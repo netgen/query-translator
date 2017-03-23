@@ -48,13 +48,13 @@ final class Full extends TokenExtractor
     public function __construct(array $expressionTypeMap = null)
     {
         if ($expressionTypeMap !== null) {
-            static::$expressionTypeMap = $expressionTypeMap;
+            self::$expressionTypeMap = $expressionTypeMap;
         }
     }
 
     protected function getExpressionTypeMap()
     {
-        return static::$expressionTypeMap;
+        return self::$expressionTypeMap;
     }
 
     protected function createTermToken($position, array $data)
