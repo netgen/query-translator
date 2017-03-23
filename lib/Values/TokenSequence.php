@@ -24,7 +24,7 @@ class TokenSequence
     public $source;
 
     /**
-     * @param \QueryTranslator\Values\Token[] $tokens[]
+     * @param \QueryTranslator\Values\Token[] $tokens
      * @param string $source
      */
     public function __construct(array $tokens, $source)
