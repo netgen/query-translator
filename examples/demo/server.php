@@ -132,7 +132,7 @@ class CorrectionRenderer
      *
      * @return string
      */
-    static public function getDescription($type)
+    public static function getDescription($type)
     {
         if (!isset(static::$descriptions[$type])) {
             return 'Undefined';
