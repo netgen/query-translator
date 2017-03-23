@@ -1,0 +1,42 @@
+language: php
+
+cache:
+    directories:
+        - vendor
+
+matrix:
+    # mark as finished before allow_failures are run
+    fast_finish: true
+    include:
+        - php: 7.0
+          env: CONFIG="phpunit.xml" COVERGAGE="all"
+        - php: 7.1
+          env: CONFIG="phpunit.xml" COVERGAGE="all"
+
+# test only master (+ pull requests)
+branches:
+    only:
+        - master
+
+# install dependencies
+install:
+    - travis_wait composer install
+
+# execute phpunit as the script command
+script:
+    - ./vendor/bin/phpunit -d memory_limit=-1 --colors -c $CONFIG --coverage-clover=coverage.xml
+
+# disable mail notifications
+notification:
+    email: false
+
+# reduce depth (history) of git checkout
+git:
+    depth: 30
+
+# we don't need sudo
+sudo: false
+
+# send coverage to codecov.io
+after_success:
+    - bash <(curl -s https://codecov.io/bash) -F $COVERGAGE
