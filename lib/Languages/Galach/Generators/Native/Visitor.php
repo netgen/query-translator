@@ -22,9 +22,9 @@ abstract class Visitor
      * Visit the given $node.
      *
      * @param \QueryTranslator\Values\Node $node
-     * @param \QueryTranslator\Languages\Galach\Generators\Native\Visitor $visitor
+     * @param \QueryTranslator\Languages\Galach\Generators\Native\Visitor $subVisitor
      *
      * @return mixed
      */
-    abstract public function visit(Node $node, Visitor $visitor = null);
+    abstract public function visit(Node $node, Visitor $subVisitor = null);
 }

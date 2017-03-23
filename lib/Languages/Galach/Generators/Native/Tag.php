@@ -16,7 +16,7 @@ final class Tag extends Visitor
         return $node instanceof Term && $node->token instanceof TagToken;
     }
 
-    public function visit(Node $node, Visitor $visitor = null)
+    public function visit(Node $node, Visitor $subVisitor = null)
     {
         /** @var \QueryTranslator\Languages\Galach\Values\Node\Term $node */
         /** @var \QueryTranslator\Languages\Galach\Values\Token\Tag $token */

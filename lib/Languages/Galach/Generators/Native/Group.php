@@ -15,13 +15,13 @@ final class Group extends Visitor
         return $node instanceof GroupNode;
     }
 
-    public function visit(Node $group, Visitor $visitor = null)
+    public function visit(Node $group, Visitor $subVisitor = null)
     {
         /** @var \QueryTranslator\Languages\Galach\Values\Node\Group $group */
         $clauses = [];
 
         foreach ($group->nodes as $node) {
-            $clauses[] = $visitor->visit($node, $visitor);
+            $clauses[] = $subVisitor->visit($node, $subVisitor);
         }
 
         $clauses = implode(' ', $clauses);

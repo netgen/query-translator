@@ -16,10 +16,10 @@ final class LogicalNot extends Visitor
         return $node instanceof LogicalNotNode;
     }
 
-    public function visit(Node $logicalNot, Visitor $visitor = null)
+    public function visit(Node $logicalNot, Visitor $subVisitor = null)
     {
         /** @var \QueryTranslator\Languages\Galach\Values\Node\LogicalNot $logicalNot */
-        $clause = $visitor->visit($logicalNot->operand, $visitor);
+        $clause = $subVisitor->visit($logicalNot->operand, $subVisitor);
 
         $padding = '';
         if ($logicalNot->token->type === Tokenizer::TOKEN_LOGICAL_NOT) {

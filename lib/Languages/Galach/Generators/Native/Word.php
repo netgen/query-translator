@@ -16,7 +16,7 @@ final class Word extends Visitor
         return $node instanceof Term && $node->token instanceof WordToken;
     }
 
-    public function visit(Node $node, Visitor $visitor = null)
+    public function visit(Node $node, Visitor $subVisitor = null)
     {
         /** @var \QueryTranslator\Languages\Galach\Values\Node\Term $node */
         /** @var \QueryTranslator\Languages\Galach\Values\Token\Word $token */

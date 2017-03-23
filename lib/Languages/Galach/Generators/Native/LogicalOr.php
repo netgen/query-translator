@@ -15,12 +15,12 @@ final class LogicalOr extends Visitor
         return $node instanceof LogicalOrNode;
     }
 
-    public function visit(Node $logicalOr, Visitor $visitor = null)
+    public function visit(Node $logicalOr, Visitor $subVisitor = null)
     {
         /** @var \QueryTranslator\Languages\Galach\Values\Node\LogicalOr $logicalOr */
         $clauses = [
-            $visitor->visit($logicalOr->leftOperand, $visitor),
-            $visitor->visit($logicalOr->rightOperand, $visitor),
+            $subVisitor->visit($logicalOr->leftOperand, $subVisitor),
+            $subVisitor->visit($logicalOr->rightOperand, $subVisitor),
         ];
 
         return implode(" {$logicalOr->token->lexeme} ", $clauses);

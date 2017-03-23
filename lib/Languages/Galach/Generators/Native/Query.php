@@ -15,13 +15,13 @@ final class Query extends Visitor
         return $node instanceof QueryNode;
     }
 
-    public function visit(Node $node, Visitor $visitor = null)
+    public function visit(Node $node, Visitor $subVisitor = null)
     {
         /** @var \QueryTranslator\Languages\Galach\Values\Node\Query $node */
         $clauses = [];
 
         foreach ($node->nodes as $subNode) {
-            $clauses[] = $visitor->visit($subNode, $visitor);
+            $clauses[] = $subVisitor->visit($subNode, $subVisitor);
         }
 
         return implode(' ', $clauses);

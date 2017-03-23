@@ -15,10 +15,10 @@ final class Exclude extends Visitor
         return $node instanceof ExcludeNode;
     }
 
-    public function visit(Node $exclude, Visitor $visitor = null)
+    public function visit(Node $exclude, Visitor $subVisitor = null)
     {
         /** @var \QueryTranslator\Languages\Galach\Values\Node\Exclude $exclude */
-        $clause = $visitor->visit($exclude->operand, $visitor);
+        $clause = $subVisitor->visit($exclude->operand, $subVisitor);
 
         return "{$exclude->token->lexeme}{$clause}";
     }

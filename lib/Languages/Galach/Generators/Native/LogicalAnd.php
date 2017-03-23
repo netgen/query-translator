@@ -15,12 +15,12 @@ final class LogicalAnd extends Visitor
         return $node instanceof LogicalAndNode;
     }
 
-    public function visit(Node $logicalAnd, Visitor $visitor = null)
+    public function visit(Node $logicalAnd, Visitor $subVisitor = null)
     {
         /** @var \QueryTranslator\Languages\Galach\Values\Node\LogicalAnd $logicalAnd */
         $clauses = [
-            $visitor->visit($logicalAnd->leftOperand, $visitor),
-            $visitor->visit($logicalAnd->rightOperand, $visitor),
+            $subVisitor->visit($logicalAnd->leftOperand, $subVisitor),
+            $subVisitor->visit($logicalAnd->rightOperand, $subVisitor),
         ];
 
         return implode(" {$logicalAnd->token->lexeme} ", $clauses);

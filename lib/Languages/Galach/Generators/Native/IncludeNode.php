@@ -15,10 +15,10 @@ final class IncludeNode extends Visitor
         return $node instanceof IncludeNodeNode;
     }
 
-    public function visit(Node $include, Visitor $visitor = null)
+    public function visit(Node $include, Visitor $subVisitor = null)
     {
         /** @var \QueryTranslator\Languages\Galach\Values\Node\IncludeNode $include */
-        $clause = $visitor->visit($include->operand, $visitor);
+        $clause = $subVisitor->visit($include->operand, $subVisitor);
 
         return "{$include->token->lexeme}{$clause}";
     }
