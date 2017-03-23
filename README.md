@@ -1,5 +1,7 @@
 # Query Translator
 
+[![Build Status](https://img.shields.io/travis/netgen/query-translator.svg?style=flat-square)](https://travis-ci.org/netgen/query-translator)
+
 ## How to run a demo
 
 1. Install dependencies using composer
