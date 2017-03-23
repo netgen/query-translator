@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Query Translator demo</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <script type="text/javascript" src="script.js" ></script>
+</head>
+<body onload="process('')">
+    <h1>Query Translator demo</h1>
+    <p>Quick syntax info:</p>
+    <p class="syntax">
+        <span>word</span>
+        <span>"phrase"</span>
+        <span>'phrase'</span>
+        <span>#tag</span>
+        <span>@user</span>
+        <span>domain:term</span>
+        <span>(group)</span>
+        <span>+include</span>
+        <span>-exclude</span>
+        <span>AND</span>
+        <span>&&</span>
+        <span>OR</span>
+        <span>||</span>
+        <span>NOT</span>
+        <span>!</span>
+    </p>
+    <p>Escape these special characters with a backslash:</p>
+    <p class="special">
+        <span>(</span>
+        <span>)</span>
+        <span>#</span>
+        <span>@</span>
+        <span>+</span>
+        <span>-</span>
+        <span>!</span>
+        <span>:</span>
+        <span>"</span>
+        <span>'</span>
+        <span>\</span>
+        <span title="blank space">&blank;</span>
+    </p>
+    <textarea placeholder="type your query here" oninput="process(this.value)" autocomplete="off" spellcheck="false" autofocus></textarea>
+    <p id="execution">translated in <span id="time">...</span> seconds</p>
+    <div class="tabs">
+        <form>
+            <input class="tab" id="tab1" type="radio" name="tabs" checked>
+            <label for="tab1">Syntax tree</label>
+            <input class="tab" id="tab2" type="radio" name="tabs">
+            <label for="tab2">Tokens</label>
+            <input class="tab" id="tab3" type="radio" name="tabs">
+            <label for="tab3">Corrections<span id="correction-count"> (0)</span></label>
+            <input class="tab" id="tab4" type="radio" name="tabs">
+            <label for="tab4">Translations</label>
+            <section id="syntax-tree"></section>
+            <section id="token-table"></section>
+            <section id="corrections"></section>
+            <section id="translations"></section>
+        </form>
+    </div>
+</body>
+</html>
