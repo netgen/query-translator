@@ -104,7 +104,7 @@ class CorrectionRenderer
 
         $corrections = '';
         foreach ($syntaxTree->corrections as $correction) {
-            $description = static::getDescription($correction->type);
+            $description = self::getDescription($correction->type);
             $string = TokenRenderer::renderQueryString($syntaxTree->tokenSequence, $correction->tokens);
             $corrections .= "<li><p>{$description}</p></li><div class='overflow'><pre class='correction'>{$string}</pre></div>";
         }
@@ -134,11 +134,11 @@ class CorrectionRenderer
      */
     public static function getDescription($type)
     {
-        if (!isset(static::$descriptions[$type])) {
+        if (!isset(self::$descriptions[$type])) {
             return 'Undefined';
         }
 
-        return static::$descriptions[$type];
+        return self::$descriptions[$type];
     }
 }
 
@@ -150,7 +150,7 @@ class TokenRenderer
 
         foreach ($tokenSequence->tokens as $token) {
             $lexeme = htmlentities($token->lexeme);
-            $name = static::getTokenTypeName($token);
+            $name = self::getTokenTypeName($token);
 
             foreach ($markTokens as $markToken) {
                 if ($markToken === $token) {
@@ -172,8 +172,8 @@ class TokenRenderer
 
         foreach ($tokenSequence->tokens as $index => $token) {
             $number = $index + 1;
-            $matchedTokenString = static::renderMatchedTokenString($tokenSequence, $token);
-            $tokenTypeName = static::getTokenTypeName($token);
+            $matchedTokenString = self::renderMatchedTokenString($tokenSequence, $token);
+            $tokenTypeName = self::getTokenTypeName($token);
             $tokenLength = mb_strlen($token->lexeme);
             $cells = [];
             $cells[] = "<td class='number'>{$number}</td>";
@@ -213,7 +213,7 @@ class TokenRenderer
             case 256:
                 return 'Right group delimiter';
             case 512:
-                return static::getTermTokenTypeName($token);
+                return self::getTermTokenTypeName($token);
             case 1024:
                 return 'BAILOUT';
         }
@@ -268,7 +268,7 @@ class SyntaxTreeRenderer
      */
     public static function render(SyntaxTree $syntaxTree)
     {
-        $namedArray = static::convert($syntaxTree->rootNode);
+        $namedArray = self::convert($syntaxTree->rootNode);
         $iterator = new RecursiveArrayIterator($namedArray);
         $treeIterator = new RecursiveTreeIterator($iterator);
         $treeIterator->setPrefixPart(RecursiveTreeIterator::PREFIX_LEFT, '');
@@ -323,14 +323,14 @@ class SyntaxTreeRenderer
         $subObjects = [];
 
         if ($node instanceof Term) {
-            $subObjects = static::getTermSubObjects($node);
+            $subObjects = self::getTermSubObjects($node);
         } else {
             foreach ($node->getNodes() as $subNode) {
-                $subObjects[] = static::convert($subNode);
+                $subObjects[] = self::convert($subNode);
             }
         }
 
-        return new NamedArrayObject(static::getNodeName($node), $subObjects);
+        return new NamedArrayObject(self::getNodeName($node), $subObjects);
     }
 
     private static function getTermSubObjects(Term $term)
