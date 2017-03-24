@@ -67,7 +67,7 @@ final class Full extends TokenExtractor
                     $lexeme,
                     $position,
                     $data['domain'],
-                    // un-backslash double backslashes and special characters
+                    // un-backslash special characters
                     preg_replace('/(?:\\\\(\\\\|([\'"+\-!():#@ ])))/', '$1', $data['word'])
                 );
             case isset($data['phrase']):
