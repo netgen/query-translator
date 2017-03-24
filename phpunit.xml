@@ -6,7 +6,7 @@
          convertWarningsToExceptions="true"
          syntaxCheck="true">
     <testsuites>
-        <testsuite name="Query parser integration tests">
+        <testsuite name="Query parser tests">
             <directory suffix="Test.php">./tests</directory>
         </testsuite>
     </testsuites>
