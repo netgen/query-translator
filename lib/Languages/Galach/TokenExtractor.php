@@ -73,10 +73,8 @@ abstract class TokenExtractor
      */
     protected function createToken($type, $position, array $data)
     {
-        $lexeme = $data['lexeme'];
-
         if ($type !== Tokenizer::TOKEN_TERM) {
-            return new Token($type, $lexeme, $position);
+            return new Token($type, $data['lexeme'], $position);
         }
 
         return $this->createTermToken($position, $data);
