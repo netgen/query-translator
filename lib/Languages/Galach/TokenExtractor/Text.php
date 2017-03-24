@@ -63,9 +63,8 @@ final class Text extends TokenExtractor
                     $lexeme,
                     $position,
                     null,
-                    // todo remove :#@?
-                    // un-backslash double backslashes and special chars
-                    preg_replace('/(?:\\\\(\\\\|([\'"+\-!():#@ ])))/', '$1', $data['word'])
+                    // un-backslash special chars
+                    preg_replace('/(?:\\\\(\\\\|([\'"+\-!() ])))/', '$1', $data['word'])
                 );
             case isset($data['phrase']):
                 $quote = $data['quote'];
