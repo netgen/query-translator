@@ -4,6 +4,7 @@ namespace QueryTranslator\Languages\Galach\Generators\Native;
 
 use QueryTranslator\Languages\Galach\Values\Node\LogicalAnd as LogicalAndNode;
 use QueryTranslator\Values\Node;
+use RuntimeException;
 
 /**
  * LogicalAnd operator Node Visitor implementation.
@@ -17,6 +18,10 @@ final class LogicalAnd extends Visitor
 
     public function visit(Node $logicalAnd, Visitor $subVisitor = null)
     {
+        if ($subVisitor === null) {
+            throw new RuntimeException('Implementation requires sub-visitor');
+        }
+
         /** @var \QueryTranslator\Languages\Galach\Values\Node\LogicalAnd $logicalAnd */
         $clauses = [
             $subVisitor->visit($logicalAnd->leftOperand, $subVisitor),

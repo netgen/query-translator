@@ -4,6 +4,7 @@ namespace QueryTranslator\Languages\Galach\Generators\Native;
 
 use QueryTranslator\Languages\Galach\Values\Node\Group as GroupNode;
 use QueryTranslator\Values\Node;
+use RuntimeException;
 
 /**
  * Group Node Visitor implementation.
@@ -17,6 +18,10 @@ final class Group extends Visitor
 
     public function visit(Node $group, Visitor $subVisitor = null)
     {
+        if ($subVisitor === null) {
+            throw new RuntimeException('Implementation requires sub-visitor');
+        }
+
         /** @var \QueryTranslator\Languages\Galach\Values\Node\Group $group */
         $clauses = [];
 

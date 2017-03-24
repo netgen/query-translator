@@ -5,6 +5,7 @@ namespace QueryTranslator\Languages\Galach\Generators\Native;
 use QueryTranslator\Languages\Galach\Values\Node\LogicalNot as LogicalNotNode;
 use QueryTranslator\Languages\Galach\Tokenizer;
 use QueryTranslator\Values\Node;
+use RuntimeException;
 
 /**
  * LogicalNot operator Node Visitor implementation.
@@ -18,6 +19,10 @@ final class LogicalNot extends Visitor
 
     public function visit(Node $logicalNot, Visitor $subVisitor = null)
     {
+        if ($subVisitor === null) {
+            throw new RuntimeException('Implementation requires sub-visitor');
+        }
+
         /** @var \QueryTranslator\Languages\Galach\Values\Node\LogicalNot $logicalNot */
         $clause = $subVisitor->visit($logicalNot->operand, $subVisitor);
 
