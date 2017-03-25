@@ -179,30 +179,8 @@ final class Parser implements Parsing
             $shift = self::$shifts[$token->type];
             $node = $this->{$shift}($token);
 
-            if (!$node instanceof Node) {
-                continue;
-            }
-
-            $previousNode = null;
-            $reductionIndex = null;
-
-            while ($node instanceof Node) {
-                // Reset reduction index on first iteration or on Node change
-                if ($node !== $previousNode) {
-                    $reductionIndex = 0;
-                }
-
-                // If there are no reductions to try, put the Node on the stack
-                // and continue shifting
-                $reduction = $this->getReduction($node, $reductionIndex);
-                if ($reduction === null) {
-                    $this->stack->push($node);
-                    break;
-                }
-
-                $previousNode = $node;
-                $node = $this->{$reduction}($node);
-                ++$reductionIndex;
+            if ($node instanceof Node) {
+                $this->reduce($node);
             }
         }
 
@@ -213,6 +191,31 @@ final class Parser implements Parsing
         }
 
         return new SyntaxTree($this->stack->top(), $tokenSequence, $this->corrections);
+    }
+
+    protected function reduce(Node $node)
+    {
+        $previousNode = null;
+        $reductionIndex = null;
+
+        while ($node instanceof Node) {
+            // Reset reduction index on first iteration or on Node change
+            if ($node !== $previousNode) {
+                $reductionIndex = 0;
+            }
+
+            // If there are no reductions to try, put the Node on the stack
+            // and continue shifting
+            $reduction = $this->getReduction($node, $reductionIndex);
+            if ($reduction === null) {
+                $this->stack->push($node);
+                break;
+            }
+
+            $previousNode = $node;
+            $node = $this->{$reduction}($node);
+            ++$reductionIndex;
+        }
     }
 
     private function getReduction(Node $node, $reductionIndex)
