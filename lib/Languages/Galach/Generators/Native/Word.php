@@ -2,6 +2,7 @@
 
 namespace QueryTranslator\Languages\Galach\Generators\Native;
 
+use LogicException;
 use QueryTranslator\Languages\Galach\Values\Node\Term;
 use QueryTranslator\Languages\Galach\Values\Token\Word as WordToken;
 use QueryTranslator\Values\Node;
@@ -18,8 +19,12 @@ final class Word extends Visitor
 
     public function visit(Node $node, Visitor $subVisitor = null)
     {
-        /** @var \QueryTranslator\Languages\Galach\Values\Node\Term $node */
-        /** @var \QueryTranslator\Languages\Galach\Values\Token\Word $token */
+        if (!$node instanceof Term) {
+            throw new LogicException(
+                'Visitor implementation accepts instance of Term Node'
+            );
+        }
+
         $token = $node->token;
         $domainPrefix = empty($token->domain) ? '' : "{$token->domain}:";
         $wordEscaped = preg_replace('/([\\\'"+\-!():#@ ])/', '\\\\$1', $token->word);

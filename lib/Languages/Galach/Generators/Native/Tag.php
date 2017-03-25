@@ -2,6 +2,7 @@
 
 namespace QueryTranslator\Languages\Galach\Generators\Native;
 
+use LogicException;
 use QueryTranslator\Languages\Galach\Values\Node\Term;
 use QueryTranslator\Languages\Galach\Values\Token\Tag as TagToken;
 use QueryTranslator\Values\Node;
@@ -18,8 +19,12 @@ final class Tag extends Visitor
 
     public function visit(Node $node, Visitor $subVisitor = null)
     {
-        /** @var \QueryTranslator\Languages\Galach\Values\Node\Term $node */
-        /** @var \QueryTranslator\Languages\Galach\Values\Token\Tag $token */
+        if (!$node instanceof Term) {
+            throw new LogicException(
+                'Visitor implementation accepts instance of Term Node'
+            );
+        }
+
         $token = $node->token;
 
         return "{$token->marker}{$token->tag}";
