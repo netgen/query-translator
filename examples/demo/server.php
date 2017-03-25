@@ -82,7 +82,7 @@ class TranslationRenderer
     {
         $string = '<p><strong>Native</strong></p>';
         $string .= '<p>This is translation of the input string back to the input format.</p>';
-        $string .= '<p>In difference to the input string, if corrections were applied, generated string will be corrected as well. Each whitespace sequence will be replaced by a single white space and special characters will be explicitly escaped.</p>';
+        $string .= '<p>In difference to the input string, if corrections were applied, generated string will be corrected as well. Each whitespace sequence will be replaced by a single blank space and special characters will be explicitly escaped.</p>';
         $string .= "<div class='overflow'><pre class='translation'><span>{$nativeTranslation}</span></pre></div>";
 
         return "<ol><li>{$string}</li></ol>";
