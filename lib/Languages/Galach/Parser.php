@@ -2,19 +2,19 @@
 
 namespace QueryTranslator\Languages\Galach;
 
-use QueryTranslator\Languages\Galach\Values\Node\Term;
+use QueryTranslator\Languages\Galach\Values\Node\Exclude;
 use QueryTranslator\Languages\Galach\Values\Node\Group;
+use QueryTranslator\Languages\Galach\Values\Node\IncludeNode;
 use QueryTranslator\Languages\Galach\Values\Node\LogicalAnd;
 use QueryTranslator\Languages\Galach\Values\Node\LogicalNot;
 use QueryTranslator\Languages\Galach\Values\Node\LogicalOr;
-use QueryTranslator\Languages\Galach\Values\Node\IncludeNode;
-use QueryTranslator\Languages\Galach\Values\Node\Exclude;
 use QueryTranslator\Languages\Galach\Values\Node\Query;
+use QueryTranslator\Languages\Galach\Values\Node\Term;
 use QueryTranslator\Parsing;
+use QueryTranslator\Values\Correction;
 use QueryTranslator\Values\Node;
 use QueryTranslator\Values\SyntaxTree;
 use QueryTranslator\Values\Token;
-use QueryTranslator\Values\Correction;
 use QueryTranslator\Values\TokenSequence;
 use RuntimeException;
 use SplStack;
@@ -157,27 +157,12 @@ final class Parser implements Parsing
      */
     private $corrections = [];
 
-    /**
-     * Initializes the parser with given array of $tokens.
-     *
-     * @param \QueryTranslator\Values\Token[] $tokens
-     */
-    private function init(array $tokens)
-    {
-        $this->corrections = [];
-        $this->tokens = $tokens;
-        $this->cleanupGroupDelimiters($this->tokens);
-        $this->stack = new SplStack();
-    }
-
     public function parse(TokenSequence $tokenSequence)
     {
         $this->init($tokenSequence->tokens);
 
         while (!empty($this->tokens)) {
-            $token = array_shift($this->tokens);
-            $shift = self::$shifts[$token->type];
-            $node = $this->{$shift}($token);
+            $node = $this->shift();
 
             if ($node instanceof Node) {
                 $this->reduce($node);
@@ -191,6 +176,14 @@ final class Parser implements Parsing
         }
 
         return new SyntaxTree($this->stack->top(), $tokenSequence, $this->corrections);
+    }
+
+    protected function shift()
+    {
+        $token = array_shift($this->tokens);
+        $shift = self::$shifts[$token->type];
+
+        return $this->{$shift}($token);
     }
 
     protected function reduce(Node $node)
@@ -216,17 +209,6 @@ final class Parser implements Parsing
             $node = $this->{$reduction}($node);
             ++$reductionIndex;
         }
-    }
-
-    private function getReduction(Node $node, $reductionIndex)
-    {
-        $reductionGroup = self::$nodeToReductionGroup[get_class($node)];
-
-        if (isset(self::$reductionGroups[$reductionGroup][$reductionIndex])) {
-            return self::$reductionGroups[$reductionGroup][$reductionIndex];
-        }
-
-        return null;
     }
 
     protected function shiftWhitespace()
@@ -422,6 +404,30 @@ final class Parser implements Parsing
         $group->tokenRight = $rightDelimiter;
 
         return $group;
+    }
+
+    /**
+     * Initializes the parser with given array of $tokens.
+     *
+     * @param \QueryTranslator\Values\Token[] $tokens
+     */
+    private function init(array $tokens)
+    {
+        $this->corrections = [];
+        $this->tokens = $tokens;
+        $this->cleanupGroupDelimiters($this->tokens);
+        $this->stack = new SplStack();
+    }
+
+    private function getReduction(Node $node, $reductionIndex)
+    {
+        $reductionGroup = self::$nodeToReductionGroup[get_class($node)];
+
+        if (isset(self::$reductionGroups[$reductionGroup][$reductionIndex])) {
+            return self::$reductionGroups[$reductionGroup][$reductionIndex];
+        }
+
+        return null;
     }
 
     private function reduceQuery()

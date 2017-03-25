@@ -2,12 +2,12 @@
 
 namespace QueryTranslator\Languages\Galach\Generators\Native;
 
-use QueryTranslator\Languages\Galach\Values\Node\IncludeNode;
-use QueryTranslator\Languages\Galach\Values\Node\Exclude;
-use QueryTranslator\Languages\Galach\Values\Node\LogicalNot;
-use QueryTranslator\Languages\Galach\Tokenizer;
-use QueryTranslator\Values\Node;
 use LogicException;
+use QueryTranslator\Languages\Galach\Tokenizer;
+use QueryTranslator\Languages\Galach\Values\Node\Exclude;
+use QueryTranslator\Languages\Galach\Values\Node\IncludeNode;
+use QueryTranslator\Languages\Galach\Values\Node\LogicalNot;
+use QueryTranslator\Values\Node;
 
 /**
  * Exclude operator Node Visitor implementation.

@@ -6,7 +6,7 @@ use QueryTranslator\Languages\Galach\Generators\Native\Visitor;
 use QueryTranslator\Values\SyntaxTree;
 
 /**
- * EDisMax generator generates query string in Solr's Extended DisMax query parser format.
+ * EDisMax generator generates query string in Solr Extended DisMax query parser format.
  *
  * @link https://cwiki.apache.org/confluence/display/solr/The+Extended+DisMax+Query+Parser
  */
@@ -23,11 +23,11 @@ final class EDisMax
     }
 
     /**
-     * Generate query string in Solr's Extended DisMax format from the given $syntaxTree.
+     * Generate query string in Solr Extended DisMax format from the given $syntaxTree.
      *
      * @param \QueryTranslator\Values\SyntaxTree $syntaxTree
      *
-     * @return mixed
+     * @return string
      */
     public function generate(SyntaxTree $syntaxTree)
     {

@@ -2,6 +2,11 @@
 
 namespace QueryTranslator\Tests\Galach;
 
+use PHPUnit\Framework\TestCase;
+use QueryTranslator\Languages\Galach\Generators;
+use QueryTranslator\Languages\Galach\Parser;
+use QueryTranslator\Languages\Galach\TokenExtractor;
+use QueryTranslator\Languages\Galach\Tokenizer;
 use QueryTranslator\Languages\Galach\Values\Node\Exclude;
 use QueryTranslator\Languages\Galach\Values\Node\Group;
 use QueryTranslator\Languages\Galach\Values\Node\IncludeNode;
@@ -10,19 +15,14 @@ use QueryTranslator\Languages\Galach\Values\Node\LogicalNot;
 use QueryTranslator\Languages\Galach\Values\Node\LogicalOr;
 use QueryTranslator\Languages\Galach\Values\Node\Query;
 use QueryTranslator\Languages\Galach\Values\Node\Term;
-use QueryTranslator\Languages\Galach\Parser;
 use QueryTranslator\Languages\Galach\Values\Token\Phrase as PhraseToken;
 use QueryTranslator\Languages\Galach\Values\Token\Tag as TagToken;
 use QueryTranslator\Languages\Galach\Values\Token\User as UserToken;
 use QueryTranslator\Languages\Galach\Values\Token\Word as WordToken;
-use QueryTranslator\Languages\Galach\TokenExtractor;
-use QueryTranslator\Languages\Galach\Tokenizer;
-use QueryTranslator\Languages\Galach\Generators;
 use QueryTranslator\Values\Correction;
 use QueryTranslator\Values\SyntaxTree;
 use QueryTranslator\Values\Token;
 use QueryTranslator\Values\TokenSequence;
-use PHPUnit\Framework\TestCase;
 
 /**
  * Tests integration of language components.

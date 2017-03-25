@@ -9,8 +9,8 @@ require_once __DIR__ . '/../../vendor/autoload.php';
 
 use QueryTranslator\Languages\Galach\Generators\Native;
 use QueryTranslator\Languages\Galach\Parser;
-use QueryTranslator\Languages\Galach\Tokenizer;
 use QueryTranslator\Languages\Galach\TokenExtractor\Full;
+use QueryTranslator\Languages\Galach\Tokenizer;
 use QueryTranslator\Languages\Galach\Values\Node\Exclude;
 use QueryTranslator\Languages\Galach\Values\Node\Group;
 use QueryTranslator\Languages\Galach\Values\Node\IncludeNode;
@@ -89,6 +89,19 @@ class TranslationRenderer
 
 class CorrectionRenderer
 {
+    private static $descriptions = [
+        Parser::CORRECTION_UNARY_OPERATOR_PRECEDING_OPERATOR_IGNORED => 'Parser ignored unary operator preceding another operator',
+        Parser::CORRECTION_UNARY_OPERATOR_MISSING_OPERAND_IGNORED => 'Parser ignored unary operator missing operand',
+        Parser::CORRECTION_BINARY_OPERATOR_MISSING_LEFT_OPERAND_IGNORED => 'Parser ignored binary operator missing left side operand',
+        Parser::CORRECTION_BINARY_OPERATOR_MISSING_RIGHT_OPERAND_IGNORED => 'Parser ignored binary operator missing right side operand',
+        Parser::CORRECTION_BINARY_OPERATOR_FOLLOWING_OPERATOR_IGNORED => 'Parser ignored binary operator following another operator',
+        Parser::CORRECTION_LOGICAL_NOT_OPERATORS_PRECEDING_INCLUSIVITY_IGNORED => 'Parser ignored logical not operators preceding inclusion/exclusion',
+        Parser::CORRECTION_EMPTY_GROUP_IGNORED => 'Parser ignored empty group and connecting operators',
+        Parser::CORRECTION_UNMATCHED_GROUP_LEFT_DELIMITER_IGNORED => 'Parser ignored unmatched left side group delimiter',
+        Parser::CORRECTION_UNMATCHED_GROUP_RIGHT_DELIMITER_IGNORED => 'Parser ignored unmatched right side group delimiter',
+        Parser::CORRECTION_BAILOUT_TOKEN_IGNORED => 'Parser ignored bailout token',
+    ];
+
     /**
      * @param \QueryTranslator\Values\SyntaxTree $syntaxTree
      *
@@ -109,19 +122,6 @@ class CorrectionRenderer
 
         return "<p>Following corrections were applied:</p><ol>{$corrections}</ol>";
     }
-
-    static private $descriptions = [
-        Parser::CORRECTION_UNARY_OPERATOR_PRECEDING_OPERATOR_IGNORED => 'Parser ignored unary operator preceding another operator',
-        Parser::CORRECTION_UNARY_OPERATOR_MISSING_OPERAND_IGNORED => 'Parser ignored unary operator missing operand',
-        Parser::CORRECTION_BINARY_OPERATOR_MISSING_LEFT_OPERAND_IGNORED => 'Parser ignored binary operator missing left side operand',
-        Parser::CORRECTION_BINARY_OPERATOR_MISSING_RIGHT_OPERAND_IGNORED => 'Parser ignored binary operator missing right side operand',
-        Parser::CORRECTION_BINARY_OPERATOR_FOLLOWING_OPERATOR_IGNORED => 'Parser ignored binary operator following another operator',
-        Parser::CORRECTION_LOGICAL_NOT_OPERATORS_PRECEDING_INCLUSIVITY_IGNORED => 'Parser ignored logical not operators preceding inclusion/exclusion',
-        Parser::CORRECTION_EMPTY_GROUP_IGNORED => 'Parser ignored empty group and connecting operators',
-        Parser::CORRECTION_UNMATCHED_GROUP_LEFT_DELIMITER_IGNORED => 'Parser ignored unmatched left side group delimiter',
-        Parser::CORRECTION_UNMATCHED_GROUP_RIGHT_DELIMITER_IGNORED => 'Parser ignored unmatched right side group delimiter',
-        Parser::CORRECTION_BAILOUT_TOKEN_IGNORED => 'Parser ignored bailout token',
-    ];
 
     /**
      * Return description for a given correction $type.

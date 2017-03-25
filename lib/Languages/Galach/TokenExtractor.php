@@ -48,21 +48,6 @@ abstract class TokenExtractor
     }
 
     /**
-     * Return the offset of the given $position in the input $string, in bytes.
-     *
-     * Offset in bytes is needed for preg_match $offset parameter.
-     *
-     * @param string $string
-     * @param int $position
-     *
-     * @return int
-     */
-    private function getByteOffset($string, $position)
-    {
-        return strlen(mb_substr($string, 0, $position));
-    }
-
-    /**
      * Create a token object from the given parameters.
      *
      * @param int $type Token type
@@ -101,4 +86,19 @@ abstract class TokenExtractor
      * @return \QueryTranslator\Values\Token
      */
     abstract protected function createTermToken($position, array $data);
+
+    /**
+     * Return the offset of the given $position in the input $string, in bytes.
+     *
+     * Offset in bytes is needed for preg_match $offset parameter.
+     *
+     * @param string $string
+     * @param int $position
+     *
+     * @return int
+     */
+    private function getByteOffset($string, $position)
+    {
+        return strlen(mb_substr($string, 0, $position));
+    }
 }

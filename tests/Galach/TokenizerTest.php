@@ -2,15 +2,15 @@
 
 namespace QueryTranslator\Tests\Galach;
 
+use PHPUnit\Framework\TestCase;
+use QueryTranslator\Languages\Galach\TokenExtractor;
+use QueryTranslator\Languages\Galach\Tokenizer;
 use QueryTranslator\Languages\Galach\Values\Token\Phrase as PhraseToken;
 use QueryTranslator\Languages\Galach\Values\Token\Tag as TagToken;
 use QueryTranslator\Languages\Galach\Values\Token\User as UserToken;
 use QueryTranslator\Languages\Galach\Values\Token\Word as WordToken;
 use QueryTranslator\Values\Token;
-use QueryTranslator\Languages\Galach\TokenExtractor;
-use QueryTranslator\Languages\Galach\Tokenizer;
 use QueryTranslator\Values\TokenSequence;
-use PHPUnit\Framework\TestCase;
 
 /**
  * Functional test case for tokenizer implementation.

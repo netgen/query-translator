@@ -2,10 +2,10 @@
 
 namespace QueryTranslator\Languages\Galach\Generators\Native;
 
+use LogicException;
 use QueryTranslator\Languages\Galach\Values\Node\LogicalAnd;
 use QueryTranslator\Languages\Galach\Values\Node\LogicalOr as LogicalOrNode;
 use QueryTranslator\Values\Node;
-use LogicException;
 
 /**
  * BinaryOperator operator Node Visitor implementation.

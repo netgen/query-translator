@@ -2,8 +2,8 @@
 
 namespace QueryTranslator\Languages\Galach\TokenExtractor;
 
-use QueryTranslator\Languages\Galach\Tokenizer;
 use QueryTranslator\Languages\Galach\TokenExtractor;
+use QueryTranslator\Languages\Galach\Tokenizer;
 use QueryTranslator\Languages\Galach\Values\Token\Phrase;
 use QueryTranslator\Languages\Galach\Values\Token\Tag;
 use QueryTranslator\Languages\Galach\Values\Token\User;
