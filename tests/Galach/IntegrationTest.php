@@ -3500,16 +3500,13 @@ class IntegrationTest extends TestCase
         $visitors = [];
 
         $visitors[] = new Generators\Native\Group();
-        $visitors[] = new Generators\Native\LogicalAnd();
-        $visitors[] = new Generators\Native\LogicalNot();
-        $visitors[] = new Generators\Native\LogicalOr();
-        $visitors[] = new Generators\Native\IncludeNode();
+        $visitors[] = new Generators\Native\BinaryOperator();
         $visitors[] = new Generators\Native\Phrase();
-        $visitors[] = new Generators\Native\Exclude();
         $visitors[] = new Generators\Native\Query();
         $visitors[] = new Generators\Native\Tag();
-        $visitors[] = new Generators\Native\Word();
+        $visitors[] = new Generators\Native\UnaryOperator();
         $visitors[] = new Generators\Native\User();
+        $visitors[] = new Generators\Native\Word();
 
         $aggregate = new Generators\Native\Aggregate($visitors);
 
