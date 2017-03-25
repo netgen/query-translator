@@ -30,7 +30,7 @@ class Correction
      * @param mixed $type
      * @param \QueryTranslator\Values\Token[] $tokens
      */
-    public function __construct($type, ...$tokens)
+    public function __construct($type, Token ...$tokens)
     {
         $this->type = $type;
         $this->tokens = $tokens;

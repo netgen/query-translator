@@ -593,7 +593,7 @@ final class Parser implements Parsing
         return array_merge($trackLeft, $trackRight);
     }
 
-    private function addCorrection($type, ...$tokens)
+    private function addCorrection($type, Token ...$tokens)
     {
         $this->corrections[] = new Correction($type, ...$tokens);
     }
