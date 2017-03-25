@@ -3,7 +3,7 @@
 namespace QueryTranslator\Languages\Galach\Generators\Native;
 
 use QueryTranslator\Languages\Galach\Values\Node\LogicalAnd;
-use QueryTranslator\Languages\Galach\Values\Node\LogicalOr;
+use QueryTranslator\Languages\Galach\Values\Node\LogicalOr as LogicalOrNode;
 use QueryTranslator\Values\Node;
 use LogicException;
 
@@ -14,12 +14,12 @@ final class BinaryOperator extends Visitor
 {
     public function accept(Node $node)
     {
-        return $node instanceof LogicalAnd || $node instanceof LogicalOr;
+        return $node instanceof LogicalAnd || $node instanceof LogicalOrNode;
     }
 
     public function visit(Node $node, Visitor $subVisitor = null)
     {
-        if (!$node instanceof LogicalAnd && !$node instanceof LogicalOr) {
+        if (!$node instanceof LogicalAnd && !$node instanceof LogicalOrNode) {
             throw new LogicException(
                 'Visitor implementation accepts instance of LogicalAnd or LogicalOr'
             );
