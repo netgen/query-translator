@@ -25,7 +25,7 @@ final class Native
      *
      * @param \QueryTranslator\Values\SyntaxTree $syntaxTree
      *
-     * @return mixed
+     * @return string
      */
     public function generate(SyntaxTree $syntaxTree)
     {
