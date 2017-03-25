@@ -26,6 +26,13 @@ final class Phrase extends Visitor
         }
 
         $token = $node->token;
+
+        if (!$token instanceof PhraseToken) {
+            throw new LogicException(
+                'Visitor implementation accepts instance of Phrase Token'
+            );
+        }
+
         $domainPrefix = empty($token->domain) ? '' : "{$token->domain}:";
         $phraseEscaped = preg_replace("/([\\{$token->quote}])/", '\\\\$1', $token->phrase);
 

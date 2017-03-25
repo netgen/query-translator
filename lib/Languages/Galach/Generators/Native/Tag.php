@@ -27,6 +27,12 @@ final class Tag extends Visitor
 
         $token = $node->token;
 
+        if (!$token instanceof TagToken) {
+            throw new LogicException(
+                'Visitor implementation accepts instance of Tag Token'
+            );
+        }
+
         return "{$token->marker}{$token->tag}";
     }
 }

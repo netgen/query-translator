@@ -27,6 +27,12 @@ final class User extends Visitor
 
         $token = $node->token;
 
+        if (!$token instanceof UserToken) {
+            throw new LogicException(
+                'Visitor implementation accepts instance of User Token'
+            );
+        }
+
         return "{$token->marker}{$token->user}";
     }
 }

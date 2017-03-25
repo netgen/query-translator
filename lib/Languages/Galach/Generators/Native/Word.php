@@ -26,6 +26,13 @@ final class Word extends Visitor
         }
 
         $token = $node->token;
+
+        if (!$token instanceof WordToken) {
+            throw new LogicException(
+                'Visitor implementation accepts instance of Word Token'
+            );
+        }
+
         $domainPrefix = empty($token->domain) ? '' : "{$token->domain}:";
         $wordEscaped = preg_replace('/([\\\'"+\-!():#@ ])/', '\\\\$1', $token->word);
 
