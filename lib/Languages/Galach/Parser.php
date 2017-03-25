@@ -238,7 +238,12 @@ final class Parser implements Parsing
 
     protected function shiftInclusivity(Token $token)
     {
-        if ($this->isToken(reset($this->tokens), self::$tokenShortcuts['operator'])) {
+        return $this->shiftAdjacentUnaryOperator($token, self::$tokenShortcuts['operator']);
+    }
+
+    protected function shiftAdjacentUnaryOperator(Token $token, $tokenMask)
+    {
+        if ($this->isToken(reset($this->tokens), $tokenMask)) {
             $this->addCorrection(
                 self::CORRECTION_UNARY_OPERATOR_PRECEDING_OPERATOR_IGNORED,
                 $token
@@ -258,16 +263,8 @@ final class Parser implements Parsing
     protected function shiftLogicalNot2(Token $token)
     {
         $tokenMask = self::$tokenShortcuts['operator'] & ~Tokenizer::TOKEN_LOGICAL_NOT_2;
-        if ($this->isToken(reset($this->tokens), $tokenMask)) {
-            $this->addCorrection(
-                self::CORRECTION_UNARY_OPERATOR_PRECEDING_OPERATOR_IGNORED,
-                $token
-            );
 
-            return null;
-        }
-
-        $this->stack->push($token);
+        return $this->shiftAdjacentUnaryOperator($token, $tokenMask);
     }
 
     protected function shiftBinaryOperator(Token $token)
