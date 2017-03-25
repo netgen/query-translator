@@ -38,12 +38,10 @@ $generator = new Native(
     new Native\Aggregate(
         [
             new Native\Group(),
-            new Native\LogicalAnd(),
-            new Native\LogicalNot(),
+            new Native\BinaryOperator(),
+            new Native\UnaryOperator(),
             new Native\LogicalOr(),
-            new Native\IncludeNode(),
             new Native\Phrase(),
-            new Native\Exclude(),
             new Native\Query(),
             new Native\Tag(),
             new Native\Word(),
