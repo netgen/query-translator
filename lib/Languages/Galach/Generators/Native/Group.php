@@ -16,21 +16,26 @@ final class Group extends Visitor
         return $node instanceof GroupNode;
     }
 
-    public function visit(Node $group, Visitor $subVisitor = null)
+    public function visit(Node $node, Visitor $subVisitor = null)
     {
+        if (!$node instanceof GroupNode) {
+            throw new LogicException(
+                'Visitor implementation accepts instance of Group Node'
+            );
+        }
+
         if ($subVisitor === null) {
             throw new LogicException('Implementation requires sub-visitor');
         }
 
-        /** @var \QueryTranslator\Languages\Galach\Values\Node\Group $group */
         $clauses = [];
 
-        foreach ($group->nodes as $node) {
-            $clauses[] = $subVisitor->visit($node, $subVisitor);
+        foreach ($node->nodes as $subNode) {
+            $clauses[] = $subVisitor->visit($subNode, $subVisitor);
         }
 
         $clauses = implode(' ', $clauses);
 
-        return "{$group->tokenLeft->lexeme}{$clauses}{$group->tokenRight->lexeme}";
+        return "{$node->tokenLeft->lexeme}{$clauses}{$node->tokenRight->lexeme}";
     }
 }

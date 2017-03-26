@@ -2,18 +2,18 @@
 
 namespace QueryTranslator\Languages\Galach\Generators;
 
-use QueryTranslator\Languages\Galach\Generators\Native\Visitor;
+use QueryTranslator\Languages\Galach\Generators\ExtendedDisMax\Visitor;
 use QueryTranslator\Values\SyntaxTree;
 
 /**
- * EDisMax generator generates query string in Solr Extended DisMax query parser format.
+ * ExtendedDisMax generator generates query string in Solr Extended DisMax query parser format.
  *
  * @link https://cwiki.apache.org/confluence/display/solr/The+Extended+DisMax+Query+Parser
  */
-final class EDisMax
+final class ExtendedDisMax
 {
     /**
-     * @var \QueryTranslator\Languages\Galach\Generators\Native\Visitor
+     * @var \QueryTranslator\Languages\Galach\Generators\ExtendedDisMax\Visitor
      */
     private $visitor;
 

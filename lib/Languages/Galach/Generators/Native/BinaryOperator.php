@@ -21,7 +21,7 @@ final class BinaryOperator extends Visitor
     {
         if (!$node instanceof LogicalAnd && !$node instanceof LogicalOrNode) {
             throw new LogicException(
-                'Visitor implementation accepts instance of LogicalAnd or LogicalOr'
+                'Visitor implementation accepts instance of LogicalAnd or LogicalOr Node'
             );
         }
 

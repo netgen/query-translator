@@ -1,6 +1,6 @@
 <?php
 
-namespace QueryTranslator\Languages\Galach\Generators\Native;
+namespace QueryTranslator\Languages\Galach\Generators\ExtendedDisMax;
 
 use LogicException;
 use QueryTranslator\Languages\Galach\Values\Node\Query as QueryNode;
@@ -20,7 +20,7 @@ final class Query extends Visitor
     {
         if (!$node instanceof QueryNode) {
             throw new LogicException(
-                'Visitor implementation accepts instance of Query Node'
+                'Visitor implementation accepts instance of LogicalOr Node'
             );
         }
 

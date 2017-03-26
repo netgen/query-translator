@@ -23,7 +23,7 @@ final class UnaryOperator extends Visitor
     {
         if (!$node instanceof IncludeNode && !$node instanceof Exclude && !$node instanceof LogicalNot) {
             throw new LogicException(
-                'Visitor implementation accepts instance of IncludeNode, Exclude or LogicalNot'
+                'Visitor implementation accepts instance of Include, Exclude or LogicalNot Node'
             );
         }
 

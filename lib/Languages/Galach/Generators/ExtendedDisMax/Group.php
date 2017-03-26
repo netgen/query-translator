@@ -1,26 +1,26 @@
 <?php
 
-namespace QueryTranslator\Languages\Galach\Generators\Native;
+namespace QueryTranslator\Languages\Galach\Generators\ExtendedDisMax;
 
 use LogicException;
-use QueryTranslator\Languages\Galach\Values\Node\Query as QueryNode;
+use QueryTranslator\Languages\Galach\Values\Node\Group as GroupNode;
 use QueryTranslator\Values\Node;
 
 /**
- * Query Node Visitor implementation.
+ * Group Node Visitor implementation.
  */
-final class Query extends Visitor
+final class Group extends Visitor
 {
     public function accept(Node $node)
     {
-        return $node instanceof QueryNode;
+        return $node instanceof GroupNode;
     }
 
     public function visit(Node $node, Visitor $subVisitor = null)
     {
-        if (!$node instanceof QueryNode) {
+        if (!$node instanceof GroupNode) {
             throw new LogicException(
-                'Visitor implementation accepts instance of Query Node'
+                'Visitor implementation accepts instance of LogicalOr Node'
             );
         }
 
@@ -34,6 +34,8 @@ final class Query extends Visitor
             $clauses[] = $subVisitor->visit($subNode, $subVisitor);
         }
 
-        return implode(' ', $clauses);
+        $clauses = implode(' ', $clauses);
+
+        return "({$clauses})";
     }
 }
