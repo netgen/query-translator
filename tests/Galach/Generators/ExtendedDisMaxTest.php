@@ -108,7 +108,7 @@ class ExtendedDisMaxTest extends TestCase
         $tokenExtractor = new TokenExtractor\Full();
         $tokenizer = new Tokenizer($tokenExtractor);
         $parser = new Parser();
-        $generator = $this->getExtendedDisMaxGenerator();
+        $generator = $this->getGenerator();
 
         $tokenSequence = $tokenizer->tokenize($string);
         $syntaxTree = $parser->parse($tokenSequence);
@@ -120,7 +120,7 @@ class ExtendedDisMaxTest extends TestCase
     /**
      * @return \QueryTranslator\Languages\Galach\Generators\ExtendedDisMax
      */
-    protected function getExtendedDisMaxGenerator()
+    protected function getGenerator()
     {
         $visitors = [];
 
