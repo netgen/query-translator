@@ -40,7 +40,6 @@ $generator = new Native(
             new Native\Group(),
             new Native\BinaryOperator(),
             new Native\UnaryOperator(),
-            new Native\LogicalOr(),
             new Native\Phrase(),
             new Native\Query(),
             new Native\Tag(),
