@@ -68,9 +68,7 @@ final class Word extends Visitor
     }
 
     /**
-     * todo doc.
-     *
-     * @throws \LogicException If field is not defined for the given $domain
+     * Return Solr backend field name for the given $token.
      *
      * @param \QueryTranslator\Languages\Galach\Values\Token\Word $token
      *
