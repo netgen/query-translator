@@ -28,7 +28,7 @@ class Correction
 
     /**
      * @param mixed $type
-     * @param \QueryTranslator\Values\Token[] $tokens
+     * @param \QueryTranslator\Values\Token[] ...$tokens
      */
     public function __construct($type, Token ...$tokens)
     {
