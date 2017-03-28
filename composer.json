@@ -1,7 +1,18 @@
 {
     "name": "netgen/query-translator",
-    "description": "Query Translator is a search query translator with AST producing parser",
-    "keywords": ["search", "query", "tokenizer", "parser", "generator", "translator", "AST"],
+    "description": "Query Translator is a search query translator with AST representation",
+    "keywords": [
+        "search",
+        "query",
+        "tokenizer",
+        "parser",
+        "generator",
+        "translator",
+        "ast",
+        "solr",
+        "edismax",
+        "elasticsearch"
+    ],
     "type": "library",
     "license": "MIT",
     "authors": [
