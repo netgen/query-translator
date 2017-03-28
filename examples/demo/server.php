@@ -5,9 +5,9 @@ if (!file_exists($autoload)) {
     throw new RuntimeException('Install dependencies using composer to run the demo.');
 }
 
-require_once __DIR__ . '/../../vendor/autoload.php';
+require_once $autoload;
 
-use QueryTranslator\Languages\Galach\Generators\Native;
+use QueryTranslator\Languages\Galach\Generators;
 use QueryTranslator\Languages\Galach\Parser;
 use QueryTranslator\Languages\Galach\TokenExtractor\Full;
 use QueryTranslator\Languages\Galach\Tokenizer;
@@ -34,32 +34,34 @@ $data = json_decode($json);
 $tokenExtractor = new Full();
 $tokenizer = new Tokenizer($tokenExtractor);
 $parser = new Parser();
-$generator = new Native(
-    new Native\Aggregate(
+$nativeGenerator = new Generators\Native(
+    new Generators\Native\Aggregate(
         [
-            new Native\Group(),
-            new Native\BinaryOperator(),
-            new Native\UnaryOperator(),
-            new Native\Phrase(),
-            new Native\Query(),
-            new Native\Tag(),
-            new Native\Word(),
-            new Native\User(),
+            new Generators\Native\Group(),
+            new Generators\Native\BinaryOperator(),
+            new Generators\Native\UnaryOperator(),
+            new Generators\Native\Phrase(),
+            new Generators\Native\Query(),
+            new Generators\Native\Tag(),
+            new Generators\Native\Word(),
+            new Generators\Native\User(),
         ]
     )
 );
 
 $tokenSequence = $tokenizer->tokenize('');
 $syntaxTree = $parser->parse($tokenSequence);
-$generator->generate($syntaxTree);
+$nativeGenerator->generate($syntaxTree);
 
 $startTime = microtime(true);
 
 $tokenSequence = $tokenizer->tokenize($data->query);
 $syntaxTree = $parser->parse($tokenSequence);
-$nativeTranslation = $generator->generate($syntaxTree);
+$nativeTranslation = $nativeGenerator->generate($syntaxTree);
 
 $elapsedTime = microtime(true) - $startTime;
+
+
 
 $data = [
     'executionTime' => sprintf('%.6f', $elapsedTime),
@@ -67,7 +69,7 @@ $data = [
     'tokenTable' => TokenRenderer::renderTable($tokenSequence),
     'corrections' => CorrectionRenderer::render($syntaxTree),
     'correctionCount' => ' (' . count($syntaxTree->corrections) . ')',
-    'translations' => TranslationRenderer::render($nativeTranslation),
+    'translations' => TranslationRenderer::render($syntaxTree, $nativeTranslation),
 ];
 
 header('Content-Type: application/json');
@@ -75,14 +77,91 @@ echo json_encode($data);
 
 class TranslationRenderer
 {
-    public static function render($nativeTranslation)
+    public static function render(SyntaxTree $syntaxTree, $nativeTranslation)
     {
-        $string = '<p><strong>Native</strong></p>';
-        $string .= '<p>This is translation of the input string back to the input format.</p>';
-        $string .= '<p>In difference to the input string, if corrections were applied, generated string will be corrected as well. Each whitespace sequence will be replaced by a single blank space and special characters will be explicitly escaped.</p>';
-        $string .= "<div class='overflow'><pre class='translation'><span>{$nativeTranslation}</span></pre></div>";
+        $nativeMarkup = '<p><strong>Native</strong></p>';
+        $nativeMarkup .= '<p>This is translation of the input string back to the input format.</p>';
+        $nativeMarkup .= '<p>In difference to the input string, if corrections were applied, generated string will be corrected as well. Each whitespace sequence will be replaced by a single blank space and special characters will be explicitly escaped.</p>';
+        $nativeMarkup .= "<div class='overflow'><pre class='translation'><span>{$nativeTranslation}</span></pre></div>";
+        $nativeMarkup = "<li>{$nativeMarkup}</li>";
 
-        return "<ol><li>{$string}</li></ol>";
+        $extendedDisMaxTranslation = self::getExtendedDisMaxTranslation($syntaxTree);
+        $extendedDisMaxMarkup = '<p><strong>ExtendedDisMax</strong></p>';
+        $extendedDisMaxMarkup .= '<p><a href="https://cwiki.apache.org/confluence/display/solr/The+Extended+DisMax+Query+Parser">Solr\'s Extended DisMax</a>...</p>';
+        $extendedDisMaxMarkup .= "<div class='overflow'><pre class='translation'><span>{$extendedDisMaxTranslation}</span></pre></div>";
+        $extendedDisMaxMarkup = "<li>{$extendedDisMaxMarkup}</li>";
+
+        $queryStringTranslation = self::getQueryStringTranslation($syntaxTree);
+        $queryStringMarkup = '<p><strong>QueryString</strong></p>';
+        $queryStringMarkup .= '<p><a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-query-string-query.html">Elasticsearch\'s Query String Query</a>...</p>';
+        $queryStringMarkup .= "<div class='overflow'><pre class='translation'><span>{$queryStringTranslation}</span></pre></div>";
+        $queryStringMarkup = "<li>{$queryStringMarkup}</li>";
+
+        return "<ol>{$nativeMarkup}{$extendedDisMaxMarkup}{$queryStringMarkup}</ol>";
+    }
+
+    private static function getExtendedDisMaxTranslation(SyntaxTree $syntaxTree)
+    {
+        $visitors = [];
+
+        $visitors[] = new Generators\ExtendedDisMax\Exclude();
+        $visitors[] = new Generators\ExtendedDisMax\Group();
+        $visitors[] = new Generators\ExtendedDisMax\IncludeNode();
+        $visitors[] = new Generators\ExtendedDisMax\LogicalAnd();
+        $visitors[] = new Generators\ExtendedDisMax\LogicalNot();
+        $visitors[] = new Generators\ExtendedDisMax\LogicalOr();
+        $visitors[] = new Generators\ExtendedDisMax\Phrase(
+            [
+                'type' => 'type_s',
+            ],
+            'default_s'
+        );
+        $visitors[] = new Generators\ExtendedDisMax\Query();
+        $visitors[] = new Generators\ExtendedDisMax\Tag('tag_ms');
+        $visitors[] = new Generators\ExtendedDisMax\User('user_s');
+        $visitors[] = new Generators\ExtendedDisMax\Word(
+            [
+                'type' => 'type_s',
+            ],
+            'default_s'
+        );
+
+        $aggregate = new Generators\ExtendedDisMax\Aggregate($visitors);
+        $generator = new Generators\ExtendedDisMax($aggregate);
+
+        return $generator->generate($syntaxTree);
+    }
+
+    private static function getQueryStringTranslation(SyntaxTree $syntaxTree)
+    {
+        $visitors = [];
+
+        $visitors[] = new Generators\QueryString\Exclude();
+        $visitors[] = new Generators\QueryString\Group();
+        $visitors[] = new Generators\QueryString\IncludeNode();
+        $visitors[] = new Generators\QueryString\LogicalAnd();
+        $visitors[] = new Generators\QueryString\LogicalNot();
+        $visitors[] = new Generators\QueryString\LogicalOr();
+        $visitors[] = new Generators\QueryString\Phrase(
+            [
+                'type' => 'type_s',
+            ],
+            'default_s'
+        );
+        $visitors[] = new Generators\QueryString\Query();
+        $visitors[] = new Generators\QueryString\Tag('tag_ms');
+        $visitors[] = new Generators\QueryString\User('user_s');
+        $visitors[] = new Generators\QueryString\Word(
+            [
+                'type' => 'type_s',
+            ],
+            'default_s'
+        );
+
+        $aggregate = new Generators\QueryString\Aggregate($visitors);
+        $generator = new Generators\QueryString($aggregate);
+
+        return $generator->generate($syntaxTree);
     }
 }
 
