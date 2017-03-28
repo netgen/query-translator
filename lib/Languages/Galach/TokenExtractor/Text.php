@@ -31,7 +31,7 @@ final class Text extends TokenExtractor
         '/(?<lexeme>(?:AND|&&))(?:[\s"\'()+\-!]|$)/Au' => Tokenizer::TOKEN_LOGICAL_AND,
         '/(?<lexeme>(?:OR|\|\|))(?:[\s"\'()+\-!]|$)/Au' => Tokenizer::TOKEN_LOGICAL_OR,
         '/(?<lexeme>(?<quote>(?<!\\\\)["\'])(?<phrase>.*?)(?:(?<!\\\\)(?P=quote)))/Aus' => Tokenizer::TOKEN_TERM,
-        '/(?<lexeme>(?<word>(?:\\\\ |\\\\\(|\\\\\)|\\\\"|\\\\\'|[^"\'()\s])+?))(?:(?<!\\\\)["\']|\(|\)|$|\s)/Au' => Tokenizer::TOKEN_TERM,
+        '/(?<lexeme>(?<word>(?:\\\\\\\\|\\\\ |\\\\\(|\\\\\)|\\\\"|\\\\\'|[^"\'()\s])+?))(?:(?<!\\\\)["\']|\(|\)|$|\s)/Au' => Tokenizer::TOKEN_TERM,
     ];
 
     /**

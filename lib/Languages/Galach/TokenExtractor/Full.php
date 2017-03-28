@@ -35,7 +35,7 @@ final class Full extends TokenExtractor
         '/(?<lexeme>(?:(?<marker>(?<!\\\\)\#)(?<tag>[a-zA-Z0-9_][a-zA-Z0-9_\-.]*)))(?:[\s"\'()+!]|$)/Au' => Tokenizer::TOKEN_TERM,
         '/(?<lexeme>(?:(?<marker>(?<!\\\\)@)(?<user>[a-zA-Z0-9_][a-zA-Z0-9_\-.]*)))(?:[\s"\'()+!]|$)/Au' => Tokenizer::TOKEN_TERM,
         '/(?<lexeme>(?:(?<domain>[a-zA-Z_][a-zA-Z0-9_\-]*):)?(?<quote>(?<!\\\\)["\'])(?<phrase>.*?)(?:(?<!\\\\)(?P=quote)))/Aus' => Tokenizer::TOKEN_TERM,
-        '/(?<lexeme>(?:(?<domain>[a-zA-Z_][a-zA-Z0-9_\-]*):)?(?<word>(?:\\\\ |\\\\\(|\\\\\)|\\\\"|\\\\\'|[^"\'()\s])+?))(?:(?<!\\\\)["\']|\(|\)|$|\s)/Au' => Tokenizer::TOKEN_TERM,
+        '/(?<lexeme>(?:(?<domain>[a-zA-Z_][a-zA-Z0-9_\-]*):)?(?<word>(?:\\\\\\\\|\\\\ |\\\\\(|\\\\\)|\\\\"|\\\\\'|[^"\'()\s])+?))(?:(?<!\\\\)["\']|\(|\)|$|\s)/Au' => Tokenizer::TOKEN_TERM,
     ];
 
     /**

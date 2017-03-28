@@ -1042,10 +1042,24 @@ class TokenizerTest extends TestCase
                 'one\\\\)two\\\\(one\\\\+two\\\\-one\\\\!two',
                 [
                     new WordToken(
-                        'one\\\\)two\\\\(one\\\\+two\\\\-one\\\\!two',
+                        'one\\\\',
                         0,
                         '',
-                        'one\)two\(one\+two\-one\!two'
+                        'one\\'
+                    ),
+                    new Token(Tokenizer::TOKEN_GROUP_RIGHT_DELIMITER, ')', 5),
+                    new WordToken(
+                        'two\\\\',
+                        6,
+                        '',
+                        'two\\'
+                    ),
+                    new Token(Tokenizer::TOKEN_GROUP_LEFT_DELIMITER, '(', 11),
+                    new WordToken(
+                        'one\\\\+two\\\\-one\\\\!two',
+                        12,
+                        '',
+                        'one\+two\-one\!two'
                     ),
                 ],
             ],
