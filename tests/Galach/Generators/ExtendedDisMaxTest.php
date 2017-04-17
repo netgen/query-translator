@@ -39,6 +39,14 @@ class ExtendedDisMaxTest extends TestCase
                 '(one two)',
             ],
             [
+                'unexpected:(one two)',
+                'default_text_t:(one two)',
+            ],
+            [
+                'domain:(one two)',
+                'special_text_t:(one two)',
+            ],
+            [
                 'one AND two',
                 'one AND two',
             ],
@@ -125,7 +133,12 @@ class ExtendedDisMaxTest extends TestCase
         $visitors = [];
 
         $visitors[] = new Generators\ExtendedDisMax\Exclude();
-        $visitors[] = new Generators\ExtendedDisMax\Group();
+        $visitors[] = new Generators\ExtendedDisMax\Group(
+            [
+                self::FIELD_TEXT_DOMAIN => self::FIELD_TEXT_DOMAIN_MAPPED,
+            ],
+            self::FIELD_TEXT_DEFAULT
+        );
         $visitors[] = new Generators\ExtendedDisMax\IncludeNode();
         $visitors[] = new Generators\ExtendedDisMax\LogicalAnd();
         $visitors[] = new Generators\ExtendedDisMax\LogicalNot();

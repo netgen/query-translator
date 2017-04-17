@@ -57,15 +57,17 @@ final class Tokenizer implements Tokenizing
      * Left side delimiter of a group.
      *
      * Group is used to group elements in order to form a sub-query.
+     *
+     * @see \QueryTranslator\Languages\Galach\Values\Token\GroupBegin
      */
-    const TOKEN_GROUP_LEFT_DELIMITER = 128;
+    const TOKEN_GROUP_BEGIN = 128;
 
     /**
      * Right side delimiter of a group.
      *
      * Group is used to group elements in order to form a sub-query.
      */
-    const TOKEN_GROUP_RIGHT_DELIMITER = 256;
+    const TOKEN_GROUP_END = 256;
 
     /**
      * Term token type represents a category of term type tokens.

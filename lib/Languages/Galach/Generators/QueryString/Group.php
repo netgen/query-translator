@@ -4,6 +4,7 @@ namespace QueryTranslator\Languages\Galach\Generators\QueryString;
 
 use LogicException;
 use QueryTranslator\Languages\Galach\Values\Node\Group as GroupNode;
+use QueryTranslator\Languages\Galach\Values\Token\GroupBegin;
 use QueryTranslator\Values\Node;
 
 /**
@@ -11,6 +12,33 @@ use QueryTranslator\Values\Node;
  */
 final class Group extends Visitor
 {
+    /**
+     * Mapping of token domain to Solr field name.
+     *
+     * @var array
+     */
+    private $domainFieldMap = [];
+
+    /**
+     * Solr field name to be used when no mapping for a domain is found.
+     *
+     * @var string
+     */
+    private $defaultFieldName;
+
+    /**
+     * @param array|null $domainFieldMap
+     * @param string|null $defaultFieldName
+     */
+    public function __construct(array $domainFieldMap = null, $defaultFieldName = null)
+    {
+        if ($domainFieldMap !== null) {
+            $this->domainFieldMap = $domainFieldMap;
+        }
+
+        $this->defaultFieldName = $defaultFieldName;
+    }
+
     public function accept(Node $node)
     {
         return $node instanceof GroupNode;
@@ -35,7 +63,33 @@ final class Group extends Visitor
         }
 
         $clauses = implode(' ', $clauses);
+        $fieldName = $this->getSolrField($node->tokenLeft);
+        $fieldPrefix = $fieldName === null ? '' : "{$fieldName}:";
 
-        return "({$clauses})";
+        return "{$fieldPrefix}({$clauses})";
+    }
+
+    /**
+     * Return Solr backend field name for the given $token.
+     *
+     * @param \QueryTranslator\Languages\Galach\Values\Token\GroupBegin $token
+     *
+     * @return string|null
+     */
+    private function getSolrField(GroupBegin $token)
+    {
+        if ($token->domain === null) {
+            return null;
+        }
+
+        if (isset($this->domainFieldMap[$token->domain])) {
+            return $this->domainFieldMap[$token->domain];
+        }
+
+        if ($this->defaultFieldName !== null) {
+            return $this->defaultFieldName;
+        }
+
+        return null;
     }
 }

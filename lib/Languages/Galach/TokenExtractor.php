@@ -2,6 +2,7 @@
 
 namespace QueryTranslator\Languages\Galach;
 
+use QueryTranslator\Languages\Galach\Values\Token\GroupBegin;
 use QueryTranslator\Values\Token;
 use RuntimeException;
 
@@ -22,7 +23,7 @@ abstract class TokenExtractor
      *
      * @return \QueryTranslator\Values\Token|null Extracted token or null if it could not be extracted
      */
-    public function extract($string, $position)
+    final public function extract($string, $position)
     {
         $byteOffset = $this->getByteOffset($string, $position);
 
@@ -56,13 +57,30 @@ abstract class TokenExtractor
      *
      * @return \QueryTranslator\Values\Token
      */
-    protected function createToken($type, $position, array $data)
+    private function createToken($type, $position, array $data)
     {
-        if ($type !== Tokenizer::TOKEN_TERM) {
-            return new Token($type, $data['lexeme'], $position);
+        if ($type === Tokenizer::TOKEN_GROUP_BEGIN) {
+            return $this->createGroupToken($position, $data);
         }
 
-        return $this->createTermToken($position, $data);
+        if ($type === Tokenizer::TOKEN_TERM) {
+            return $this->createTermToken($position, $data);
+        }
+
+        return new Token($type, $data['lexeme'], $position);
+    }
+
+    /**
+     * Create an instance of Group token by the given parameters.
+     *
+     * @param $position
+     * @param array $data
+     *
+     * @return \QueryTranslator\Languages\Galach\Values\Token\GroupBegin
+     */
+    private function createGroupToken($position, array $data)
+    {
+        return new GroupBegin($data['lexeme'], $position, $data['delimiter'], $data['domain']);
     }
 
     /**

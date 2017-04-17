@@ -2,6 +2,7 @@
 
 namespace QueryTranslator\Languages\Galach\Values\Node;
 
+use QueryTranslator\Languages\Galach\Values\Token\GroupBegin;
 use QueryTranslator\Values\Node;
 use QueryTranslator\Values\Token;
 
@@ -16,7 +17,7 @@ final class Group extends Node
     public $nodes;
 
     /**
-     * @var \QueryTranslator\Values\Token
+     * @var \QueryTranslator\Languages\Galach\Values\Token\GroupBegin
      */
     public $tokenLeft;
 
@@ -27,12 +28,12 @@ final class Group extends Node
 
     /**
      * @param \QueryTranslator\Values\Node[] $nodes
-     * @param \QueryTranslator\Values\Token $tokenLeft
+     * @param \QueryTranslator\Languages\Galach\Values\Token\GroupBegin $tokenLeft
      * @param \QueryTranslator\Values\Token $tokenRight
      */
     public function __construct(
         array $nodes = [],
-        Token $tokenLeft = null,
+        GroupBegin $tokenLeft = null,
         Token $tokenRight = null
     ) {
         $this->nodes = $nodes;

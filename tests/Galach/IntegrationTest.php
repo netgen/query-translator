@@ -15,6 +15,7 @@ use QueryTranslator\Languages\Galach\Values\Node\LogicalNot;
 use QueryTranslator\Languages\Galach\Values\Node\LogicalOr;
 use QueryTranslator\Languages\Galach\Values\Node\Query;
 use QueryTranslator\Languages\Galach\Values\Node\Term;
+use QueryTranslator\Languages\Galach\Values\Token\GroupBegin as GroupBeginToken;
 use QueryTranslator\Languages\Galach\Values\Token\Phrase as PhraseToken;
 use QueryTranslator\Languages\Galach\Values\Token\Tag as TagToken;
 use QueryTranslator\Languages\Galach\Values\Token\User as UserToken;
@@ -296,10 +297,10 @@ class IntegrationTest extends TestCase
             [
                 '(one two)',
                 [
-                    $token1 = new Token(Tokenizer::TOKEN_GROUP_LEFT_DELIMITER, '(', 0),
+                    $token1 = new GroupBeginToken('(', 0, '(', null),
                     $token2 = new WordToken('one', 1, '', 'one'),
                     $token3 = new WordToken('two', 5, '', 'two'),
-                    $token4 = new Token(Tokenizer::TOKEN_GROUP_RIGHT_DELIMITER, ')', 8),
+                    $token4 = new Token(Tokenizer::TOKEN_GROUP_END, ')', 8),
                 ],
                 new Query(
                     [
@@ -317,11 +318,11 @@ class IntegrationTest extends TestCase
             [
                 '(one AND two)',
                 [
-                    $token1 = new Token(Tokenizer::TOKEN_GROUP_LEFT_DELIMITER, '(', 0),
+                    $token1 = new GroupBeginToken('(', 0, '(', null),
                     $token2 = new WordToken('one', 1, '', 'one'),
                     $token3 = new Token(Tokenizer::TOKEN_LOGICAL_AND, 'AND', 5),
                     $token4 = new WordToken('two', 9, '', 'two'),
-                    $token5 = new Token(Tokenizer::TOKEN_GROUP_RIGHT_DELIMITER, ')', 12),
+                    $token5 = new Token(Tokenizer::TOKEN_GROUP_END, ')', 12),
                 ],
                 new Query(
                     [
@@ -342,12 +343,12 @@ class IntegrationTest extends TestCase
             [
                 '(NOT one OR two)',
                 [
-                    $token1 = new Token(Tokenizer::TOKEN_GROUP_LEFT_DELIMITER, '(', 0),
+                    $token1 = new GroupBeginToken('(', 0, '(', null),
                     $token2 = new Token(Tokenizer::TOKEN_LOGICAL_NOT, 'NOT', 1),
                     $token3 = new WordToken('one', 5, '', 'one'),
                     $token4 = new Token(Tokenizer::TOKEN_LOGICAL_OR, 'OR', 9),
                     $token5 = new WordToken('two', 12, '', 'two'),
-                    $token6 = new Token(Tokenizer::TOKEN_GROUP_RIGHT_DELIMITER, ')', 15),
+                    $token6 = new Token(Tokenizer::TOKEN_GROUP_END, ')', 15),
                 ],
                 new Query(
                     [
@@ -373,11 +374,11 @@ class IntegrationTest extends TestCase
                 [
                     $token1 = new WordToken('one', 0, '', 'one'),
                     $token2 = new Token(Tokenizer::TOKEN_LOGICAL_AND, 'AND', 4),
-                    $token3 = new Token(Tokenizer::TOKEN_GROUP_LEFT_DELIMITER, '(', 8),
+                    $token3 = new GroupBeginToken('(', 8, '(', null),
                     $token4 = new WordToken('two', 9, '', 'two'),
                     $token5 = new Token(Tokenizer::TOKEN_LOGICAL_OR, 'OR', 13),
                     $token6 = new WordToken('three', 16, '', 'three'),
-                    $token7 = new Token(Tokenizer::TOKEN_GROUP_RIGHT_DELIMITER, ')', 21),
+                    $token7 = new Token(Tokenizer::TOKEN_GROUP_END, ')', 21),
                 ],
                 new Query(
                     [
@@ -402,22 +403,22 @@ class IntegrationTest extends TestCase
             [
                 '((one) AND (two AND (three OR four five)))',
                 [
-                    $token1 = new Token(Tokenizer::TOKEN_GROUP_LEFT_DELIMITER, '(', 0),
-                    $token2 = new Token(Tokenizer::TOKEN_GROUP_LEFT_DELIMITER, '(', 1),
+                    $token1 = new GroupBeginToken('(', 0, '(', null),
+                    $token2 = new GroupBeginToken('(', 1, '(', null),
                     $token3 = new WordToken('one', 2, '', 'one'),
-                    $token4 = new Token(Tokenizer::TOKEN_GROUP_RIGHT_DELIMITER, ')', 5),
+                    $token4 = new Token(Tokenizer::TOKEN_GROUP_END, ')', 5),
                     $token5 = new Token(Tokenizer::TOKEN_LOGICAL_AND, 'AND', 7),
-                    $token6 = new Token(Tokenizer::TOKEN_GROUP_LEFT_DELIMITER, '(', 11),
+                    $token6 = new GroupBeginToken('(', 11, '(', null),
                     $token7 = new WordToken('two', 12, '', 'two'),
                     $token8 = new Token(Tokenizer::TOKEN_LOGICAL_AND, 'AND', 16),
-                    $token9 = new Token(Tokenizer::TOKEN_GROUP_LEFT_DELIMITER, '(', 20),
+                    $token9 = new GroupBeginToken('(', 20, '(', null),
                     $token10 = new WordToken('three', 21, '', 'three'),
                     $token11 = new Token(Tokenizer::TOKEN_LOGICAL_OR, 'OR', 27),
                     $token12 = new WordToken('four', 30, '', 'four'),
                     $token13 = new WordToken('five', 35, '', 'five'),
-                    $token14 = new Token(Tokenizer::TOKEN_GROUP_RIGHT_DELIMITER, ')', 39),
-                    $token15 = new Token(Tokenizer::TOKEN_GROUP_RIGHT_DELIMITER, ')', 40),
-                    $token16 = new Token(Tokenizer::TOKEN_GROUP_RIGHT_DELIMITER, ')', 41),
+                    $token14 = new Token(Tokenizer::TOKEN_GROUP_END, ')', 39),
+                    $token15 = new Token(Tokenizer::TOKEN_GROUP_END, ')', 40),
+                    $token16 = new Token(Tokenizer::TOKEN_GROUP_END, ')', 41),
                 ],
                 new Query(
                     [
@@ -465,16 +466,16 @@ class IntegrationTest extends TestCase
             [
                 '((one) (two OR three))',
                 [
-                    $token1 = new Token(Tokenizer::TOKEN_GROUP_LEFT_DELIMITER, '(', 0),
-                    $token2 = new Token(Tokenizer::TOKEN_GROUP_LEFT_DELIMITER, '(', 1),
+                    $token1 = new GroupBeginToken('(', 0, '(', null),
+                    $token2 = new GroupBeginToken('(', 1, '(', null),
                     $token3 = new WordToken('one', 2, '', 'one'),
-                    $token4 = new Token(Tokenizer::TOKEN_GROUP_RIGHT_DELIMITER, ')', 5),
-                    $token5 = new Token(Tokenizer::TOKEN_GROUP_LEFT_DELIMITER, '(', 7),
+                    $token4 = new Token(Tokenizer::TOKEN_GROUP_END, ')', 5),
+                    $token5 = new GroupBeginToken('(', 7, '(', null),
                     $token6 = new WordToken('two', 8, '', 'two'),
                     $token7 = new Token(Tokenizer::TOKEN_LOGICAL_OR, 'OR', 12),
                     $token8 = new WordToken('three', 15, '', 'three'),
-                    $token9 = new Token(Tokenizer::TOKEN_GROUP_RIGHT_DELIMITER, ')', 20),
-                    $token10 = new Token(Tokenizer::TOKEN_GROUP_RIGHT_DELIMITER, ')', 21),
+                    $token9 = new Token(Tokenizer::TOKEN_GROUP_END, ')', 20),
+                    $token10 = new Token(Tokenizer::TOKEN_GROUP_END, ')', 21),
                 ],
                 new Query(
                     [
@@ -644,9 +645,9 @@ class IntegrationTest extends TestCase
                 '+(one)',
                 [
                     $token1 = new Token(Tokenizer::TOKEN_INCLUDE, '+', 0),
-                    $token2 = new Token(Tokenizer::TOKEN_GROUP_LEFT_DELIMITER, '(', 1),
+                    $token2 = new GroupBeginToken('(', 1, '(', null),
                     $token3 = new WordToken('one', 2, '', 'one'),
-                    $token4 = new Token(Tokenizer::TOKEN_GROUP_RIGHT_DELIMITER, ')', 5),
+                    $token4 = new Token(Tokenizer::TOKEN_GROUP_END, ')', 5),
                 ],
                 new Query(
                     [
@@ -802,9 +803,9 @@ class IntegrationTest extends TestCase
                 '-(one)',
                 [
                     $token1 = new Token(Tokenizer::TOKEN_EXCLUDE, '-', 0),
-                    $token2 = new Token(Tokenizer::TOKEN_GROUP_LEFT_DELIMITER, '(', 1),
+                    $token2 = new GroupBeginToken('(', 1, '(', null),
                     $token3 = new WordToken('one', 2, '', 'one'),
-                    $token4 = new Token(Tokenizer::TOKEN_GROUP_RIGHT_DELIMITER, ')', 5),
+                    $token4 = new Token(Tokenizer::TOKEN_GROUP_END, ')', 5),
                 ],
                 new Query(
                     [
@@ -824,13 +825,13 @@ class IntegrationTest extends TestCase
             [
                 '(one OR +two three)',
                 [
-                    $token1 = new Token(Tokenizer::TOKEN_GROUP_LEFT_DELIMITER, '(', 0),
+                    $token1 = new GroupBeginToken('(', 0, '(', null),
                     $token2 = new WordToken('one', 1, '', 'one'),
                     $token3 = new Token(Tokenizer::TOKEN_LOGICAL_OR, 'OR', 5),
                     $token4 = new Token(Tokenizer::TOKEN_INCLUDE, '+', 8),
                     $token5 = new WordToken('two', 9, '', 'two'),
                     $token6 = new WordToken('three', 13, '', 'three'),
-                    $token7 = new Token(Tokenizer::TOKEN_GROUP_RIGHT_DELIMITER, ')', 18),
+                    $token7 = new Token(Tokenizer::TOKEN_GROUP_END, ')', 18),
                 ],
                 new Query(
                     [
@@ -855,13 +856,13 @@ class IntegrationTest extends TestCase
             [
                 '(one OR -two three)',
                 [
-                    $token1 = new Token(Tokenizer::TOKEN_GROUP_LEFT_DELIMITER, '(', 0),
+                    $token1 = new GroupBeginToken('(', 0, '(', null),
                     $token2 = new WordToken('one', 1, '', 'one'),
                     $token3 = new Token(Tokenizer::TOKEN_LOGICAL_OR, 'OR', 5),
                     $token4 = new Token(Tokenizer::TOKEN_EXCLUDE, '-', 8),
                     $token5 = new WordToken('two', 9, '', 'two'),
                     $token6 = new WordToken('three', 13, '', 'three'),
-                    $token7 = new Token(Tokenizer::TOKEN_GROUP_RIGHT_DELIMITER, ')', 18),
+                    $token7 = new Token(Tokenizer::TOKEN_GROUP_END, ')', 18),
                 ],
                 new Query(
                     [
@@ -886,11 +887,11 @@ class IntegrationTest extends TestCase
             [
                 '((one))',
                 [
-                    $token1 = new Token(Tokenizer::TOKEN_GROUP_LEFT_DELIMITER, '(', 0),
-                    $token2 = new Token(Tokenizer::TOKEN_GROUP_LEFT_DELIMITER, '(', 1),
+                    $token1 = new GroupBeginToken('(', 0, '(', null),
+                    $token2 = new GroupBeginToken('(', 1, '(', null),
                     $token3 = new WordToken('one', 2, '', 'one'),
-                    $token4 = new Token(Tokenizer::TOKEN_GROUP_RIGHT_DELIMITER, ')', 5),
-                    $token5 = new Token(Tokenizer::TOKEN_GROUP_RIGHT_DELIMITER, ')', 6),
+                    $token4 = new Token(Tokenizer::TOKEN_GROUP_END, ')', 5),
+                    $token5 = new Token(Tokenizer::TOKEN_GROUP_END, ')', 6),
                 ],
                 new Query(
                     [
@@ -1425,13 +1426,13 @@ class IntegrationTest extends TestCase
                 '(one AND two OR NOT)',
                 '(one AND two)',
                 [
-                    $token1 = new Token(Tokenizer::TOKEN_GROUP_LEFT_DELIMITER, '(', 0),
+                    $token1 = new GroupBeginToken('(', 0, '(', null),
                     $token2 = new WordToken('one', 1, '', 'one'),
                     $token3 = new Token(Tokenizer::TOKEN_LOGICAL_AND, 'AND', 5),
                     $token4 = new WordToken('two', 9, '', 'two'),
                     $token5 = new Token(Tokenizer::TOKEN_LOGICAL_OR, 'OR', 13),
                     $token6 = new Token(Tokenizer::TOKEN_LOGICAL_NOT, 'NOT', 16),
-                    $token7 = new Token(Tokenizer::TOKEN_GROUP_RIGHT_DELIMITER, ')', 19),
+                    $token7 = new Token(Tokenizer::TOKEN_GROUP_END, ')', 19),
                 ],
                 new Query(
                     [
@@ -1457,12 +1458,12 @@ class IntegrationTest extends TestCase
                 '(AND one OR two)',
                 '(one OR two)',
                 [
-                    $token1 = new Token(Tokenizer::TOKEN_GROUP_LEFT_DELIMITER, '(', 0),
+                    $token1 = new GroupBeginToken('(', 0, '(', null),
                     $token2 = new Token(Tokenizer::TOKEN_LOGICAL_AND, 'AND', 1),
                     $token3 = new WordToken('one', 5, '', 'one'),
                     $token4 = new Token(Tokenizer::TOKEN_LOGICAL_OR, 'OR', 9),
                     $token5 = new WordToken('two', 12, '', 'two'),
-                    $token6 = new Token(Tokenizer::TOKEN_GROUP_RIGHT_DELIMITER, ')', 15),
+                    $token6 = new Token(Tokenizer::TOKEN_GROUP_END, ')', 15),
                 ],
                 new Query(
                     [
@@ -1488,18 +1489,18 @@ class IntegrationTest extends TestCase
                 '(((one)))',
                 [
                     $token1 = new Token(Tokenizer::TOKEN_LOGICAL_AND, 'AND', 0),
-                    $token2 = new Token(Tokenizer::TOKEN_GROUP_LEFT_DELIMITER, '(', 4),
-                    $token3 = new Token(Tokenizer::TOKEN_GROUP_LEFT_DELIMITER, '(', 5),
-                    $token4 = new Token(Tokenizer::TOKEN_GROUP_LEFT_DELIMITER, '(', 6),
+                    $token2 = new GroupBeginToken('(', 4, '(', null),
+                    $token3 = new GroupBeginToken('(', 5, '(', null),
+                    $token4 = new GroupBeginToken('(', 6, '(', null),
                     $token5 = new Token(Tokenizer::TOKEN_LOGICAL_OR, 'OR', 7),
                     $token6 = new Token(Tokenizer::TOKEN_LOGICAL_AND, 'AND', 10),
                     $token7 = new WordToken('one', 14, '', 'one'),
                     $token8 = new Token(Tokenizer::TOKEN_LOGICAL_AND, 'AND', 18),
                     $token9 = new Token(Tokenizer::TOKEN_LOGICAL_NOT, 'NOT', 22),
                     $token10 = new Token(Tokenizer::TOKEN_LOGICAL_OR, 'OR', 26),
-                    $token11 = new Token(Tokenizer::TOKEN_GROUP_RIGHT_DELIMITER, ')', 28),
-                    $token12 = new Token(Tokenizer::TOKEN_GROUP_RIGHT_DELIMITER, ')', 29),
-                    $token13 = new Token(Tokenizer::TOKEN_GROUP_RIGHT_DELIMITER, ')', 30),
+                    $token11 = new Token(Tokenizer::TOKEN_GROUP_END, ')', 28),
+                    $token12 = new Token(Tokenizer::TOKEN_GROUP_END, ')', 29),
+                    $token13 = new Token(Tokenizer::TOKEN_GROUP_END, ')', 30),
                     $token14 = new Token(Tokenizer::TOKEN_LOGICAL_OR, 'OR', 32),
                     $token15 = new Token(Tokenizer::TOKEN_LOGICAL_NOT, 'NOT', 35),
                 ],
@@ -1542,8 +1543,8 @@ class IntegrationTest extends TestCase
                 'one',
                 [
                     $token1 = new WordToken('one', 0, '', 'one'),
-                    $token2 = new Token(Tokenizer::TOKEN_GROUP_LEFT_DELIMITER, '(', 4),
-                    $token3 = new Token(Tokenizer::TOKEN_GROUP_RIGHT_DELIMITER, ')', 5),
+                    $token2 = new GroupBeginToken('(', 4, '(', null),
+                    $token3 = new Token(Tokenizer::TOKEN_GROUP_END, ')', 5, null),
                 ],
                 new Query(
                     [
@@ -1559,10 +1560,10 @@ class IntegrationTest extends TestCase
                 'one',
                 [
                     $token1 = new WordToken('one', 0, '', 'one'),
-                    $token2 = new Token(Tokenizer::TOKEN_GROUP_LEFT_DELIMITER, '(', 4),
-                    $token3 = new Token(Tokenizer::TOKEN_GROUP_LEFT_DELIMITER, '(', 5),
-                    $token4 = new Token(Tokenizer::TOKEN_GROUP_RIGHT_DELIMITER, ')', 6),
-                    $token5 = new Token(Tokenizer::TOKEN_GROUP_RIGHT_DELIMITER, ')', 7),
+                    $token2 = new GroupBeginToken('(', 4, '(', null),
+                    $token3 = new GroupBeginToken('(', 5, '(', null),
+                    $token4 = new Token(Tokenizer::TOKEN_GROUP_END, ')', 6),
+                    $token5 = new Token(Tokenizer::TOKEN_GROUP_END, ')', 7),
                 ],
                 new Query(
                     [
@@ -1580,10 +1581,10 @@ class IntegrationTest extends TestCase
                 [
                     $token1 = new WordToken('one', 0, '', 'one'),
                     $token2 = new Token(Tokenizer::TOKEN_LOGICAL_AND, 'AND', 4),
-                    $token3 = new Token(Tokenizer::TOKEN_GROUP_LEFT_DELIMITER, '(', 8),
-                    $token4 = new Token(Tokenizer::TOKEN_GROUP_LEFT_DELIMITER, '(', 9),
-                    $token5 = new Token(Tokenizer::TOKEN_GROUP_RIGHT_DELIMITER, ')', 10),
-                    $token6 = new Token(Tokenizer::TOKEN_GROUP_RIGHT_DELIMITER, ')', 11),
+                    $token3 = new GroupBeginToken('(', 8, '(', null),
+                    $token4 = new GroupBeginToken('(', 9, '(', null),
+                    $token5 = new Token(Tokenizer::TOKEN_GROUP_END, ')', 10),
+                    $token6 = new Token(Tokenizer::TOKEN_GROUP_END, ')', 11),
                     $token7 = new Token(Tokenizer::TOKEN_LOGICAL_OR, 'OR', 13),
                     $token8 = new WordToken('two', 16, '', 'two'),
                 ],
@@ -1603,11 +1604,11 @@ class IntegrationTest extends TestCase
                 'one',
                 [
                     $token1 = new WordToken('one', 0, '', 'one'),
-                    $token2 = new Token(Tokenizer::TOKEN_GROUP_LEFT_DELIMITER, '(', 4),
+                    $token2 = new GroupBeginToken('(', 4, '(', null),
                     $token3 = new Token(Tokenizer::TOKEN_LOGICAL_AND, 'AND', 5),
                     $token4 = new Token(Tokenizer::TOKEN_LOGICAL_OR, 'OR', 9),
                     $token5 = new Token(Tokenizer::TOKEN_LOGICAL_NOT, 'NOT', 12),
-                    $token6 = new Token(Tokenizer::TOKEN_GROUP_RIGHT_DELIMITER, ')', 15),
+                    $token6 = new Token(Tokenizer::TOKEN_GROUP_END, ')', 15),
                 ],
                 new Query(
                     [
@@ -1626,14 +1627,14 @@ class IntegrationTest extends TestCase
                 'one',
                 [
                     $token1 = new WordToken('one', 0, '', 'one'),
-                    $token2 = new Token(Tokenizer::TOKEN_GROUP_RIGHT_DELIMITER, ')', 3),
-                    $token3 = new Token(Tokenizer::TOKEN_GROUP_LEFT_DELIMITER, '(', 5),
+                    $token2 = new Token(Tokenizer::TOKEN_GROUP_END, ')', 3),
+                    $token3 = new GroupBeginToken('(', 5, '(', null),
                     $token4 = new Token(Tokenizer::TOKEN_LOGICAL_AND, 'AND', 6),
-                    $token5 = new Token(Tokenizer::TOKEN_GROUP_RIGHT_DELIMITER, ')', 9),
-                    $token6 = new Token(Tokenizer::TOKEN_GROUP_RIGHT_DELIMITER, ')', 10),
+                    $token5 = new Token(Tokenizer::TOKEN_GROUP_END, ')', 9),
+                    $token6 = new Token(Tokenizer::TOKEN_GROUP_END, ')', 10),
                     $token7 = new Token(Tokenizer::TOKEN_LOGICAL_OR, 'OR', 12),
                     $token8 = new Token(Tokenizer::TOKEN_LOGICAL_NOT, 'NOT', 15),
-                    $token9 = new Token(Tokenizer::TOKEN_GROUP_RIGHT_DELIMITER, ')', 18),
+                    $token9 = new Token(Tokenizer::TOKEN_GROUP_END, ')', 18),
                 ],
                 new Query(
                     [
@@ -1653,16 +1654,16 @@ class IntegrationTest extends TestCase
                 '(one( (AND) OR NOT((',
                 'one',
                 [
-                    $token1 = new Token(Tokenizer::TOKEN_GROUP_LEFT_DELIMITER, '(', 0),
+                    $token1 = new GroupBeginToken('(', 0, '(', null),
                     $token2 = new WordToken('one', 1, '', 'one'),
-                    $token3 = new Token(Tokenizer::TOKEN_GROUP_LEFT_DELIMITER, '(', 4),
-                    $token4 = new Token(Tokenizer::TOKEN_GROUP_LEFT_DELIMITER, '(', 6),
+                    $token3 = new GroupBeginToken('(', 4, '(', null),
+                    $token4 = new GroupBeginToken('(', 6, '(', null),
                     $token5 = new Token(Tokenizer::TOKEN_LOGICAL_AND, 'AND', 7),
-                    $token6 = new Token(Tokenizer::TOKEN_GROUP_RIGHT_DELIMITER, ')', 10),
+                    $token6 = new Token(Tokenizer::TOKEN_GROUP_END, ')', 10),
                     $token7 = new Token(Tokenizer::TOKEN_LOGICAL_OR, 'OR', 12),
                     $token8 = new Token(Tokenizer::TOKEN_LOGICAL_NOT, 'NOT', 15),
-                    $token9 = new Token(Tokenizer::TOKEN_GROUP_LEFT_DELIMITER, '(', 18),
-                    $token10 = new Token(Tokenizer::TOKEN_GROUP_LEFT_DELIMITER, '(', 19),
+                    $token9 = new GroupBeginToken('(', 18, '(', null),
+                    $token10 = new GroupBeginToken('(', 19, '(', null),
                 ],
                 new Query(
                     [
@@ -1685,14 +1686,14 @@ class IntegrationTest extends TestCase
                 [
                     $token1 = new Token(Tokenizer::TOKEN_LOGICAL_OR, 'OR', 0),
                     $token2 = new Token(Tokenizer::TOKEN_LOGICAL_NOT, 'NOT', 3),
-                    $token3 = new Token(Tokenizer::TOKEN_GROUP_LEFT_DELIMITER, '(', 7),
+                    $token3 = new GroupBeginToken('(', 7, '(', null),
                     $token4 = new WordToken('one', 8, '', 'one'),
                     $token5 = new Token(Tokenizer::TOKEN_LOGICAL_OR, 'OR', 12),
                     $token6 = new WordToken('two', 15, '', 'two'),
                     $token7 = new Token(Tokenizer::TOKEN_LOGICAL_AND, 'AND', 19),
                     $token8 = new Token(Tokenizer::TOKEN_LOGICAL_OR, 'OR', 23),
                     $token9 = new Token(Tokenizer::TOKEN_LOGICAL_NOT, 'NOT', 26),
-                    $token10 = new Token(Tokenizer::TOKEN_GROUP_RIGHT_DELIMITER, ')', 29),
+                    $token10 = new Token(Tokenizer::TOKEN_GROUP_END, ')', 29),
                     $token11 = new Token(Tokenizer::TOKEN_LOGICAL_OR, 'OR', 31),
                     $token12 = new WordToken('three', 34, '', 'three'),
                     $token13 = new Token(Tokenizer::TOKEN_LOGICAL_AND, 'AND', 40),
@@ -1892,7 +1893,7 @@ class IntegrationTest extends TestCase
                 '+(+one OR +two)',
                 [
                     $token1 = new Token(Tokenizer::TOKEN_INCLUDE, '+', 0),
-                    $token2 = new Token(Tokenizer::TOKEN_GROUP_LEFT_DELIMITER, '(', 1),
+                    $token2 = new GroupBeginToken('(', 1, '(', null),
                     $token3 = new Token(Tokenizer::TOKEN_INCLUDE, '+', 2),
                     $token4 = new WordToken('one', 3, '', 'one'),
                     $token5 = new Token(Tokenizer::TOKEN_INCLUDE, '+', 7),
@@ -1905,7 +1906,7 @@ class IntegrationTest extends TestCase
                     $token12 = new Token(Tokenizer::TOKEN_INCLUDE, '+', 20),
                     $token13 = new Token(Tokenizer::TOKEN_INCLUDE, '+', 21),
                     $token14 = new Token(Tokenizer::TOKEN_INCLUDE, '+', 23),
-                    $token15 = new Token(Tokenizer::TOKEN_GROUP_RIGHT_DELIMITER, ')', 24),
+                    $token15 = new Token(Tokenizer::TOKEN_GROUP_END, ')', 24),
                 ],
                 new Query(
                     [
@@ -2088,7 +2089,7 @@ class IntegrationTest extends TestCase
                 '-(-one OR -two)',
                 [
                     $token1 = new Token(Tokenizer::TOKEN_EXCLUDE, '-', 0),
-                    $token2 = new Token(Tokenizer::TOKEN_GROUP_LEFT_DELIMITER, '(', 1),
+                    $token2 = new GroupBeginToken('(', 1, '(', null),
                     $token3 = new Token(Tokenizer::TOKEN_EXCLUDE, '-', 2),
                     $token4 = new WordToken('one', 3, '', 'one'),
                     $token5 = new Token(Tokenizer::TOKEN_EXCLUDE, '-', 7),
@@ -2100,7 +2101,7 @@ class IntegrationTest extends TestCase
                     $token11 = new WordToken('two', 16, '', 'two'),
                     $token12 = new Token(Tokenizer::TOKEN_EXCLUDE, '-', 20),
                     $token13 = new Token(Tokenizer::TOKEN_EXCLUDE, '-', 21),
-                    $token15 = new Token(Tokenizer::TOKEN_GROUP_RIGHT_DELIMITER, ')', 22),
+                    $token15 = new Token(Tokenizer::TOKEN_GROUP_END, ')', 22),
                     $token14 = new Token(Tokenizer::TOKEN_EXCLUDE, '-', 23),
                 ],
                 new Query(
@@ -2254,7 +2255,7 @@ class IntegrationTest extends TestCase
                 'NOT one',
                 [
                     $token1 = new Token(Tokenizer::TOKEN_LOGICAL_NOT, 'NOT', 0),
-                    $token2 = new Token(Tokenizer::TOKEN_GROUP_LEFT_DELIMITER, '(', 4),
+                    $token2 = new GroupBeginToken('(', 4, '(', null),
                     $token3 = new WordToken('one', 5, '', 'one'),
                 ],
                 new Query(
@@ -2274,7 +2275,7 @@ class IntegrationTest extends TestCase
                 'NOT one two',
                 [
                     $token1 = new Token(Tokenizer::TOKEN_LOGICAL_NOT, 'NOT', 0),
-                    $token2 = new Token(Tokenizer::TOKEN_GROUP_LEFT_DELIMITER, '(', 4),
+                    $token2 = new GroupBeginToken('(', 4, '(', null),
                     $token3 = new WordToken('one', 5, '', 'one'),
                     $token4 = new WordToken('two', 9, '', 'two'),
                 ],
@@ -2296,7 +2297,7 @@ class IntegrationTest extends TestCase
                 '-one',
                 [
                     $token1 = new Token(Tokenizer::TOKEN_EXCLUDE, '-', 0),
-                    $token2 = new Token(Tokenizer::TOKEN_GROUP_LEFT_DELIMITER, '(', 1),
+                    $token2 = new GroupBeginToken('(', 1, '(', null),
                     $token3 = new WordToken('one', 2, '', 'one'),
                 ],
                 new Query(
@@ -2316,7 +2317,7 @@ class IntegrationTest extends TestCase
                 '-one two',
                 [
                     $token1 = new Token(Tokenizer::TOKEN_EXCLUDE, '-', 0),
-                    $token2 = new Token(Tokenizer::TOKEN_GROUP_LEFT_DELIMITER, '(', 1),
+                    $token2 = new GroupBeginToken('(', 1, '(', null),
                     $token3 = new WordToken('one', 2, '', 'one'),
                     $token4 = new WordToken('two', 6, '', 'two'),
                 ],
@@ -2338,7 +2339,7 @@ class IntegrationTest extends TestCase
                 '+one',
                 [
                     $token1 = new Token(Tokenizer::TOKEN_INCLUDE, '+', 0),
-                    $token2 = new Token(Tokenizer::TOKEN_GROUP_LEFT_DELIMITER, '(', 1),
+                    $token2 = new GroupBeginToken('(', 1, '(', null),
                     $token3 = new WordToken('one', 2, '', 'one'),
                 ],
                 new Query(
@@ -2358,7 +2359,7 @@ class IntegrationTest extends TestCase
                 '+one two',
                 [
                     $token1 = new Token(Tokenizer::TOKEN_INCLUDE, '+', 0),
-                    $token2 = new Token(Tokenizer::TOKEN_GROUP_LEFT_DELIMITER, '(', 1),
+                    $token2 = new GroupBeginToken('(', 1, '(', null),
                     $token3 = new WordToken('one', 2, '', 'one'),
                     $token4 = new WordToken('two', 6, '', 'two'),
                 ],
@@ -2380,13 +2381,13 @@ class IntegrationTest extends TestCase
                 '-one +two NOT three',
                 [
                     $token1 = new Token(Tokenizer::TOKEN_EXCLUDE, '-', 0),
-                    $token2 = new Token(Tokenizer::TOKEN_GROUP_LEFT_DELIMITER, '(', 1),
+                    $token2 = new GroupBeginToken('(', 1, '(', null),
                     $token3 = new WordToken('one', 2, '', 'one'),
                     $token4 = new Token(Tokenizer::TOKEN_INCLUDE, '+', 6),
-                    $token5 = new Token(Tokenizer::TOKEN_GROUP_LEFT_DELIMITER, '(', 7),
+                    $token5 = new GroupBeginToken('(', 7, '(', null),
                     $token6 = new WordToken('two', 8, '', 'two'),
                     $token7 = new Token(Tokenizer::TOKEN_LOGICAL_NOT, 'NOT', 12),
-                    $token8 = new Token(Tokenizer::TOKEN_GROUP_LEFT_DELIMITER, '(', 16),
+                    $token8 = new GroupBeginToken('(', 16, '(', null),
                     $token9 = new WordToken('three', 17, '', 'three'),
                 ],
                 new Query(
@@ -2418,7 +2419,7 @@ class IntegrationTest extends TestCase
                     $token1 = new WordToken('one', 0, '', 'one'),
                     $token2 = new Token(Tokenizer::TOKEN_LOGICAL_AND, 'AND', 4),
                     $token3 = new Token(Tokenizer::TOKEN_LOGICAL_NOT, 'NOT', 8),
-                    $token4 = new Token(Tokenizer::TOKEN_GROUP_LEFT_DELIMITER, '(', 12),
+                    $token4 = new GroupBeginToken('(', 12, '(', null),
                     $token5 = new WordToken('two', 13, '', 'two'),
                 ],
                 new Query(
@@ -2441,12 +2442,12 @@ class IntegrationTest extends TestCase
                 '(one OR two AND) AND',
                 '(one OR two)',
                 [
-                    $token1 = new Token(Tokenizer::TOKEN_GROUP_LEFT_DELIMITER, '(', 0),
+                    $token1 = new GroupBeginToken('(', 0, '(', null),
                     $token2 = new WordToken('one', 1, '', 'one'),
                     $token3 = new Token(Tokenizer::TOKEN_LOGICAL_OR, 'OR', 5),
                     $token4 = new WordToken('two', 8, '', 'two'),
                     $token5 = new Token(Tokenizer::TOKEN_LOGICAL_AND, 'AND', 12),
-                    $token6 = new Token(Tokenizer::TOKEN_GROUP_RIGHT_DELIMITER, ')', 15),
+                    $token6 = new Token(Tokenizer::TOKEN_GROUP_END, ')', 15),
                     $token7 = new Token(Tokenizer::TOKEN_LOGICAL_AND, 'AND', 17),
                 ],
                 new Query(
@@ -2473,13 +2474,13 @@ class IntegrationTest extends TestCase
                 '(one AND NOT +two)',
                 '(one AND +two)',
                 [
-                    $token1 = new Token(Tokenizer::TOKEN_GROUP_LEFT_DELIMITER, '(', 0),
+                    $token1 = new GroupBeginToken('(', 0, '(', null),
                     $token2 = new WordToken('one', 1, '', 'one'),
                     $token3 = new Token(Tokenizer::TOKEN_LOGICAL_AND, 'AND', 5),
                     $token4 = new Token(Tokenizer::TOKEN_LOGICAL_NOT, 'NOT', 9),
                     $token5 = new Token(Tokenizer::TOKEN_INCLUDE, '+', 13),
                     $token6 = new WordToken('two', 14, '', 'two'),
-                    $token7 = new Token(Tokenizer::TOKEN_GROUP_RIGHT_DELIMITER, ')', 17),
+                    $token7 = new Token(Tokenizer::TOKEN_GROUP_END, ')', 17),
                 ],
                 new Query(
                     [
@@ -2507,13 +2508,13 @@ class IntegrationTest extends TestCase
                 '(one AND NOT -two)',
                 '(one AND -two)',
                 [
-                    $token1 = new Token(Tokenizer::TOKEN_GROUP_LEFT_DELIMITER, '(', 0),
+                    $token1 = new GroupBeginToken('(', 0, '(', null),
                     $token2 = new WordToken('one', 1, '', 'one'),
                     $token3 = new Token(Tokenizer::TOKEN_LOGICAL_AND, 'AND', 5),
                     $token4 = new Token(Tokenizer::TOKEN_LOGICAL_NOT, 'NOT', 9),
                     $token5 = new Token(Tokenizer::TOKEN_EXCLUDE, '-', 13),
                     $token6 = new WordToken('two', 14, '', 'two'),
-                    $token7 = new Token(Tokenizer::TOKEN_GROUP_RIGHT_DELIMITER, ')', 17),
+                    $token7 = new Token(Tokenizer::TOKEN_GROUP_END, ')', 17),
                 ],
                 new Query(
                     [
@@ -2541,14 +2542,14 @@ class IntegrationTest extends TestCase
                 '(one AND NOT -two three)',
                 '(one AND -two three)',
                 [
-                    $token1 = new Token(Tokenizer::TOKEN_GROUP_LEFT_DELIMITER, '(', 0),
+                    $token1 = new GroupBeginToken('(', 0, '(', null),
                     $token2 = new WordToken('one', 1, '', 'one'),
                     $token3 = new Token(Tokenizer::TOKEN_LOGICAL_AND, 'AND', 5),
                     $token4 = new Token(Tokenizer::TOKEN_LOGICAL_NOT, 'NOT', 9),
                     $token5 = new Token(Tokenizer::TOKEN_EXCLUDE, '-', 13),
                     $token6 = new WordToken('two', 14, '', 'two'),
                     $token7 = new WordToken('three', 18, '', 'three'),
-                    $token8 = new Token(Tokenizer::TOKEN_GROUP_RIGHT_DELIMITER, ')', 23),
+                    $token8 = new Token(Tokenizer::TOKEN_GROUP_END, ')', 23),
                 ],
                 new Query(
                     [
@@ -2577,14 +2578,14 @@ class IntegrationTest extends TestCase
                 '(one AND NOT +two three)',
                 '(one AND +two three)',
                 [
-                    $token1 = new Token(Tokenizer::TOKEN_GROUP_LEFT_DELIMITER, '(', 0),
+                    $token1 = new GroupBeginToken('(', 0, '(', null),
                     $token2 = new WordToken('one', 1, '', 'one'),
                     $token3 = new Token(Tokenizer::TOKEN_LOGICAL_AND, 'AND', 5),
                     $token4 = new Token(Tokenizer::TOKEN_LOGICAL_NOT, 'NOT', 9),
                     $token5 = new Token(Tokenizer::TOKEN_INCLUDE, '+', 13),
                     $token6 = new WordToken('two', 14, '', 'two'),
                     $token7 = new WordToken('three', 18, '', 'three'),
-                    $token8 = new Token(Tokenizer::TOKEN_GROUP_RIGHT_DELIMITER, ')', 23),
+                    $token8 = new Token(Tokenizer::TOKEN_GROUP_END, ')', 23),
                 ],
                 new Query(
                     [
@@ -2614,8 +2615,8 @@ class IntegrationTest extends TestCase
                 '+one',
                 [
                     $token1 = new Token(Tokenizer::TOKEN_INCLUDE, '+', 0),
-                    $token2 = new Token(Tokenizer::TOKEN_GROUP_LEFT_DELIMITER, '(', 1),
-                    $token3 = new Token(Tokenizer::TOKEN_GROUP_RIGHT_DELIMITER, ')', 2),
+                    $token2 = new GroupBeginToken('(', 1, '(', null),
+                    $token3 = new Token(Tokenizer::TOKEN_GROUP_END, ')', 2),
                     $token4 = new Token(Tokenizer::TOKEN_INCLUDE, '+', 3),
                     $token5 = new WordToken('one', 4, '', 'one'),
                 ],
@@ -2636,8 +2637,8 @@ class IntegrationTest extends TestCase
                 '!one',
                 [
                     $token1 = new Token(Tokenizer::TOKEN_INCLUDE, '+', 0),
-                    $token2 = new Token(Tokenizer::TOKEN_GROUP_LEFT_DELIMITER, '(', 1),
-                    $token3 = new Token(Tokenizer::TOKEN_GROUP_RIGHT_DELIMITER, ')', 2),
+                    $token2 = new GroupBeginToken('(', 1, '(', null),
+                    $token3 = new Token(Tokenizer::TOKEN_GROUP_END, ')', 2),
                     $token4 = new Token(Tokenizer::TOKEN_LOGICAL_NOT_2, '!', 3),
                     $token5 = new WordToken('one', 4, '', 'one'),
                 ],
@@ -2660,8 +2661,8 @@ class IntegrationTest extends TestCase
                     $token1 = new WordToken('one', 0, '', 'one'),
                     $token2 = new Token(Tokenizer::TOKEN_LOGICAL_AND, 'AND', 4),
                     $token3 = new Token(Tokenizer::TOKEN_INCLUDE, '+', 8),
-                    $token4 = new Token(Tokenizer::TOKEN_GROUP_LEFT_DELIMITER, '(', 9),
-                    $token5 = new Token(Tokenizer::TOKEN_GROUP_RIGHT_DELIMITER, ')', 10),
+                    $token4 = new GroupBeginToken('(', 9, '(', null),
+                    $token5 = new Token(Tokenizer::TOKEN_GROUP_END, ')', 10),
                     $token6 = new Token(Tokenizer::TOKEN_LOGICAL_NOT_2, '!', 11),
                     $token7 = new WordToken('two', 12, '', 'two'),
                 ],
@@ -2684,8 +2685,8 @@ class IntegrationTest extends TestCase
                 [
                     $token1 = new Token(Tokenizer::TOKEN_LOGICAL_NOT, 'NOT', 0),
                     $token2 = new Token(Tokenizer::TOKEN_INCLUDE, '+', 4),
-                    $token3 = new Token(Tokenizer::TOKEN_GROUP_LEFT_DELIMITER, '(', 5),
-                    $token4 = new Token(Tokenizer::TOKEN_GROUP_RIGHT_DELIMITER, ')', 6),
+                    $token3 = new GroupBeginToken('(', 5, '(', null),
+                    $token4 = new Token(Tokenizer::TOKEN_GROUP_END, ')', 6),
                     $token5 = new Token(Tokenizer::TOKEN_LOGICAL_NOT_2, '!', 7),
                     $token6 = new WordToken('one', 8, '', 'one'),
                 ],
@@ -2707,8 +2708,8 @@ class IntegrationTest extends TestCase
                 [
                     $token1 = new Token(Tokenizer::TOKEN_LOGICAL_NOT, 'NOT', 0),
                     $token2 = new Token(Tokenizer::TOKEN_EXCLUDE, '-', 4),
-                    $token3 = new Token(Tokenizer::TOKEN_GROUP_LEFT_DELIMITER, '(', 5),
-                    $token4 = new Token(Tokenizer::TOKEN_GROUP_RIGHT_DELIMITER, ')', 6),
+                    $token3 = new GroupBeginToken('(', 5, '(', null),
+                    $token4 = new Token(Tokenizer::TOKEN_GROUP_END, ')', 6),
                     $token5 = new Token(Tokenizer::TOKEN_LOGICAL_NOT_2, '!', 7),
                     $token6 = new WordToken('one', 8, '', 'one'),
                 ],
@@ -2731,8 +2732,8 @@ class IntegrationTest extends TestCase
                     $token1 = new Token(Tokenizer::TOKEN_LOGICAL_NOT, 'NOT', 0),
                     $token2 = new Token(Tokenizer::TOKEN_INCLUDE, '+', 4),
                     $token3 = new Token(Tokenizer::TOKEN_INCLUDE, '+', 5),
-                    $token4 = new Token(Tokenizer::TOKEN_GROUP_LEFT_DELIMITER, '(', 6),
-                    $token5 = new Token(Tokenizer::TOKEN_GROUP_RIGHT_DELIMITER, ')', 7),
+                    $token4 = new GroupBeginToken('(', 6, '(', null),
+                    $token5 = new Token(Tokenizer::TOKEN_GROUP_END, ')', 7),
                     $token6 = new Token(Tokenizer::TOKEN_LOGICAL_NOT_2, '!', 8),
                     $token7 = new WordToken('one', 9, '', 'one'),
                 ],
@@ -2756,8 +2757,8 @@ class IntegrationTest extends TestCase
                     $token1 = new Token(Tokenizer::TOKEN_LOGICAL_NOT, 'NOT', 0),
                     $token2 = new Token(Tokenizer::TOKEN_EXCLUDE, '-', 4),
                     $token3 = new Token(Tokenizer::TOKEN_INCLUDE, '+', 5),
-                    $token4 = new Token(Tokenizer::TOKEN_GROUP_LEFT_DELIMITER, '(', 6),
-                    $token5 = new Token(Tokenizer::TOKEN_GROUP_RIGHT_DELIMITER, ')', 7),
+                    $token4 = new GroupBeginToken('(', 6, '(', null),
+                    $token5 = new Token(Tokenizer::TOKEN_GROUP_END, ')', 7),
                     $token6 = new Token(Tokenizer::TOKEN_LOGICAL_NOT_2, '!', 8),
                     $token7 = new WordToken('one', 9, '', 'one'),
                 ],
@@ -2780,8 +2781,8 @@ class IntegrationTest extends TestCase
                 [
                     $token1 = new Token(Tokenizer::TOKEN_LOGICAL_NOT, 'NOT', 0),
                     $token2 = new Token(Tokenizer::TOKEN_LOGICAL_NOT_2, '!', 4),
-                    $token3 = new Token(Tokenizer::TOKEN_GROUP_LEFT_DELIMITER, '(', 5),
-                    $token4 = new Token(Tokenizer::TOKEN_GROUP_RIGHT_DELIMITER, ')', 6),
+                    $token3 = new GroupBeginToken('(', 5, '(', null),
+                    $token4 = new Token(Tokenizer::TOKEN_GROUP_END, ')', 6),
                     $token5 = new Token(Tokenizer::TOKEN_LOGICAL_NOT_2, '!', 7),
                     $token6 = new WordToken('one', 8, '', 'one'),
                 ],
@@ -2803,11 +2804,11 @@ class IntegrationTest extends TestCase
                 [
                     $token1 = new Token(Tokenizer::TOKEN_LOGICAL_NOT, 'NOT', 0),
                     $token2 = new Token(Tokenizer::TOKEN_INCLUDE, '+', 4),
-                    $token3 = new Token(Tokenizer::TOKEN_GROUP_LEFT_DELIMITER, '(', 5),
-                    $token4 = new Token(Tokenizer::TOKEN_GROUP_RIGHT_DELIMITER, ')', 6),
+                    $token3 = new GroupBeginToken('(', 5, '(', null),
+                    $token4 = new Token(Tokenizer::TOKEN_GROUP_END, ')', 6),
                     $token5 = new Token(Tokenizer::TOKEN_INCLUDE, '+', 7),
-                    $token6 = new Token(Tokenizer::TOKEN_GROUP_LEFT_DELIMITER, '(', 8),
-                    $token7 = new Token(Tokenizer::TOKEN_GROUP_RIGHT_DELIMITER, ')', 9),
+                    $token6 = new GroupBeginToken('(', 8, '(', null),
+                    $token7 = new Token(Tokenizer::TOKEN_GROUP_END, ')', 9),
                     $token8 = new Token(Tokenizer::TOKEN_LOGICAL_NOT_2, '!', 10),
                     $token9 = new WordToken('one', 11, '', 'one'),
                 ],
@@ -2831,11 +2832,11 @@ class IntegrationTest extends TestCase
                     $token1 = new Token(Tokenizer::TOKEN_LOGICAL_NOT, 'NOT', 0),
                     $token2 = new Token(Tokenizer::TOKEN_LOGICAL_NOT, 'NOT', 4),
                     $token3 = new Token(Tokenizer::TOKEN_INCLUDE, '+', 8),
-                    $token4 = new Token(Tokenizer::TOKEN_GROUP_LEFT_DELIMITER, '(', 9),
-                    $token5 = new Token(Tokenizer::TOKEN_GROUP_RIGHT_DELIMITER, ')', 10),
+                    $token4 = new GroupBeginToken('(', 9, '(', null),
+                    $token5 = new Token(Tokenizer::TOKEN_GROUP_END, ')', 10),
                     $token6 = new Token(Tokenizer::TOKEN_INCLUDE, '+', 11),
-                    $token7 = new Token(Tokenizer::TOKEN_GROUP_LEFT_DELIMITER, '(', 12),
-                    $token8 = new Token(Tokenizer::TOKEN_GROUP_RIGHT_DELIMITER, ')', 13),
+                    $token7 = new GroupBeginToken('(', 12, '(', null),
+                    $token8 = new Token(Tokenizer::TOKEN_GROUP_END, ')', 13),
                     $token9 = new Token(Tokenizer::TOKEN_LOGICAL_NOT_2, '!', 14),
                     $token10 = new WordToken('one', 15, '', 'one'),
                 ],
@@ -2860,11 +2861,11 @@ class IntegrationTest extends TestCase
                     $token2 = new Token(Tokenizer::TOKEN_LOGICAL_AND, 'AND', 4),
                     $token3 = new Token(Tokenizer::TOKEN_LOGICAL_NOT, 'NOT', 8),
                     $token4 = new Token(Tokenizer::TOKEN_INCLUDE, '+', 12),
-                    $token5 = new Token(Tokenizer::TOKEN_GROUP_LEFT_DELIMITER, '(', 13),
-                    $token6 = new Token(Tokenizer::TOKEN_GROUP_RIGHT_DELIMITER, ')', 14),
+                    $token5 = new GroupBeginToken('(', 13, '(', null),
+                    $token6 = new Token(Tokenizer::TOKEN_GROUP_END, ')', 14),
                     $token7 = new Token(Tokenizer::TOKEN_INCLUDE, '+', 15),
-                    $token8 = new Token(Tokenizer::TOKEN_GROUP_LEFT_DELIMITER, '(', 16),
-                    $token9 = new Token(Tokenizer::TOKEN_GROUP_RIGHT_DELIMITER, ')', 17),
+                    $token8 = new GroupBeginToken('(', 16, '(', null),
+                    $token9 = new Token(Tokenizer::TOKEN_GROUP_END, ')', 17),
                     $token10 = new Token(Tokenizer::TOKEN_LOGICAL_NOT_2, '!', 18),
                     $token11 = new WordToken('two', 19, '', 'two'),
                 ],
@@ -2891,11 +2892,11 @@ class IntegrationTest extends TestCase
                     $token3 = new Token(Tokenizer::TOKEN_LOGICAL_NOT, 'NOT', 8),
                     $token4 = new Token(Tokenizer::TOKEN_LOGICAL_NOT, 'NOT', 12),
                     $token5 = new Token(Tokenizer::TOKEN_INCLUDE, '+', 16),
-                    $token6 = new Token(Tokenizer::TOKEN_GROUP_LEFT_DELIMITER, '(', 17),
-                    $token7 = new Token(Tokenizer::TOKEN_GROUP_RIGHT_DELIMITER, ')', 18),
+                    $token6 = new GroupBeginToken('(', 17, '(', null),
+                    $token7 = new Token(Tokenizer::TOKEN_GROUP_END, ')', 18),
                     $token8 = new Token(Tokenizer::TOKEN_INCLUDE, '+', 19),
-                    $token9 = new Token(Tokenizer::TOKEN_GROUP_LEFT_DELIMITER, '(', 20),
-                    $token10 = new Token(Tokenizer::TOKEN_GROUP_RIGHT_DELIMITER, ')', 21),
+                    $token9 = new GroupBeginToken('(', 20, '(', null),
+                    $token10 = new Token(Tokenizer::TOKEN_GROUP_END, ')', 21),
                     $token11 = new Token(Tokenizer::TOKEN_LOGICAL_NOT_2, '!', 22),
                     $token12 = new WordToken('two', 23, '', 'two'),
                 ],
@@ -2919,11 +2920,11 @@ class IntegrationTest extends TestCase
                 [
                     $token1 = new WordToken('one', 0, '', 'one'),
                     $token2 = new Token(Tokenizer::TOKEN_EXCLUDE, '-', 4),
-                    $token3 = new Token(Tokenizer::TOKEN_GROUP_LEFT_DELIMITER, '(', 5),
-                    $token4 = new Token(Tokenizer::TOKEN_GROUP_RIGHT_DELIMITER, ')', 6),
+                    $token3 = new GroupBeginToken('(', 5, '(', null),
+                    $token4 = new Token(Tokenizer::TOKEN_GROUP_END, ')', 6),
                     $token5 = new Token(Tokenizer::TOKEN_INCLUDE, '+', 8),
-                    $token6 = new Token(Tokenizer::TOKEN_GROUP_LEFT_DELIMITER, '(', 9),
-                    $token7 = new Token(Tokenizer::TOKEN_GROUP_RIGHT_DELIMITER, ')', 10),
+                    $token6 = new GroupBeginToken('(', 9, '(', null),
+                    $token7 = new Token(Tokenizer::TOKEN_GROUP_END, ')', 10),
                     $token8 = new WordToken('two', 12, '', 'two'),
                 ],
                 new Query(
@@ -3126,8 +3127,8 @@ class IntegrationTest extends TestCase
                 'NOT one',
                 [
                     $token1 = new Token(Tokenizer::TOKEN_INCLUDE, '+', 0),
-                    $token2 = new Token(Tokenizer::TOKEN_GROUP_LEFT_DELIMITER, '(', 1),
-                    $token3 = new Token(Tokenizer::TOKEN_GROUP_RIGHT_DELIMITER, ')', 2),
+                    $token2 = new GroupBeginToken('(', 1, '(', null),
+                    $token3 = new Token(Tokenizer::TOKEN_GROUP_END, ')', 2),
                     $token4 = new Token(Tokenizer::TOKEN_LOGICAL_NOT, 'NOT', 3),
                     $token5 = new WordToken('one', 7, '', 'one'),
                 ],
@@ -3148,8 +3149,8 @@ class IntegrationTest extends TestCase
                 'NOT one',
                 [
                     $token1 = new Token(Tokenizer::TOKEN_EXCLUDE, '-', 0),
-                    $token2 = new Token(Tokenizer::TOKEN_GROUP_LEFT_DELIMITER, '(', 1),
-                    $token3 = new Token(Tokenizer::TOKEN_GROUP_RIGHT_DELIMITER, ')', 2),
+                    $token2 = new GroupBeginToken('(', 1, '(', null),
+                    $token3 = new Token(Tokenizer::TOKEN_GROUP_END, ')', 2),
                     $token4 = new Token(Tokenizer::TOKEN_LOGICAL_NOT, 'NOT', 3),
                     $token5 = new WordToken('one', 7, '', 'one'),
                 ],
@@ -3170,12 +3171,12 @@ class IntegrationTest extends TestCase
                 'one',
                 [
                     $token1 = new Token(Tokenizer::TOKEN_INCLUDE, '+', 0),
-                    $token2 = new Token(Tokenizer::TOKEN_GROUP_LEFT_DELIMITER, '(', 1),
-                    $token3 = new Token(Tokenizer::TOKEN_GROUP_RIGHT_DELIMITER, ')', 2),
+                    $token2 = new GroupBeginToken('(', 1, '(', null),
+                    $token3 = new Token(Tokenizer::TOKEN_GROUP_END, ')', 2),
                     $token4 = new Token(Tokenizer::TOKEN_LOGICAL_NOT, 'NOT', 3),
                     $token5 = new Token(Tokenizer::TOKEN_INCLUDE, '+', 6),
-                    $token6 = new Token(Tokenizer::TOKEN_GROUP_LEFT_DELIMITER, '(', 7),
-                    $token7 = new Token(Tokenizer::TOKEN_GROUP_RIGHT_DELIMITER, ')', 8),
+                    $token6 = new GroupBeginToken('(', 7, '(', null),
+                    $token7 = new Token(Tokenizer::TOKEN_GROUP_END, ')', 8),
                     $token8 = new WordToken('one', 9, '', 'one'),
                 ],
                 new Query(
@@ -3193,8 +3194,8 @@ class IntegrationTest extends TestCase
                 '+one',
                 [
                     $token1 = new Token(Tokenizer::TOKEN_LOGICAL_NOT, 'NOT', 0),
-                    $token2 = new Token(Tokenizer::TOKEN_GROUP_LEFT_DELIMITER, '(', 3),
-                    $token3 = new Token(Tokenizer::TOKEN_GROUP_RIGHT_DELIMITER, ')', 4),
+                    $token2 = new GroupBeginToken('(', 3, '(', null),
+                    $token3 = new Token(Tokenizer::TOKEN_GROUP_END, ')', 4),
                     $token4 = new Token(Tokenizer::TOKEN_INCLUDE, '+', 5),
                     $token5 = new WordToken('one', 6, '', 'one'),
                 ],
@@ -3215,8 +3216,8 @@ class IntegrationTest extends TestCase
                 'NOT one',
                 [
                     $token1 = new Token(Tokenizer::TOKEN_LOGICAL_NOT, 'NOT', 0),
-                    $token2 = new Token(Tokenizer::TOKEN_GROUP_LEFT_DELIMITER, '(', 4),
-                    $token3 = new Token(Tokenizer::TOKEN_GROUP_RIGHT_DELIMITER, ')', 5),
+                    $token2 = new GroupBeginToken('(', 4, '(', null),
+                    $token3 = new Token(Tokenizer::TOKEN_GROUP_END, ')', 5),
                     $token4 = new Token(Tokenizer::TOKEN_LOGICAL_NOT, 'NOT', 7),
                     $token5 = new WordToken('one', 11, '', 'one'),
                 ],
@@ -3237,8 +3238,8 @@ class IntegrationTest extends TestCase
                 '+one',
                 [
                     $token1 = new Token(Tokenizer::TOKEN_LOGICAL_NOT, 'NOT', 0),
-                    $token2 = new Token(Tokenizer::TOKEN_GROUP_LEFT_DELIMITER, '(', 4),
-                    $token3 = new Token(Tokenizer::TOKEN_GROUP_RIGHT_DELIMITER, ')', 5),
+                    $token2 = new GroupBeginToken('(', 4, '(', null),
+                    $token3 = new Token(Tokenizer::TOKEN_GROUP_END, ')', 5),
                     $token4 = new Token(Tokenizer::TOKEN_INCLUDE, '+', 7),
                     $token5 = new WordToken('one', 8, '', 'one'),
                 ],
@@ -3260,8 +3261,8 @@ class IntegrationTest extends TestCase
                 [
                     $token1 = new Token(Tokenizer::TOKEN_LOGICAL_NOT, 'NOT', 0),
                     $token2 = new Token(Tokenizer::TOKEN_INCLUDE, '+', 4),
-                    $token3 = new Token(Tokenizer::TOKEN_GROUP_LEFT_DELIMITER, '(', 5),
-                    $token4 = new Token(Tokenizer::TOKEN_GROUP_RIGHT_DELIMITER, ')', 6),
+                    $token3 = new GroupBeginToken('(', 5, '(', null),
+                    $token4 = new Token(Tokenizer::TOKEN_GROUP_END, ')', 6),
                     $token5 = new Token(Tokenizer::TOKEN_LOGICAL_NOT, 'NOT', 7),
                     $token6 = new Token(Tokenizer::TOKEN_INCLUDE, '+', 11),
                     $token7 = new WordToken('one', 12, '', 'one'),
@@ -3285,8 +3286,8 @@ class IntegrationTest extends TestCase
                 [
                     $token1 = new Token(Tokenizer::TOKEN_LOGICAL_NOT, 'NOT', 0),
                     $token2 = new Token(Tokenizer::TOKEN_INCLUDE, '+', 4),
-                    $token3 = new Token(Tokenizer::TOKEN_GROUP_LEFT_DELIMITER, '(', 5),
-                    $token4 = new Token(Tokenizer::TOKEN_GROUP_RIGHT_DELIMITER, ')', 6),
+                    $token3 = new GroupBeginToken('(', 5, '(', null),
+                    $token4 = new Token(Tokenizer::TOKEN_GROUP_END, ')', 6),
                     $token5 = new Token(Tokenizer::TOKEN_LOGICAL_NOT, 'NOT', 8),
                     $token6 = new Token(Tokenizer::TOKEN_INCLUDE, '+', 12),
                     $token7 = new WordToken('one', 13, '', 'one'),
@@ -3308,13 +3309,13 @@ class IntegrationTest extends TestCase
                 '(+()NOT one)AND',
                 '(NOT one)',
                 [
-                    $token1 = new Token(Tokenizer::TOKEN_GROUP_LEFT_DELIMITER, '(', 0),
+                    $token1 = new GroupBeginToken('(', 0, '(', null),
                     $token2 = new Token(Tokenizer::TOKEN_INCLUDE, '+', 1),
-                    $token3 = new Token(Tokenizer::TOKEN_GROUP_LEFT_DELIMITER, '(', 2),
-                    $token4 = new Token(Tokenizer::TOKEN_GROUP_RIGHT_DELIMITER, ')', 3),
+                    $token3 = new GroupBeginToken('(', 2, '(', null),
+                    $token4 = new Token(Tokenizer::TOKEN_GROUP_END, ')', 3),
                     $token5 = new Token(Tokenizer::TOKEN_LOGICAL_NOT, 'NOT', 4),
                     $token6 = new WordToken('one', 8, '', 'one'),
-                    $token7 = new Token(Tokenizer::TOKEN_GROUP_RIGHT_DELIMITER, ')', 11),
+                    $token7 = new Token(Tokenizer::TOKEN_GROUP_END, ')', 11),
                     $token8 = new Token(Tokenizer::TOKEN_LOGICAL_AND, 'AND', 12),
                 ],
                 new Query(
@@ -3409,8 +3410,8 @@ class IntegrationTest extends TestCase
                     $token2 = new Token(Tokenizer::TOKEN_LOGICAL_OR, 'OR', 4),
                     $token3 = new WordToken('two', 7, '', 'two'),
                     $token4 = new Token(Tokenizer::TOKEN_LOGICAL_AND, 'AND', 11),
-                    $token5 = new Token(Tokenizer::TOKEN_GROUP_LEFT_DELIMITER, '(', 15),
-                    $token6 = new Token(Tokenizer::TOKEN_GROUP_RIGHT_DELIMITER, ')', 16),
+                    $token5 = new GroupBeginToken('(', 15, '(', null),
+                    $token6 = new Token(Tokenizer::TOKEN_GROUP_END, ')', 16),
                     $token7 = new WordToken('three', 18, '', 'three'),
                 ],
                 new Query(

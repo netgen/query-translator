@@ -6,6 +6,7 @@ use PHPUnit\Framework\TestCase;
 use QueryTranslator\Languages\Galach\TokenExtractor;
 use QueryTranslator\Languages\Galach\Tokenizer;
 use QueryTranslator\Languages\Galach\Values\Token\Phrase as PhraseToken;
+use QueryTranslator\Languages\Galach\Values\Token\GroupBegin as GroupBeginToken;
 use QueryTranslator\Languages\Galach\Values\Token\Tag as TagToken;
 use QueryTranslator\Languages\Galach\Values\Token\User as UserToken;
 use QueryTranslator\Languages\Galach\Values\Token\Word as WordToken;
@@ -50,14 +51,14 @@ class TokenizerTest extends TestCase
                 'word(',
                 [
                     new WordToken('word', 0, '', 'word'),
-                    new Token(Tokenizer::TOKEN_GROUP_LEFT_DELIMITER, '(', 4),
+                    new GroupBeginToken('(', 4, '(', null),
                 ],
             ],
             [
                 'word)',
                 [
                     new WordToken('word', 0, '', 'word'),
-                    new Token(Tokenizer::TOKEN_GROUP_RIGHT_DELIMITER, ')', 4),
+                    new Token(Tokenizer::TOKEN_GROUP_END, ')', 4),
                 ],
             ],
             [
@@ -302,14 +303,14 @@ class TokenizerTest extends TestCase
                 '#tag(',
                 [
                     new TagToken('#tag', 0, '#', 'tag'),
-                    new Token(Tokenizer::TOKEN_GROUP_LEFT_DELIMITER, '(', 4),
+                    new GroupBeginToken('(', 4, '(', null),
                 ],
             ],
             [
                 '#tag)',
                 [
                     new TagToken('#tag', 0, '#', 'tag'),
-                    new Token(Tokenizer::TOKEN_GROUP_RIGHT_DELIMITER, ')', 4),
+                    new Token(Tokenizer::TOKEN_GROUP_END, ')', 4),
                 ],
             ],
             [
@@ -380,14 +381,14 @@ class TokenizerTest extends TestCase
                 '@user(',
                 [
                     new UserToken('@user', 0, '@', 'user'),
-                    new Token(Tokenizer::TOKEN_GROUP_LEFT_DELIMITER, '(', 5),
+                    new GroupBeginToken('(', 5, '(', null),
                 ],
             ],
             [
                 '@user)',
                 [
                     new UserToken('@user', 0, '@', 'user'),
-                    new Token(Tokenizer::TOKEN_GROUP_RIGHT_DELIMITER, ')', 5),
+                    new Token(Tokenizer::TOKEN_GROUP_END, ')', 5),
                 ],
             ],
             [
@@ -591,14 +592,14 @@ class TokenizerTest extends TestCase
                 'AND(',
                 [
                     new Token(Tokenizer::TOKEN_LOGICAL_AND, 'AND', 0),
-                    new Token(Tokenizer::TOKEN_GROUP_LEFT_DELIMITER, '(', 3),
+                    new GroupBeginToken('(', 3, '(', null),
                 ],
             ],
             [
                 'AND)',
                 [
                     new Token(Tokenizer::TOKEN_LOGICAL_AND, 'AND', 0),
-                    new Token(Tokenizer::TOKEN_GROUP_RIGHT_DELIMITER, ')', 3),
+                    new Token(Tokenizer::TOKEN_GROUP_END, ')', 3),
                 ],
             ],
             [
@@ -697,14 +698,14 @@ class TokenizerTest extends TestCase
                 'OR(',
                 [
                     new Token(Tokenizer::TOKEN_LOGICAL_OR, 'OR', 0),
-                    new Token(Tokenizer::TOKEN_GROUP_LEFT_DELIMITER, '(', 2),
+                    new GroupBeginToken('(', 2, '(', null),
                 ],
             ],
             [
                 'OR)',
                 [
                     new Token(Tokenizer::TOKEN_LOGICAL_OR, 'OR', 0),
-                    new Token(Tokenizer::TOKEN_GROUP_RIGHT_DELIMITER, ')', 2),
+                    new Token(Tokenizer::TOKEN_GROUP_END, ')', 2),
                 ],
             ],
             [
@@ -785,14 +786,14 @@ class TokenizerTest extends TestCase
                 'NOT(',
                 [
                     new Token(Tokenizer::TOKEN_LOGICAL_NOT, 'NOT', 0),
-                    new Token(Tokenizer::TOKEN_GROUP_LEFT_DELIMITER, '(', 3),
+                    new GroupBeginToken('(', 3, '(', null),
                 ],
             ],
             [
                 'NOT)',
                 [
                     new Token(Tokenizer::TOKEN_LOGICAL_NOT, 'NOT', 0),
-                    new Token(Tokenizer::TOKEN_GROUP_RIGHT_DELIMITER, ')', 3),
+                    new Token(Tokenizer::TOKEN_GROUP_END, ')', 3),
                 ],
             ],
             [
@@ -858,14 +859,14 @@ class TokenizerTest extends TestCase
             [
                 '(word',
                 [
-                    new Token(Tokenizer::TOKEN_GROUP_LEFT_DELIMITER, '(', 0),
+                    new GroupBeginToken('(', 0, '(', null),
                     new WordToken('word', 1, '', 'word'),
                 ],
             ],
             [
                 ')word',
                 [
-                    new Token(Tokenizer::TOKEN_GROUP_RIGHT_DELIMITER, ')', 0),
+                    new Token(Tokenizer::TOKEN_GROUP_END, ')', 0),
                     new WordToken('word', 1, '', 'word'),
                 ],
             ],
@@ -891,14 +892,14 @@ class TokenizerTest extends TestCase
                 'word(',
                 [
                     new WordToken('word', 0, '', 'word'),
-                    new Token(Tokenizer::TOKEN_GROUP_LEFT_DELIMITER, '(', 4),
+                    new GroupBeginToken('(', 4, '(', null),
                 ],
             ],
             [
                 'word)',
                 [
                     new WordToken('word', 0, '', 'word'),
-                    new Token(Tokenizer::TOKEN_GROUP_RIGHT_DELIMITER, ')', 4),
+                    new Token(Tokenizer::TOKEN_GROUP_END, ')', 4),
                 ],
             ],
             [
@@ -923,18 +924,18 @@ class TokenizerTest extends TestCase
                 'one(two(',
                 [
                     new WordToken('one', 0, '', 'one'),
-                    new Token(Tokenizer::TOKEN_GROUP_LEFT_DELIMITER, '(', 3),
+                    new GroupBeginToken('(', 3, '(', null),
                     new WordToken('two', 4, '', 'two'),
-                    new Token(Tokenizer::TOKEN_GROUP_LEFT_DELIMITER, '(', 7),
+                    new GroupBeginToken('(', 7, '(', null),
                 ],
             ],
             [
                 'one)two)',
                 [
                     new WordToken('one', 0, '', 'one'),
-                    new Token(Tokenizer::TOKEN_GROUP_RIGHT_DELIMITER, ')', 3),
+                    new Token(Tokenizer::TOKEN_GROUP_END, ')', 3),
                     new WordToken('two', 4, '', 'two'),
-                    new Token(Tokenizer::TOKEN_GROUP_RIGHT_DELIMITER, ')', 7),
+                    new Token(Tokenizer::TOKEN_GROUP_END, ')', 7),
                 ],
             ],
             [
@@ -1047,14 +1048,14 @@ class TokenizerTest extends TestCase
                         '',
                         'one\\'
                     ),
-                    new Token(Tokenizer::TOKEN_GROUP_RIGHT_DELIMITER, ')', 5),
+                    new Token(Tokenizer::TOKEN_GROUP_END, ')', 5),
                     new WordToken(
                         'two\\\\',
                         6,
                         '',
                         'two\\'
                     ),
-                    new Token(Tokenizer::TOKEN_GROUP_LEFT_DELIMITER, '(', 11),
+                    new GroupBeginToken('(', 11, '(', null),
                     new WordToken(
                         'one\\\\+two\\\\-one\\\\!two',
                         12,
@@ -1113,9 +1114,9 @@ class TokenizerTest extends TestCase
             [
                 '(type:)',
                 [
-                    new Token(Tokenizer::TOKEN_GROUP_LEFT_DELIMITER, '(', 0),
+                    new GroupBeginToken('(', 0, '(', null),
                     new WordToken('type:', 1, '', 'type:'),
-                    new Token(Tokenizer::TOKEN_GROUP_RIGHT_DELIMITER, ')', 6),
+                    new Token(Tokenizer::TOKEN_GROUP_END, ')', 6),
                 ],
             ],
             [

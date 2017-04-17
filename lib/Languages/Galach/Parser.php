@@ -10,6 +10,7 @@ use QueryTranslator\Languages\Galach\Values\Node\LogicalNot;
 use QueryTranslator\Languages\Galach\Values\Node\LogicalOr;
 use QueryTranslator\Languages\Galach\Values\Node\Query;
 use QueryTranslator\Languages\Galach\Values\Node\Term;
+use QueryTranslator\Languages\Galach\Values\Token\GroupBegin;
 use QueryTranslator\Parsing;
 use QueryTranslator\Values\Correction;
 use QueryTranslator\Values\Node;
@@ -83,15 +84,15 @@ final class Parser implements Parsing
         'operatorUnary' => Tokenizer::TOKEN_INCLUDE | Tokenizer::TOKEN_EXCLUDE | Tokenizer::TOKEN_LOGICAL_NOT | Tokenizer::TOKEN_LOGICAL_NOT_2,
         'operatorBinary' => Tokenizer::TOKEN_LOGICAL_AND | Tokenizer::TOKEN_LOGICAL_OR,
         'operator' => Tokenizer::TOKEN_LOGICAL_AND | Tokenizer::TOKEN_LOGICAL_OR | Tokenizer::TOKEN_INCLUDE | Tokenizer::TOKEN_EXCLUDE | Tokenizer::TOKEN_LOGICAL_NOT | Tokenizer::TOKEN_LOGICAL_NOT_2,
-        'groupDelimiter' => Tokenizer::TOKEN_GROUP_LEFT_DELIMITER | Tokenizer::TOKEN_GROUP_RIGHT_DELIMITER,
+        'groupDelimiter' => Tokenizer::TOKEN_GROUP_BEGIN | Tokenizer::TOKEN_GROUP_END,
         'binaryOperatorAndWhitespace' => Tokenizer::TOKEN_LOGICAL_AND | Tokenizer::TOKEN_LOGICAL_OR | Tokenizer::TOKEN_WHITESPACE,
     ];
 
     private static $shifts = [
         Tokenizer::TOKEN_WHITESPACE => 'shiftWhitespace',
         Tokenizer::TOKEN_TERM => 'shiftTerm',
-        Tokenizer::TOKEN_GROUP_LEFT_DELIMITER => 'shiftGroupLeftDelimiter',
-        Tokenizer::TOKEN_GROUP_RIGHT_DELIMITER => 'shiftGroupRightDelimiter',
+        Tokenizer::TOKEN_GROUP_BEGIN => 'shiftGroupBegin',
+        Tokenizer::TOKEN_GROUP_END => 'shiftGroupEnd',
         Tokenizer::TOKEN_LOGICAL_AND => 'shiftBinaryOperator',
         Tokenizer::TOKEN_LOGICAL_OR => 'shiftBinaryOperator',
         Tokenizer::TOKEN_LOGICAL_NOT => 'shiftLogicalNot',
@@ -254,7 +255,7 @@ final class Parser implements Parsing
 
     protected function shiftBinaryOperator(Token $token)
     {
-        if ($this->stack->isEmpty() || $this->isTopStackToken(Tokenizer::TOKEN_GROUP_LEFT_DELIMITER)) {
+        if ($this->stack->isEmpty() || $this->isTopStackToken(Tokenizer::TOKEN_GROUP_BEGIN)) {
             $this->addCorrection(
                 self::CORRECTION_BINARY_OPERATOR_MISSING_LEFT_OPERAND_IGNORED,
                 $token
@@ -280,12 +281,12 @@ final class Parser implements Parsing
         return new Term($token);
     }
 
-    protected function shiftGroupLeftDelimiter(Token $token)
+    protected function shiftGroupBegin(GroupBegin $token)
     {
         $this->stack->push($token);
     }
 
-    protected function shiftGroupRightDelimiter(Token $token)
+    protected function shiftGroupEnd(Token $token)
     {
         $this->stack->push($token);
 
@@ -373,9 +374,9 @@ final class Parser implements Parsing
     {
         $rightDelimiter = $this->stack->pop();
 
-        $this->popTokens(~Tokenizer::TOKEN_GROUP_LEFT_DELIMITER);
+        $this->popTokens(~Tokenizer::TOKEN_GROUP_BEGIN);
 
-        if ($this->isTopStackToken(Tokenizer::TOKEN_GROUP_LEFT_DELIMITER)) {
+        if ($this->isTopStackToken(Tokenizer::TOKEN_GROUP_BEGIN)) {
             $leftDelimiter = $this->stack->pop();
             $precedingOperators = $this->ignorePrecedingOperators(self::$tokenShortcuts['operator']);
             $followingOperators = $this->ignoreFollowingOperators();
@@ -554,7 +555,7 @@ final class Parser implements Parsing
             $token = $tokens[$lastIndex];
             unset($tokens[$lastIndex]);
 
-            if ($token->type === Tokenizer::TOKEN_GROUP_LEFT_DELIMITER) {
+            if ($token->type === Tokenizer::TOKEN_GROUP_BEGIN) {
                 $this->addCorrection(
                     self::CORRECTION_UNMATCHED_GROUP_LEFT_DELIMITER_IGNORED,
                     $token
@@ -578,7 +579,7 @@ final class Parser implements Parsing
                 continue;
             }
 
-            if ($this->isToken($token, Tokenizer::TOKEN_GROUP_LEFT_DELIMITER)) {
+            if ($this->isToken($token, Tokenizer::TOKEN_GROUP_BEGIN)) {
                 $trackLeft[] = $index;
                 continue;
             }

@@ -105,7 +105,12 @@ class TranslationRenderer
         $visitors = [];
 
         $visitors[] = new Generators\ExtendedDisMax\Exclude();
-        $visitors[] = new Generators\ExtendedDisMax\Group();
+        $visitors[] = new Generators\ExtendedDisMax\Group(
+            [
+                'type' => 'type_s',
+            ],
+            'default_s'
+        );
         $visitors[] = new Generators\ExtendedDisMax\IncludeNode();
         $visitors[] = new Generators\ExtendedDisMax\LogicalAnd();
         $visitors[] = new Generators\ExtendedDisMax\LogicalNot();
@@ -137,7 +142,12 @@ class TranslationRenderer
         $visitors = [];
 
         $visitors[] = new Generators\QueryString\Exclude();
-        $visitors[] = new Generators\QueryString\Group();
+        $visitors[] = new Generators\QueryString\Group(
+            [
+                'type' => 'type_s',
+            ],
+            'default_s'
+        );
         $visitors[] = new Generators\QueryString\IncludeNode();
         $visitors[] = new Generators\QueryString\LogicalAnd();
         $visitors[] = new Generators\QueryString\LogicalNot();
@@ -285,9 +295,9 @@ class TokenRenderer
             case 64:
                 return 'Exclude';
             case 128:
-                return 'Left group delimiter';
+                return 'Group begin';
             case 256:
-                return 'Right group delimiter';
+                return 'Group end';
             case 512:
                 return self::getTermTokenTypeName($token);
             case 1024:
@@ -406,6 +416,13 @@ class SyntaxTreeRenderer
             }
         }
 
+        if ($node instanceof Group) {
+            $subObjects = [
+                new NamedArrayObject('<span>domain: ' . htmlentities($node->tokenLeft->domain ?: '~') . '</span>'),
+                new NamedArrayObject('<span>clauses</span>', $subObjects),
+            ];
+        }
+
         return new NamedArrayObject(self::getNodeName($node), $subObjects);
     }
 
@@ -417,26 +434,26 @@ class SyntaxTreeRenderer
             case $term->token instanceof Phrase:
                 /** @var \QueryTranslator\Languages\Galach\Values\Token\Phrase $token */
                 return [
-                    new NamedArrayObject('<span>phrase: <span>' . htmlentities($token->phrase) . '</span></span>'),
                     new NamedArrayObject('<span>domain: ' . htmlentities($token->domain ?: '~') . '</span>'),
+                    new NamedArrayObject('<span>phrase: <span>' . htmlentities($token->phrase) . '</span></span>'),
                 ];
             case $term->token instanceof Tag:
                 /** @var \QueryTranslator\Languages\Galach\Values\Token\Tag $token */
                 return [
-                    new NamedArrayObject('<span>tag: <span>' . htmlentities($token->tag) . '</span></span>'),
                     new NamedArrayObject('<span>marker: ' . htmlentities($token->marker) . '</span>'),
+                    new NamedArrayObject('<span>tag: <span>' . htmlentities($token->tag) . '</span></span>'),
                 ];
             case $term->token instanceof User:
                 /** @var \QueryTranslator\Languages\Galach\Values\Token\User $token */
                 return [
-                    new NamedArrayObject('<span>user: <span>' . htmlentities($token->user) . '</span></span>'),
                     new NamedArrayObject('<span>marker: ' . htmlentities($token->marker) . '</span>'),
+                    new NamedArrayObject('<span>user: <span>' . htmlentities($token->user) . '</span></span>'),
                 ];
             case $term->token instanceof Word:
                 /** @var \QueryTranslator\Languages\Galach\Values\Token\Word $token */
                 return [
-                    new NamedArrayObject('<span>word: <span>' . htmlentities($token->word) . '</span></span>'),
                     new NamedArrayObject('<span>domain: ' . htmlentities($token->domain ?: '~') . '</span>'),
+                    new NamedArrayObject('<span>word: <span>' . htmlentities($token->word) . '</span></span>'),
                 ];
         }
 
