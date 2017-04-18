@@ -61,8 +61,6 @@ $nativeTranslation = $nativeGenerator->generate($syntaxTree);
 
 $elapsedTime = microtime(true) - $startTime;
 
-
-
 $data = [
     'executionTime' => sprintf('%.6f', $elapsedTime),
     'syntaxTree' => SyntaxTreeRenderer::render($syntaxTree),

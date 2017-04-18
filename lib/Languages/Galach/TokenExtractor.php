@@ -49,6 +49,28 @@ abstract class TokenExtractor
     }
 
     /**
+     * Return a map of regular expressions to token types.
+     *
+     * The returned map must an array where key is a regular expression
+     * and value is a corresponding token type.
+     *
+     * @return array
+     */
+    abstract protected function getExpressionTypeMap();
+
+    /**
+     * Create a term type token by the given parameters.
+     *
+     * @throw \RuntimeException If token could not be created from the given $matches data
+     *
+     * @param int $position Position of the token in the input string
+     * @param array $data Regex match data, depends on the matched term token
+     *
+     * @return \QueryTranslator\Values\Token
+     */
+    abstract protected function createTermToken($position, array $data);
+
+    /**
      * Create a token object from the given parameters.
      *
      * @param int $type Token type
@@ -82,28 +104,6 @@ abstract class TokenExtractor
     {
         return new GroupBegin($data['lexeme'], $position, $data['delimiter'], $data['domain']);
     }
-
-    /**
-     * Return a map of regular expressions to token types.
-     *
-     * The returned map must an array where key is a regular expression
-     * and value is a corresponding token type.
-     *
-     * @return array
-     */
-    abstract protected function getExpressionTypeMap();
-
-    /**
-     * Create a term type token by the given parameters.
-     *
-     * @throw \RuntimeException If token could not be created from the given $matches data
-     *
-     * @param int $position Position of the token in the input string
-     * @param array $data Regex match data, depends on the matched term token
-     *
-     * @return \QueryTranslator\Values\Token
-     */
-    abstract protected function createTermToken($position, array $data);
 
     /**
      * Return the offset of the given $position in the input $string, in bytes.

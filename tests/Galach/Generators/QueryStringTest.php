@@ -29,6 +29,7 @@ class QueryStringTest extends ExtendedDisMaxTest
             ]
         );
     }
+
     /**
      * @return \QueryTranslator\Languages\Galach\Generators\QueryString
      */
