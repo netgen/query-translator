@@ -9,6 +9,26 @@ use QueryTranslator\Languages\Galach\Generators\QueryString;
  */
 class QueryStringTest extends ExtendedDisMaxTest
 {
+    public function providerForTestTranslation()
+    {
+        return array_merge(
+            parent::providerForTestTranslation(),
+            [
+                [
+                    '\\=',
+                    '\\\\\\=',
+                ],
+                [
+                    '\\>',
+                    '\\\\\\>',
+                ],
+                [
+                    '\\<',
+                    '\\\\\\<',
+                ],
+            ]
+        );
+    }
     /**
      * @return \QueryTranslator\Languages\Galach\Generators\QueryString
      */

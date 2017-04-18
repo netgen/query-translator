@@ -60,11 +60,31 @@ final class Word extends Visitor
             );
         }
 
-        $wordEscaped = preg_replace('/([\\\'"+\-!():#@ ])/', '\\\\$1', $token->word);
+        $wordEscaped = $this->escapeWord($token->word);
         $fieldName = $this->getElasticsearchField($token);
         $fieldPrefix = $fieldName === null ? '' : "{$fieldName}:";
 
         return "{$fieldPrefix}{$wordEscaped}";
+    }
+
+    /**
+     * Escape special characters in the given word $string.
+     *
+     * @link http://lucene.apache.org/core/6_5_0/queryparser/org/apache/lucene/queryparser/classic/package-summary.html#Escaping_Special_Characters
+     *
+     * Note: additionally to what is defined above we also escape blank space.
+     *
+     * @param string $string
+     *
+     * @return string
+     */
+    protected function escapeWord($string)
+    {
+        return preg_replace(
+            '/(\\+|-|\\=|&&|\\|\\||\\>|\\<|!|\\(|\\)|\\{|}|\\[|]|\\^|"|~|\\*|\\?|:|\\/|\\\\| )/',
+            '\\\\$1',
+            $string
+        );
     }
 
     /**

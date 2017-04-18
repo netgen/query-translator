@@ -60,11 +60,31 @@ final class Word extends Visitor
             );
         }
 
-        $wordEscaped = preg_replace('/([\\\'"+\-!():#@ ])/', '\\\\$1', $token->word);
+        $wordEscaped = $this->escapeWord($token->word);
         $fieldName = $this->getSolrField($token);
         $fieldPrefix = $fieldName === null ? '' : "{$fieldName}:";
 
         return "{$fieldPrefix}{$wordEscaped}";
+    }
+
+    /**
+     * Escape special characters in the given word $string.
+     *
+     * @link https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-query-string-query.html
+     *
+     * Note: additionally to what is defined above we also escape blank space.
+     *
+     * @param string $string
+     *
+     * @return string
+     */
+    protected function escapeWord($string)
+    {
+        return preg_replace(
+            '/(\\+|-|&&|\\|\\||!|\\(|\\)|\\{|}|\\[|]|\\^|"|~|\\*|\\?|:|\\/|\\\\| )/',
+            '\\\\$1',
+            $string
+        );
     }
 
     /**
