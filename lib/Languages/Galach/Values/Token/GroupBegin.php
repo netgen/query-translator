@@ -6,7 +6,7 @@ use QueryTranslator\Languages\Galach\Tokenizer;
 use QueryTranslator\Values\Token;
 
 /**
- * Group token represents group's domain and left side delimiter.
+ * GroupBegin token represents group's domain and left side delimiter.
  */
 final class GroupBegin extends Token
 {
