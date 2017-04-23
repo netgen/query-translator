@@ -5,7 +5,7 @@ namespace QueryTranslator\Languages\Galach\Values\Node;
 use QueryTranslator\Values\Node;
 use QueryTranslator\Values\Token;
 
-final class IncludeNode extends Node
+final class Prohibited extends Node
 {
     /**
      * @var \QueryTranslator\Values\Node

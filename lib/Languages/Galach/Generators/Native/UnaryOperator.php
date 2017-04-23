@@ -4,26 +4,26 @@ namespace QueryTranslator\Languages\Galach\Generators\Native;
 
 use LogicException;
 use QueryTranslator\Languages\Galach\Tokenizer;
-use QueryTranslator\Languages\Galach\Values\Node\Exclude;
-use QueryTranslator\Languages\Galach\Values\Node\IncludeNode;
 use QueryTranslator\Languages\Galach\Values\Node\LogicalNot;
+use QueryTranslator\Languages\Galach\Values\Node\Mandatory;
+use QueryTranslator\Languages\Galach\Values\Node\Prohibited;
 use QueryTranslator\Values\Node;
 
 /**
- * Exclude operator Node Visitor implementation.
+ * Unary operator Node Visitor implementation.
  */
 final class UnaryOperator extends Visitor
 {
     public function accept(Node $node)
     {
-        return $node instanceof IncludeNode || $node instanceof Exclude || $node instanceof LogicalNot;
+        return $node instanceof Mandatory || $node instanceof Prohibited || $node instanceof LogicalNot;
     }
 
     public function visit(Node $node, Visitor $subVisitor = null)
     {
-        if (!$node instanceof IncludeNode && !$node instanceof Exclude && !$node instanceof LogicalNot) {
+        if (!$node instanceof Mandatory && !$node instanceof Prohibited && !$node instanceof LogicalNot) {
             throw new LogicException(
-                'Visitor implementation accepts instance of Include, Exclude or LogicalNot Node'
+                'Visitor implementation accepts instance of Mandatory, Prohibited or LogicalNot Node'
             );
         }
 

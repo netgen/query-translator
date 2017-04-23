@@ -269,7 +269,7 @@ class FullTokenizerTest extends TestCase
                 '#tag+',
                 [
                     new TagToken('#tag', 0, '#', 'tag'),
-                    new Token(Tokenizer::TOKEN_INCLUDE, '+', 4),
+                    new Token(Tokenizer::TOKEN_MANDATORY, '+', 4),
                 ],
             ],
             [
@@ -347,7 +347,7 @@ class FullTokenizerTest extends TestCase
                 '@user+',
                 [
                     new UserToken('@user', 0, '@', 'user'),
-                    new Token(Tokenizer::TOKEN_INCLUDE, '+', 5),
+                    new Token(Tokenizer::TOKEN_MANDATORY, '+', 5),
                 ],
             ],
             [
@@ -518,7 +518,7 @@ class FullTokenizerTest extends TestCase
                 'AND+',
                 [
                     new Token(Tokenizer::TOKEN_LOGICAL_AND, 'AND', 0),
-                    new Token(Tokenizer::TOKEN_INCLUDE, '+', 3),
+                    new Token(Tokenizer::TOKEN_MANDATORY, '+', 3),
                 ],
             ],
             [
@@ -530,7 +530,7 @@ class FullTokenizerTest extends TestCase
             [
                 '+AND',
                 [
-                    new Token(Tokenizer::TOKEN_INCLUDE, '+', 0),
+                    new Token(Tokenizer::TOKEN_MANDATORY, '+', 0),
                     new Token(Tokenizer::TOKEN_LOGICAL_AND, 'AND', 1),
                 ],
             ],
@@ -538,7 +538,7 @@ class FullTokenizerTest extends TestCase
                 'AND-',
                 [
                     new Token(Tokenizer::TOKEN_LOGICAL_AND, 'AND', 0),
-                    new Token(Tokenizer::TOKEN_EXCLUDE, '-', 3),
+                    new Token(Tokenizer::TOKEN_PROHIBITED, '-', 3),
                 ],
             ],
             [
@@ -550,7 +550,7 @@ class FullTokenizerTest extends TestCase
             [
                 '-AND',
                 [
-                    new Token(Tokenizer::TOKEN_EXCLUDE, '-', 0),
+                    new Token(Tokenizer::TOKEN_PROHIBITED, '-', 0),
                     new Token(Tokenizer::TOKEN_LOGICAL_AND, 'AND', 1),
                 ],
             ],
@@ -624,7 +624,7 @@ class FullTokenizerTest extends TestCase
                 'OR+',
                 [
                     new Token(Tokenizer::TOKEN_LOGICAL_OR, 'OR', 0),
-                    new Token(Tokenizer::TOKEN_INCLUDE, '+', 2),
+                    new Token(Tokenizer::TOKEN_MANDATORY, '+', 2),
                 ],
             ],
             [
@@ -636,7 +636,7 @@ class FullTokenizerTest extends TestCase
             [
                 '+OR',
                 [
-                    new Token(Tokenizer::TOKEN_INCLUDE, '+', 0),
+                    new Token(Tokenizer::TOKEN_MANDATORY, '+', 0),
                     new Token(Tokenizer::TOKEN_LOGICAL_OR, 'OR', 1),
                 ],
             ],
@@ -644,7 +644,7 @@ class FullTokenizerTest extends TestCase
                 'OR-',
                 [
                     new Token(Tokenizer::TOKEN_LOGICAL_OR, 'OR', 0),
-                    new Token(Tokenizer::TOKEN_EXCLUDE, '-', 2),
+                    new Token(Tokenizer::TOKEN_PROHIBITED, '-', 2),
                 ],
             ],
             [
@@ -656,7 +656,7 @@ class FullTokenizerTest extends TestCase
             [
                 '-OR',
                 [
-                    new Token(Tokenizer::TOKEN_EXCLUDE, '-', 0),
+                    new Token(Tokenizer::TOKEN_PROHIBITED, '-', 0),
                     new Token(Tokenizer::TOKEN_LOGICAL_OR, 'OR', 1),
                 ],
             ],
@@ -730,13 +730,13 @@ class FullTokenizerTest extends TestCase
                 'NOT+',
                 [
                     new Token(Tokenizer::TOKEN_LOGICAL_NOT, 'NOT', 0),
-                    new Token(Tokenizer::TOKEN_INCLUDE, '+', 3),
+                    new Token(Tokenizer::TOKEN_MANDATORY, '+', 3),
                 ],
             ],
             [
                 '+NOT',
                 [
-                    new Token(Tokenizer::TOKEN_INCLUDE, '+', 0),
+                    new Token(Tokenizer::TOKEN_MANDATORY, '+', 0),
                     new Token(Tokenizer::TOKEN_LOGICAL_NOT, 'NOT', 1),
                 ],
             ],
@@ -744,13 +744,13 @@ class FullTokenizerTest extends TestCase
                 'NOT-',
                 [
                     new Token(Tokenizer::TOKEN_LOGICAL_NOT, 'NOT', 0),
-                    new Token(Tokenizer::TOKEN_EXCLUDE, '-', 3),
+                    new Token(Tokenizer::TOKEN_PROHIBITED, '-', 3),
                 ],
             ],
             [
                 '-NOT',
                 [
-                    new Token(Tokenizer::TOKEN_EXCLUDE, '-', 0),
+                    new Token(Tokenizer::TOKEN_PROHIBITED, '-', 0),
                     new Token(Tokenizer::TOKEN_LOGICAL_NOT, 'NOT', 1),
                 ],
             ],
@@ -799,27 +799,27 @@ class FullTokenizerTest extends TestCase
             [
                 '+',
                 [
-                    new Token(Tokenizer::TOKEN_INCLUDE, '+', 0),
+                    new Token(Tokenizer::TOKEN_MANDATORY, '+', 0),
                 ],
             ],
             [
                 '++',
                 [
-                    new Token(Tokenizer::TOKEN_INCLUDE, '+', 0),
-                    new Token(Tokenizer::TOKEN_INCLUDE, '+', 1),
+                    new Token(Tokenizer::TOKEN_MANDATORY, '+', 0),
+                    new Token(Tokenizer::TOKEN_MANDATORY, '+', 1),
                 ],
             ],
             [
                 '-',
                 [
-                    new Token(Tokenizer::TOKEN_EXCLUDE, '-', 0),
+                    new Token(Tokenizer::TOKEN_PROHIBITED, '-', 0),
                 ],
             ],
             [
                 '--',
                 [
-                    new Token(Tokenizer::TOKEN_EXCLUDE, '-', 0),
-                    new Token(Tokenizer::TOKEN_EXCLUDE, '-', 1),
+                    new Token(Tokenizer::TOKEN_PROHIBITED, '-', 0),
+                    new Token(Tokenizer::TOKEN_PROHIBITED, '-', 1),
                 ],
             ],
             [
@@ -838,14 +838,14 @@ class FullTokenizerTest extends TestCase
             [
                 '+word',
                 [
-                    new Token(Tokenizer::TOKEN_INCLUDE, '+', 0),
+                    new Token(Tokenizer::TOKEN_MANDATORY, '+', 0),
                     new WordToken('word', 1, '', 'word'),
                 ],
             ],
             [
                 '-word',
                 [
-                    new Token(Tokenizer::TOKEN_EXCLUDE, '-', 0),
+                    new Token(Tokenizer::TOKEN_PROHIBITED, '-', 0),
                     new WordToken('word', 1, '', 'word'),
                 ],
             ],

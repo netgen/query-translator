@@ -1,26 +1,26 @@
 <?php
 
-namespace QueryTranslator\Languages\Galach\Generators\QueryString;
+namespace QueryTranslator\Languages\Galach\Generators\ExtendedDisMax;
 
 use LogicException;
-use QueryTranslator\Languages\Galach\Values\Node\Exclude as ExcludeNode;
+use QueryTranslator\Languages\Galach\Values\Node\Prohibited as ProhibitedNode;
 use QueryTranslator\Values\Node;
 
 /**
- * Exclude operator Node Visitor implementation.
+ * Prohibited operator Node Visitor implementation.
  */
-final class Exclude extends Visitor
+final class Prohibited extends Visitor
 {
     public function accept(Node $node)
     {
-        return $node instanceof ExcludeNode;
+        return $node instanceof ProhibitedNode;
     }
 
     public function visit(Node $node, Visitor $subVisitor = null)
     {
-        if (!$node instanceof ExcludeNode) {
+        if (!$node instanceof ProhibitedNode) {
             throw new LogicException(
-                'Visitor implementation accepts instance of Exclude Node'
+                'Visitor implementation accepts instance of Prohibited Node'
             );
         }
 

@@ -1,26 +1,26 @@
 <?php
 
-namespace QueryTranslator\Languages\Galach\Generators\QueryString;
+namespace QueryTranslator\Languages\Galach\Generators\ExtendedDisMax;
 
 use LogicException;
-use QueryTranslator\Languages\Galach\Values\Node\IncludeNode as IncludeNodeNode;
+use QueryTranslator\Languages\Galach\Values\Node\Mandatory as MandatoryNode;
 use QueryTranslator\Values\Node;
 
 /**
- * Include operator Node Visitor implementation.
+ * Mandatory operator Node Visitor implementation.
  */
-final class IncludeNode extends Visitor
+final class Mandatory extends Visitor
 {
     public function accept(Node $node)
     {
-        return $node instanceof IncludeNodeNode;
+        return $node instanceof MandatoryNode;
     }
 
     public function visit(Node $node, Visitor $subVisitor = null)
     {
-        if (!$node instanceof IncludeNodeNode) {
+        if (!$node instanceof MandatoryNode) {
             throw new LogicException(
-                'Visitor implementation accepts instance of Include Node'
+                'Visitor implementation accepts instance of Mandatory Node'
             );
         }
 

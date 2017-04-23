@@ -5,7 +5,7 @@ namespace QueryTranslator\Languages\Galach\Values\Node;
 use QueryTranslator\Values\Node;
 use QueryTranslator\Values\Token;
 
-final class Exclude extends Node
+final class Mandatory extends Node
 {
     /**
      * @var \QueryTranslator\Values\Node

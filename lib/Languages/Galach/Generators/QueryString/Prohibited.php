@@ -1,26 +1,26 @@
 <?php
 
-namespace QueryTranslator\Languages\Galach\Generators\ExtendedDisMax;
+namespace QueryTranslator\Languages\Galach\Generators\QueryString;
 
 use LogicException;
-use QueryTranslator\Languages\Galach\Values\Node\IncludeNode as IncludeNodeNode;
+use QueryTranslator\Languages\Galach\Values\Node\Prohibited as ProhibitedNode;
 use QueryTranslator\Values\Node;
 
 /**
- * Include operator Node Visitor implementation.
+ * Prohibited operator Node Visitor implementation.
  */
-final class IncludeNode extends Visitor
+final class Prohibited extends Visitor
 {
     public function accept(Node $node)
     {
-        return $node instanceof IncludeNodeNode;
+        return $node instanceof ProhibitedNode;
     }
 
     public function visit(Node $node, Visitor $subVisitor = null)
     {
-        if (!$node instanceof IncludeNodeNode) {
+        if (!$node instanceof ProhibitedNode) {
             throw new LogicException(
-                'Visitor implementation accepts instance of Include Node'
+                'Visitor implementation accepts instance of Prohibited Node'
             );
         }
 
@@ -30,6 +30,6 @@ final class IncludeNode extends Visitor
 
         $clause = $subVisitor->visit($node->operand, $subVisitor);
 
-        return "+{$clause}";
+        return "-{$clause}";
     }
 }

@@ -40,18 +40,18 @@ final class Tokenizer implements Tokenizing
     const TOKEN_LOGICAL_NOT_2 = 16;
 
     /**
-     * Include operator applies to the next (right-side) element and means
+     * Mandatory operator applies to the next (right-side) element and means
      * that the element must be present. There must be no whitespace between it
      * and the element it applies to.
      */
-    const TOKEN_INCLUDE = 32;
+    const TOKEN_MANDATORY = 32;
 
     /**
-     * Exclude operator applies to the next (right-side) element and means
+     * Prohibited operator applies to the next (right-side) element and means
      * that the element must not be present. There must be no whitespace between
      * it and the element it applies to.
      */
-    const TOKEN_EXCLUDE = 64;
+    const TOKEN_PROHIBITED = 64;
 
     /**
      * Left side delimiter of a group.

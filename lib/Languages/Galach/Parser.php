@@ -2,12 +2,12 @@
 
 namespace QueryTranslator\Languages\Galach;
 
-use QueryTranslator\Languages\Galach\Values\Node\Exclude;
 use QueryTranslator\Languages\Galach\Values\Node\Group;
-use QueryTranslator\Languages\Galach\Values\Node\IncludeNode;
 use QueryTranslator\Languages\Galach\Values\Node\LogicalAnd;
 use QueryTranslator\Languages\Galach\Values\Node\LogicalNot;
 use QueryTranslator\Languages\Galach\Values\Node\LogicalOr;
+use QueryTranslator\Languages\Galach\Values\Node\Mandatory;
+use QueryTranslator\Languages\Galach\Values\Node\Prohibited;
 use QueryTranslator\Languages\Galach\Values\Node\Query;
 use QueryTranslator\Languages\Galach\Values\Node\Term;
 use QueryTranslator\Languages\Galach\Values\Token\GroupBegin;
@@ -51,9 +51,9 @@ final class Parser implements Parsing
     const CORRECTION_BINARY_OPERATOR_FOLLOWING_OPERATOR_IGNORED = 4;
 
     /**
-     * Parser ignored logical not operators preceding inclusion/exclusion.
+     * Parser ignored logical not operators preceding preference (mandatory/prohibited) operator.
      */
-    const CORRECTION_LOGICAL_NOT_OPERATORS_PRECEDING_INCLUSIVITY_IGNORED = 5;
+    const CORRECTION_LOGICAL_NOT_OPERATORS_PRECEDING_PREFERENCE_IGNORED = 5;
 
     /**
      * Parser ignored empty group and connecting operators.
@@ -79,11 +79,11 @@ final class Parser implements Parsing
 
     private static $tokenShortcuts = [
         'operatorNot' => Tokenizer::TOKEN_LOGICAL_NOT | Tokenizer::TOKEN_LOGICAL_NOT_2,
-        'operatorInclusivity' => Tokenizer::TOKEN_INCLUDE | Tokenizer::TOKEN_EXCLUDE,
-        'operatorPrefix' => Tokenizer::TOKEN_INCLUDE | Tokenizer::TOKEN_EXCLUDE | Tokenizer::TOKEN_LOGICAL_NOT_2,
-        'operatorUnary' => Tokenizer::TOKEN_INCLUDE | Tokenizer::TOKEN_EXCLUDE | Tokenizer::TOKEN_LOGICAL_NOT | Tokenizer::TOKEN_LOGICAL_NOT_2,
+        'operatorPreference' => Tokenizer::TOKEN_MANDATORY | Tokenizer::TOKEN_PROHIBITED,
+        'operatorPrefix' => Tokenizer::TOKEN_MANDATORY | Tokenizer::TOKEN_PROHIBITED | Tokenizer::TOKEN_LOGICAL_NOT_2,
+        'operatorUnary' => Tokenizer::TOKEN_MANDATORY | Tokenizer::TOKEN_PROHIBITED | Tokenizer::TOKEN_LOGICAL_NOT | Tokenizer::TOKEN_LOGICAL_NOT_2,
         'operatorBinary' => Tokenizer::TOKEN_LOGICAL_AND | Tokenizer::TOKEN_LOGICAL_OR,
-        'operator' => Tokenizer::TOKEN_LOGICAL_AND | Tokenizer::TOKEN_LOGICAL_OR | Tokenizer::TOKEN_INCLUDE | Tokenizer::TOKEN_EXCLUDE | Tokenizer::TOKEN_LOGICAL_NOT | Tokenizer::TOKEN_LOGICAL_NOT_2,
+        'operator' => Tokenizer::TOKEN_LOGICAL_AND | Tokenizer::TOKEN_LOGICAL_OR | Tokenizer::TOKEN_MANDATORY | Tokenizer::TOKEN_PROHIBITED | Tokenizer::TOKEN_LOGICAL_NOT | Tokenizer::TOKEN_LOGICAL_NOT_2,
         'groupDelimiter' => Tokenizer::TOKEN_GROUP_BEGIN | Tokenizer::TOKEN_GROUP_END,
         'binaryOperatorAndWhitespace' => Tokenizer::TOKEN_LOGICAL_AND | Tokenizer::TOKEN_LOGICAL_OR | Tokenizer::TOKEN_WHITESPACE,
     ];
@@ -97,8 +97,8 @@ final class Parser implements Parsing
         Tokenizer::TOKEN_LOGICAL_OR => 'shiftBinaryOperator',
         Tokenizer::TOKEN_LOGICAL_NOT => 'shiftLogicalNot',
         Tokenizer::TOKEN_LOGICAL_NOT_2 => 'shiftLogicalNot2',
-        Tokenizer::TOKEN_INCLUDE => 'shiftInclusivity',
-        Tokenizer::TOKEN_EXCLUDE => 'shiftInclusivity',
+        Tokenizer::TOKEN_MANDATORY => 'shiftPreference',
+        Tokenizer::TOKEN_PROHIBITED => 'shiftPreference',
         Tokenizer::TOKEN_BAILOUT => 'shiftBailout',
     ];
 
@@ -107,15 +107,15 @@ final class Parser implements Parsing
         LogicalAnd::class => 'logicalAnd',
         LogicalOr::class => 'logicalOr',
         LogicalNot::class => 'unaryOperator',
-        IncludeNode::class => 'unaryOperator',
-        Exclude::class => 'unaryOperator',
+        Mandatory::class => 'unaryOperator',
+        Prohibited::class => 'unaryOperator',
         Term::class => 'term',
     ];
 
     private static $reductionGroups = [
         'group' => [
             'reduceGroup',
-            'reduceInclusivity',
+            'reducePreference',
             'reduceLogicalNot',
             'reduceLogicalAnd',
             'reduceLogicalOr',
@@ -130,7 +130,7 @@ final class Parser implements Parsing
             'reduceLogicalOr',
         ],
         'term' => [
-            'reduceInclusivity',
+            'reducePreference',
             'reduceLogicalNot',
             'reduceLogicalAnd',
             'reduceLogicalOr',
@@ -222,7 +222,7 @@ final class Parser implements Parsing
         }
     }
 
-    protected function shiftInclusivity(Token $token)
+    protected function shiftPreference(Token $token)
     {
         return $this->shiftAdjacentUnaryOperator($token, self::$tokenShortcuts['operator']);
     }
@@ -298,19 +298,19 @@ final class Parser implements Parsing
         $this->addCorrection(self::CORRECTION_BAILOUT_TOKEN_IGNORED, $token);
     }
 
-    protected function reduceInclusivity(Node $node)
+    protected function reducePreference(Node $node)
     {
-        if (!$this->isTopStackToken(self::$tokenShortcuts['operatorInclusivity'])) {
+        if (!$this->isTopStackToken(self::$tokenShortcuts['operatorPreference'])) {
             return $node;
         }
 
         $token = $this->stack->pop();
 
-        if ($this->isToken($token, Tokenizer::TOKEN_INCLUDE)) {
-            return new IncludeNode($node, $token);
+        if ($this->isToken($token, Tokenizer::TOKEN_MANDATORY)) {
+            return new Mandatory($node, $token);
         }
 
-        return new Exclude($node, $token);
+        return new Prohibited($node, $token);
     }
 
     protected function reduceLogicalNot(Node $node)
@@ -319,11 +319,11 @@ final class Parser implements Parsing
             return $node;
         }
 
-        if ($node instanceof IncludeNode || $node instanceof Exclude) {
+        if ($node instanceof Mandatory || $node instanceof Prohibited) {
             $precedingOperators = $this->ignorePrecedingOperators(self::$tokenShortcuts['operatorNot']);
             if (!empty($precedingOperators)) {
                 $this->addCorrection(
-                    self::CORRECTION_LOGICAL_NOT_OPERATORS_PRECEDING_INCLUSIVITY_IGNORED,
+                    self::CORRECTION_LOGICAL_NOT_OPERATORS_PRECEDING_PREFERENCE_IGNORED,
                     ...$precedingOperators
                 );
             }

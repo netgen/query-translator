@@ -37,14 +37,14 @@ class QueryStringTest extends ExtendedDisMaxTest
     {
         $visitors = [];
 
-        $visitors[] = new QueryString\Exclude();
+        $visitors[] = new QueryString\Prohibited();
         $visitors[] = new QueryString\Group(
             [
                 self::FIELD_TEXT_DOMAIN => self::FIELD_TEXT_DOMAIN_MAPPED,
             ],
             self::FIELD_TEXT_DEFAULT
         );
-        $visitors[] = new QueryString\IncludeNode();
+        $visitors[] = new QueryString\Mandatory();
         $visitors[] = new QueryString\LogicalAnd();
         $visitors[] = new QueryString\LogicalNot();
         $visitors[] = new QueryString\LogicalOr();

@@ -216,14 +216,14 @@ class ExtendedDisMaxTest extends TestCase
     {
         $visitors = [];
 
-        $visitors[] = new Generators\ExtendedDisMax\Exclude();
+        $visitors[] = new Generators\ExtendedDisMax\Prohibited();
         $visitors[] = new Generators\ExtendedDisMax\Group(
             [
                 self::FIELD_TEXT_DOMAIN => self::FIELD_TEXT_DOMAIN_MAPPED,
             ],
             self::FIELD_TEXT_DEFAULT
         );
-        $visitors[] = new Generators\ExtendedDisMax\IncludeNode();
+        $visitors[] = new Generators\ExtendedDisMax\Mandatory();
         $visitors[] = new Generators\ExtendedDisMax\LogicalAnd();
         $visitors[] = new Generators\ExtendedDisMax\LogicalNot();
         $visitors[] = new Generators\ExtendedDisMax\LogicalOr();

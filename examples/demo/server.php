@@ -11,12 +11,12 @@ use QueryTranslator\Languages\Galach\Generators;
 use QueryTranslator\Languages\Galach\Parser;
 use QueryTranslator\Languages\Galach\TokenExtractor\Full;
 use QueryTranslator\Languages\Galach\Tokenizer;
-use QueryTranslator\Languages\Galach\Values\Node\Exclude;
 use QueryTranslator\Languages\Galach\Values\Node\Group;
-use QueryTranslator\Languages\Galach\Values\Node\IncludeNode;
 use QueryTranslator\Languages\Galach\Values\Node\LogicalAnd;
 use QueryTranslator\Languages\Galach\Values\Node\LogicalNot;
 use QueryTranslator\Languages\Galach\Values\Node\LogicalOr;
+use QueryTranslator\Languages\Galach\Values\Node\Mandatory;
+use QueryTranslator\Languages\Galach\Values\Node\Prohibited;
 use QueryTranslator\Languages\Galach\Values\Node\Query;
 use QueryTranslator\Languages\Galach\Values\Node\Term;
 use QueryTranslator\Languages\Galach\Values\Token\Phrase;
@@ -102,14 +102,14 @@ class TranslationRenderer
     {
         $visitors = [];
 
-        $visitors[] = new Generators\ExtendedDisMax\Exclude();
+        $visitors[] = new Generators\ExtendedDisMax\Prohibited();
         $visitors[] = new Generators\ExtendedDisMax\Group(
             [
                 'type' => 'type_s',
             ],
             'default_s'
         );
-        $visitors[] = new Generators\ExtendedDisMax\IncludeNode();
+        $visitors[] = new Generators\ExtendedDisMax\Mandatory();
         $visitors[] = new Generators\ExtendedDisMax\LogicalAnd();
         $visitors[] = new Generators\ExtendedDisMax\LogicalNot();
         $visitors[] = new Generators\ExtendedDisMax\LogicalOr();
@@ -139,14 +139,14 @@ class TranslationRenderer
     {
         $visitors = [];
 
-        $visitors[] = new Generators\QueryString\Exclude();
+        $visitors[] = new Generators\QueryString\Prohibited();
         $visitors[] = new Generators\QueryString\Group(
             [
                 'type' => 'type_s',
             ],
             'default_s'
         );
-        $visitors[] = new Generators\QueryString\IncludeNode();
+        $visitors[] = new Generators\QueryString\Mandatory();
         $visitors[] = new Generators\QueryString\LogicalAnd();
         $visitors[] = new Generators\QueryString\LogicalNot();
         $visitors[] = new Generators\QueryString\LogicalOr();
@@ -181,7 +181,7 @@ class CorrectionRenderer
         Parser::CORRECTION_BINARY_OPERATOR_MISSING_LEFT_OPERAND_IGNORED => 'Parser ignored binary operator missing left side operand',
         Parser::CORRECTION_BINARY_OPERATOR_MISSING_RIGHT_OPERAND_IGNORED => 'Parser ignored binary operator missing right side operand',
         Parser::CORRECTION_BINARY_OPERATOR_FOLLOWING_OPERATOR_IGNORED => 'Parser ignored binary operator following another operator',
-        Parser::CORRECTION_LOGICAL_NOT_OPERATORS_PRECEDING_INCLUSIVITY_IGNORED => 'Parser ignored logical not operators preceding inclusion/exclusion',
+        Parser::CORRECTION_LOGICAL_NOT_OPERATORS_PRECEDING_PREFERENCE_IGNORED => 'Parser ignored logical not operators preceding inclusion/exclusion',
         Parser::CORRECTION_EMPTY_GROUP_IGNORED => 'Parser ignored empty group and connecting operators',
         Parser::CORRECTION_UNMATCHED_GROUP_LEFT_DELIMITER_IGNORED => 'Parser ignored unmatched left side group delimiter',
         Parser::CORRECTION_UNMATCHED_GROUP_RIGHT_DELIMITER_IGNORED => 'Parser ignored unmatched right side group delimiter',
@@ -289,9 +289,9 @@ class TokenRenderer
             case 16:
                 return 'Logical not (short)';
             case 32:
-                return 'Include';
+                return 'Mandatory';
             case 64:
-                return 'Exclude';
+                return 'Prohibited';
             case 128:
                 return 'Group begin';
             case 256:
@@ -389,10 +389,10 @@ class SyntaxTreeRenderer
                 return '<span class="operator">OR</span>';
             case $node instanceof LogicalNot:
                 return '<span class="operator">NOT</span>';
-            case $node instanceof IncludeNode:
-                return '<span class="operator">INCLUDE</span>';
-            case $node instanceof Exclude:
-                return '<span class="operator">EXCLUDE</span>';
+            case $node instanceof Mandatory:
+                return '<span class="operator">MANDATORY</span>';
+            case $node instanceof Prohibited:
+                return '<span class="operator">PROHIBITED</span>';
             case $node instanceof Group:
                 return '<span class="group">GROUP</span>';
             case $node instanceof Query:

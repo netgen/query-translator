@@ -22,8 +22,8 @@ final class Text extends TokenExtractor
      */
     private static $expressionTypeMap = [
         '/(?<lexeme>[\s]+)/Au' => Tokenizer::TOKEN_WHITESPACE,
-        '/(?<lexeme>\+)/Au' => Tokenizer::TOKEN_INCLUDE,
-        '/(?<lexeme>-)/Au' => Tokenizer::TOKEN_EXCLUDE,
+        '/(?<lexeme>\+)/Au' => Tokenizer::TOKEN_MANDATORY,
+        '/(?<lexeme>-)/Au' => Tokenizer::TOKEN_PROHIBITED,
         '/(?<lexeme>!)/Au' => Tokenizer::TOKEN_LOGICAL_NOT_2,
         '/(?<lexeme>\))/Au' => Tokenizer::TOKEN_GROUP_END,
         '/(?<lexeme>NOT)(?:[\s"\'()+\-!]|$)/Au' => Tokenizer::TOKEN_LOGICAL_NOT,
