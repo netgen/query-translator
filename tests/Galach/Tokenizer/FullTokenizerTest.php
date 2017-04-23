@@ -1,6 +1,6 @@
 <?php
 
-namespace QueryTranslator\Tests\Galach;
+namespace QueryTranslator\Tests\Galach\Tokenizer;
 
 use PHPUnit\Framework\TestCase;
 use QueryTranslator\Languages\Galach\TokenExtractor;
@@ -14,9 +14,9 @@ use QueryTranslator\Values\Token;
 use QueryTranslator\Values\TokenSequence;
 
 /**
- * Functional test case for tokenizer implementation.
+ * Test case for tokenizer using Full token extractor.
  */
-class TokenizerTest extends TestCase
+class FullTokenizerTest extends TestCase
 {
     public function providerForTestTokenize()
     {
@@ -1134,11 +1134,11 @@ class TokenizerTest extends TestCase
      * @dataProvider providerForTestTokenize
      *
      * @param string $string
-     * @param array $expectedTokens
+     * @param \QueryTranslator\Values\Token[] $expectedTokens
      */
     public function testTokenize($string, array $expectedTokens)
     {
-        $tokenExtractor = new TokenExtractor\Full();
+        $tokenExtractor = $this->getTokenExtractor();
         $tokenizer = new Tokenizer($tokenExtractor);
 
         $tokenSequence = $tokenizer->tokenize($string);
@@ -1264,11 +1264,11 @@ class TokenizerTest extends TestCase
      * @dataProvider providerForTestTokenizeNotRecognized
      *
      * @param string $string
-     * @param array $expectedTokens
+     * @param \QueryTranslator\Values\Token[] $expectedTokens
      */
     public function testTokenizeNotRecognized($string, array $expectedTokens)
     {
-        $tokenExtractor = new TokenExtractor\Full();
+        $tokenExtractor = $this->getTokenExtractor();
         $tokenizer = new Tokenizer($tokenExtractor);
 
         $tokenSequence = $tokenizer->tokenize($string);
@@ -1276,5 +1276,13 @@ class TokenizerTest extends TestCase
         $this->assertInstanceOf(TokenSequence::class, $tokenSequence);
         $this->assertEquals($expectedTokens, $tokenSequence->tokens);
         $this->assertEquals($string, $tokenSequence->source);
+    }
+
+    /**
+     * @return \QueryTranslator\Languages\Galach\TokenExtractor
+     */
+    protected function getTokenExtractor()
+    {
+        return new TokenExtractor\Full();
     }
 }
