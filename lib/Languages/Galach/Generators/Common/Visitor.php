@@ -1,11 +1,11 @@
 <?php
 
-namespace QueryTranslator\Languages\Galach\Generators\QueryString;
+namespace QueryTranslator\Languages\Galach\Generators\Common;
 
 use QueryTranslator\Values\Node;
 
 /**
- * Base class for AST visitor implementations.
+ * Common base class for AST visitor implementations.
  */
 abstract class Visitor
 {
@@ -22,7 +22,7 @@ abstract class Visitor
      * Visit the given $node.
      *
      * @param \QueryTranslator\Values\Node $node
-     * @param \QueryTranslator\Languages\Galach\Generators\QueryString\Visitor $subVisitor
+     * @param \QueryTranslator\Languages\Galach\Generators\Common\Visitor $subVisitor
      *
      * @return string
      */

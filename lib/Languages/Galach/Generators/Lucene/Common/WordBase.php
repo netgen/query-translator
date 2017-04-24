@@ -1,16 +1,17 @@
 <?php
 
-namespace QueryTranslator\Languages\Galach\Generators\ExtendedDisMax;
+namespace QueryTranslator\Languages\Galach\Generators\Lucene\Common;
 
 use LogicException;
-use QueryTranslator\Languages\Galach\Values\Node\Group as GroupNode;
-use QueryTranslator\Languages\Galach\Values\Token\GroupBegin;
+use QueryTranslator\Languages\Galach\Generators\Common\Visitor;
+use QueryTranslator\Languages\Galach\Values\Node\Term;
+use QueryTranslator\Languages\Galach\Values\Token\Word as WordToken;
 use QueryTranslator\Values\Node;
 
 /**
- * Group Node Visitor implementation.
+ * Base Word Node Visitor implementation.
  */
-final class Group extends Visitor
+abstract class WordBase extends Visitor
 {
     /**
      * Mapping of token domain to Solr field name.
@@ -41,42 +42,49 @@ final class Group extends Visitor
 
     public function accept(Node $node)
     {
-        return $node instanceof GroupNode;
+        return $node instanceof Term && $node->token instanceof WordToken;
     }
 
     public function visit(Node $node, Visitor $subVisitor = null)
     {
-        if (!$node instanceof GroupNode) {
+        if (!$node instanceof Term) {
             throw new LogicException(
-                'Visitor implementation accepts instance of LogicalOr Node'
+                'Visitor implementation accepts instance of Term Node'
             );
         }
 
-        if ($subVisitor === null) {
-            throw new LogicException('Implementation requires sub-visitor');
+        $token = $node->token;
+
+        if (!$token instanceof WordToken) {
+            throw new LogicException(
+                'Visitor implementation accepts instance of Word Token'
+            );
         }
 
-        $clauses = [];
-
-        foreach ($node->nodes as $subNode) {
-            $clauses[] = $subVisitor->visit($subNode, $subVisitor);
-        }
-
-        $clauses = implode(' ', $clauses);
-        $fieldName = $this->getSolrField($node->tokenLeft);
+        $wordEscaped = $this->escapeWord($token->word);
+        $fieldName = $this->getSolrField($token);
         $fieldPrefix = $fieldName === null ? '' : "{$fieldName}:";
 
-        return "{$fieldPrefix}({$clauses})";
+        return "{$fieldPrefix}{$wordEscaped}";
     }
+
+    /**
+     * Escape special characters in the given word $string.
+     *
+     * @param string $string
+     *
+     * @return string
+     */
+    abstract protected function escapeWord($string);
 
     /**
      * Return Solr backend field name for the given $token.
      *
-     * @param \QueryTranslator\Languages\Galach\Values\Token\GroupBegin $token
+     * @param \QueryTranslator\Languages\Galach\Values\Token\Word $token
      *
      * @return string|null
      */
-    private function getSolrField(GroupBegin $token)
+    private function getSolrField(WordToken $token)
     {
         if ($token->domain === null) {
             return null;
@@ -86,10 +94,6 @@ final class Group extends Visitor
             return $this->domainFieldMap[$token->domain];
         }
 
-        if ($this->defaultFieldName !== null) {
-            return $this->defaultFieldName;
-        }
-
-        return null;
+        return $this->defaultFieldName;
     }
 }

@@ -2,7 +2,7 @@
 
 namespace QueryTranslator\Languages\Galach\Generators;
 
-use QueryTranslator\Languages\Galach\Generators\ExtendedDisMax\Visitor;
+use QueryTranslator\Languages\Galach\Generators\Common\Visitor;
 use QueryTranslator\Values\SyntaxTree;
 
 /**
@@ -13,7 +13,7 @@ use QueryTranslator\Values\SyntaxTree;
 final class ExtendedDisMax
 {
     /**
-     * @var \QueryTranslator\Languages\Galach\Generators\ExtendedDisMax\Visitor
+     * @var \QueryTranslator\Languages\Galach\Generators\Common\Visitor
      */
     private $visitor;
 

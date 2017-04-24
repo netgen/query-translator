@@ -2,7 +2,7 @@
 
 namespace QueryTranslator\Languages\Galach\Generators;
 
-use QueryTranslator\Languages\Galach\Generators\Native\Visitor;
+use QueryTranslator\Languages\Galach\Generators\Common\Visitor;
 use QueryTranslator\Values\SyntaxTree;
 
 /**
@@ -11,7 +11,7 @@ use QueryTranslator\Values\SyntaxTree;
 final class Native
 {
     /**
-     * @var \QueryTranslator\Languages\Galach\Generators\Native\Visitor
+     * @var \QueryTranslator\Languages\Galach\Generators\Common\Visitor
      */
     private $visitor;
 

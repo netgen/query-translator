@@ -3509,7 +3509,7 @@ class IntegrationTest extends TestCase
         $visitors[] = new Generators\Native\User();
         $visitors[] = new Generators\Native\Word();
 
-        $aggregate = new Generators\Native\Aggregate($visitors);
+        $aggregate = new Generators\Common\Aggregate($visitors);
 
         return new Generators\Native($aggregate);
     }

@@ -3,6 +3,7 @@
 namespace QueryTranslator\Languages\Galach\Generators\Native;
 
 use LogicException;
+use QueryTranslator\Languages\Galach\Generators\Common\Visitor;
 use QueryTranslator\Languages\Galach\Tokenizer;
 use QueryTranslator\Languages\Galach\Values\Node\LogicalNot;
 use QueryTranslator\Languages\Galach\Values\Node\Mandatory;

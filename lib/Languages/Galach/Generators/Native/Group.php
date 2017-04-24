@@ -3,6 +3,7 @@
 namespace QueryTranslator\Languages\Galach\Generators\Native;
 
 use LogicException;
+use QueryTranslator\Languages\Galach\Generators\Common\Visitor;
 use QueryTranslator\Languages\Galach\Values\Node\Group as GroupNode;
 use QueryTranslator\Values\Node;
 

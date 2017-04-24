@@ -1,16 +1,17 @@
 <?php
 
-namespace QueryTranslator\Languages\Galach\Generators\ExtendedDisMax;
+namespace QueryTranslator\Languages\Galach\Generators\Lucene\Common;
 
 use LogicException;
+use QueryTranslator\Languages\Galach\Generators\Common\Visitor;
 use QueryTranslator\Languages\Galach\Values\Node\Term;
-use QueryTranslator\Languages\Galach\Values\Token\Word as WordToken;
+use QueryTranslator\Languages\Galach\Values\Token\Phrase as PhraseToken;
 use QueryTranslator\Values\Node;
 
 /**
- * Word Node Visitor implementation.
+ * Phrase Node Visitor implementation.
  */
-final class Word extends Visitor
+final class Phrase extends Visitor
 {
     /**
      * Mapping of token domain to Solr field name.
@@ -41,7 +42,7 @@ final class Word extends Visitor
 
     public function accept(Node $node)
     {
-        return $node instanceof Term && $node->token instanceof WordToken;
+        return $node instanceof Term && $node->token instanceof PhraseToken;
     }
 
     public function visit(Node $node, Visitor $subVisitor = null)
@@ -54,47 +55,27 @@ final class Word extends Visitor
 
         $token = $node->token;
 
-        if (!$token instanceof WordToken) {
+        if (!$token instanceof PhraseToken) {
             throw new LogicException(
-                'Visitor implementation accepts instance of Word Token'
+                'Visitor implementation accepts instance of Phrase Token'
             );
         }
 
-        $wordEscaped = $this->escapeWord($token->word);
+        $phraseEscaped = preg_replace("/([\\{$token->quote}])/", '\\\\$1', $token->phrase);
         $fieldName = $this->getSolrField($token);
         $fieldPrefix = $fieldName === null ? '' : "{$fieldName}:";
 
-        return "{$fieldPrefix}{$wordEscaped}";
-    }
-
-    /**
-     * Escape special characters in the given word $string.
-     *
-     * @link https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-query-string-query.html
-     *
-     * Note: additionally to what is defined above we also escape blank space.
-     *
-     * @param string $string
-     *
-     * @return string
-     */
-    protected function escapeWord($string)
-    {
-        return preg_replace(
-            '/(\\+|-|&&|\\|\\||!|\\(|\\)|\\{|}|\\[|]|\\^|"|~|\\*|\\?|:|\\/|\\\\| )/',
-            '\\\\$1',
-            $string
-        );
+        return "{$fieldPrefix}\"{$phraseEscaped}\"";
     }
 
     /**
      * Return Solr backend field name for the given $token.
      *
-     * @param \QueryTranslator\Languages\Galach\Values\Token\Word $token
+     * @param \QueryTranslator\Languages\Galach\Values\Token\Phrase $token
      *
      * @return string|null
      */
-    private function getSolrField(WordToken $token)
+    private function getSolrField(PhraseToken $token)
     {
         if ($token->domain === null) {
             return null;

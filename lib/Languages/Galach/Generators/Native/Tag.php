@@ -3,6 +3,7 @@
 namespace QueryTranslator\Languages\Galach\Generators\Native;
 
 use LogicException;
+use QueryTranslator\Languages\Galach\Generators\Common\Visitor;
 use QueryTranslator\Languages\Galach\Values\Node\Term;
 use QueryTranslator\Languages\Galach\Values\Token\Tag as TagToken;
 use QueryTranslator\Values\Node;

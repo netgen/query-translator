@@ -1,24 +1,24 @@
 <?php
 
-namespace QueryTranslator\Languages\Galach\Generators\QueryString;
+namespace QueryTranslator\Languages\Galach\Generators\Common;
 
 use QueryTranslator\Values\Node;
 use RuntimeException;
 
 /**
- * Aggregate Visitor implementation.
+ * Common Aggregate Visitor implementation.
  */
 final class Aggregate extends Visitor
 {
     /**
-     * @var \QueryTranslator\Languages\Galach\Generators\QueryString\Visitor[]
+     * @var \QueryTranslator\Languages\Galach\Generators\Common\Visitor[]
      */
     private $visitors;
 
     /**
      * Construct from the optional array of $visitors.
      *
-     * @param \QueryTranslator\Languages\Galach\Generators\QueryString\Visitor[] $visitors
+     * @param \QueryTranslator\Languages\Galach\Generators\Common\Visitor[] $visitors
      */
     public function __construct(array $visitors = [])
     {
@@ -30,7 +30,7 @@ final class Aggregate extends Visitor
     /**
      * Add a $visitor to the aggregated collection.
      *
-     * @param \QueryTranslator\Languages\Galach\Generators\QueryString\Visitor $visitor
+     * @param \QueryTranslator\Languages\Galach\Generators\Common\Visitor $visitor
      */
     public function addVisitor(Visitor $visitor)
     {

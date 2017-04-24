@@ -1,8 +1,9 @@
 <?php
 
-namespace QueryTranslator\Languages\Galach\Generators\QueryString;
+namespace QueryTranslator\Languages\Galach\Generators\Lucene\Common;
 
 use LogicException;
+use QueryTranslator\Languages\Galach\Generators\Common\Visitor;
 use QueryTranslator\Languages\Galach\Values\Node\Prohibited as ProhibitedNode;
 use QueryTranslator\Values\Node;
 

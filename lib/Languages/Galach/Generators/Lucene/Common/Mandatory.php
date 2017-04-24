@@ -1,8 +1,9 @@
 <?php
 
-namespace QueryTranslator\Languages\Galach\Generators\ExtendedDisMax;
+namespace QueryTranslator\Languages\Galach\Generators\Lucene\Common;
 
 use LogicException;
+use QueryTranslator\Languages\Galach\Generators\Common\Visitor;
 use QueryTranslator\Languages\Galach\Values\Node\Mandatory as MandatoryNode;
 use QueryTranslator\Values\Node;
 

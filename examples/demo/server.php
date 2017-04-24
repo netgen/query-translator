@@ -35,7 +35,7 @@ $tokenExtractor = new Full();
 $tokenizer = new Tokenizer($tokenExtractor);
 $parser = new Parser();
 $nativeGenerator = new Generators\Native(
-    new Generators\Native\Aggregate(
+    new Generators\Common\Aggregate(
         [
             new Generators\Native\Group(),
             new Generators\Native\BinaryOperator(),
@@ -102,34 +102,34 @@ class TranslationRenderer
     {
         $visitors = [];
 
-        $visitors[] = new Generators\ExtendedDisMax\Prohibited();
-        $visitors[] = new Generators\ExtendedDisMax\Group(
+        $visitors[] = new Generators\Lucene\Common\Prohibited();
+        $visitors[] = new Generators\Lucene\Common\Group(
             [
                 'type' => 'type_s',
             ],
             'default_s'
         );
-        $visitors[] = new Generators\ExtendedDisMax\Mandatory();
-        $visitors[] = new Generators\ExtendedDisMax\LogicalAnd();
-        $visitors[] = new Generators\ExtendedDisMax\LogicalNot();
-        $visitors[] = new Generators\ExtendedDisMax\LogicalOr();
-        $visitors[] = new Generators\ExtendedDisMax\Phrase(
+        $visitors[] = new Generators\Lucene\Common\Mandatory();
+        $visitors[] = new Generators\Lucene\Common\LogicalAnd();
+        $visitors[] = new Generators\Lucene\Common\LogicalNot();
+        $visitors[] = new Generators\Lucene\Common\LogicalOr();
+        $visitors[] = new Generators\Lucene\Common\Phrase(
             [
                 'type' => 'type_s',
             ],
             'default_s'
         );
-        $visitors[] = new Generators\ExtendedDisMax\Query();
-        $visitors[] = new Generators\ExtendedDisMax\Tag('tag_ms');
-        $visitors[] = new Generators\ExtendedDisMax\User('user_s');
-        $visitors[] = new Generators\ExtendedDisMax\Word(
+        $visitors[] = new Generators\Lucene\Common\Query();
+        $visitors[] = new Generators\Lucene\Common\Tag('tag_ms');
+        $visitors[] = new Generators\Lucene\Common\User('user_s');
+        $visitors[] = new Generators\Lucene\ExtendedDisMax\Word(
             [
                 'type' => 'type_s',
             ],
             'default_s'
         );
 
-        $aggregate = new Generators\ExtendedDisMax\Aggregate($visitors);
+        $aggregate = new Generators\Common\Aggregate($visitors);
         $generator = new Generators\ExtendedDisMax($aggregate);
 
         return $generator->generate($syntaxTree);
@@ -139,34 +139,34 @@ class TranslationRenderer
     {
         $visitors = [];
 
-        $visitors[] = new Generators\QueryString\Prohibited();
-        $visitors[] = new Generators\QueryString\Group(
+        $visitors[] = new Generators\Lucene\Common\Prohibited();
+        $visitors[] = new Generators\Lucene\Common\Group(
             [
                 'type' => 'type_s',
             ],
             'default_s'
         );
-        $visitors[] = new Generators\QueryString\Mandatory();
-        $visitors[] = new Generators\QueryString\LogicalAnd();
-        $visitors[] = new Generators\QueryString\LogicalNot();
-        $visitors[] = new Generators\QueryString\LogicalOr();
-        $visitors[] = new Generators\QueryString\Phrase(
+        $visitors[] = new Generators\Lucene\Common\Mandatory();
+        $visitors[] = new Generators\Lucene\Common\LogicalAnd();
+        $visitors[] = new Generators\Lucene\Common\LogicalNot();
+        $visitors[] = new Generators\Lucene\Common\LogicalOr();
+        $visitors[] = new Generators\Lucene\Common\Phrase(
             [
                 'type' => 'type_s',
             ],
             'default_s'
         );
-        $visitors[] = new Generators\QueryString\Query();
-        $visitors[] = new Generators\QueryString\Tag('tag_ms');
-        $visitors[] = new Generators\QueryString\User('user_s');
-        $visitors[] = new Generators\QueryString\Word(
+        $visitors[] = new Generators\Lucene\Common\Query();
+        $visitors[] = new Generators\Lucene\Common\Tag('tag_ms');
+        $visitors[] = new Generators\Lucene\Common\User('user_s');
+        $visitors[] = new Generators\Lucene\QueryString\Word(
             [
                 'type' => 'type_s',
             ],
             'default_s'
         );
 
-        $aggregate = new Generators\QueryString\Aggregate($visitors);
+        $aggregate = new Generators\Common\Aggregate($visitors);
         $generator = new Generators\QueryString($aggregate);
 
         return $generator->generate($syntaxTree);

@@ -1,26 +1,27 @@
 <?php
 
-namespace QueryTranslator\Languages\Galach\Generators\QueryString;
+namespace QueryTranslator\Languages\Galach\Generators\Lucene\Common;
 
 use LogicException;
-use QueryTranslator\Languages\Galach\Values\Node\LogicalAnd as LogicalAndNode;
+use QueryTranslator\Languages\Galach\Generators\Common\Visitor;
+use QueryTranslator\Languages\Galach\Values\Node\LogicalOr as LogicalOrNode;
 use QueryTranslator\Values\Node;
 
 /**
- * LogicalAnd operator Node Visitor implementation.
+ * LogicalOr operator Node Visitor implementation.
  */
-final class LogicalAnd extends Visitor
+final class LogicalOr extends Visitor
 {
     public function accept(Node $node)
     {
-        return $node instanceof LogicalAndNode;
+        return $node instanceof LogicalOrNode;
     }
 
     public function visit(Node $node, Visitor $subVisitor = null)
     {
-        if (!$node instanceof LogicalAndNode) {
+        if (!$node instanceof LogicalOrNode) {
             throw new LogicException(
-                'Visitor implementation accepts instance of LogicalAnd Node'
+                'Visitor implementation accepts instance of LogicalOr Node'
             );
         }
 
@@ -33,6 +34,6 @@ final class LogicalAnd extends Visitor
             $subVisitor->visit($node->rightOperand, $subVisitor),
         ];
 
-        return implode(' AND ', $clauses);
+        return implode(' OR ', $clauses);
     }
 }
