@@ -38,20 +38,6 @@ final class Full extends TokenExtractor
         '/(?<lexeme>(?:(?<domain>[a-zA-Z_][a-zA-Z0-9_\-]*):)?(?<word>(?:\\\\\\\\|\\\\ |\\\\\(|\\\\\)|\\\\"|\\\\\'|[^"\'()\s])+?))(?:(?<!\\\\)["\']|\(|\)|$|\s)/Au' => Tokenizer::TOKEN_TERM,
     ];
 
-    /**
-     * Construct from the optional $expressionTypeMap, as defined by the base TokenExtractor.
-     *
-     * @see \QueryTranslator\Languages\Galach\TokenExtractor::getExpressionTypeMap()
-     *
-     * @param array|null $expressionTypeMap
-     */
-    public function __construct(array $expressionTypeMap = null)
-    {
-        if ($expressionTypeMap !== null) {
-            self::$expressionTypeMap = $expressionTypeMap;
-        }
-    }
-
     protected function getExpressionTypeMap()
     {
         return self::$expressionTypeMap;
