@@ -62,7 +62,7 @@ abstract class WordBase extends Visitor
         }
 
         $wordEscaped = $this->escapeWord($token->word);
-        $fieldName = $this->getSolrField($token);
+        $fieldName = $this->getBackendField($token);
         $fieldPrefix = $fieldName === null ? '' : "{$fieldName}:";
 
         return "{$fieldPrefix}{$wordEscaped}";
@@ -84,7 +84,7 @@ abstract class WordBase extends Visitor
      *
      * @return string|null
      */
-    private function getSolrField(WordToken $token)
+    private function getBackendField(WordToken $token)
     {
         if ($token->domain === null) {
             return null;
