@@ -87,10 +87,6 @@ final class Group extends Visitor
             return $this->domainFieldMap[$token->domain];
         }
 
-        if ($this->defaultFieldName !== null) {
-            return $this->defaultFieldName;
-        }
-
-        return null;
+        return $this->defaultFieldName;
     }
 }
