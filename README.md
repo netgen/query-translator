@@ -10,5 +10,5 @@
 
 1. Clone the repository
 2. Generate autoloader using composer `composer dump-autoload -o`
-3. Start the web server with demo document root `php -S localhost:8005 -t examples/demo`
+3. Start the web server with demo document root `php -S localhost:8005 -t demo`
 4. Open http://localhost:8005 in your browser
