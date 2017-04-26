@@ -2,8 +2,8 @@
 
 namespace QueryTranslator\Tests\Galach\Generators;
 
-use QueryTranslator\Languages\Galach\Generators\QueryString;
 use QueryTranslator\Languages\Galach\Generators;
+use QueryTranslator\Languages\Galach\Generators\QueryString;
 
 /**
  * Test case for QueryString generator.

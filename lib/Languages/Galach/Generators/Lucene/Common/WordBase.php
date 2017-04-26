@@ -14,7 +14,7 @@ use QueryTranslator\Values\Node;
 abstract class WordBase extends Visitor
 {
     /**
-     * Mapping of token domain to Solr field name.
+     * Mapping of token domain to the backend field name.
      *
      * @var array
      */
@@ -49,7 +49,7 @@ abstract class WordBase extends Visitor
     {
         if (!$node instanceof Term) {
             throw new LogicException(
-                'Visitor implementation accepts instance of Term Node'
+                'Implementation accepts instance of Term Node'
             );
         }
 
@@ -57,12 +57,12 @@ abstract class WordBase extends Visitor
 
         if (!$token instanceof WordToken) {
             throw new LogicException(
-                'Visitor implementation accepts instance of Word Token'
+                'Implementation accepts instance of Word Token'
             );
         }
 
         $wordEscaped = $this->escapeWord($token->word);
-        $fieldName = $this->getBackendField($token);
+        $fieldName = $this->getBackendFieldName($token);
         $fieldPrefix = $fieldName === null ? '' : "{$fieldName}:";
 
         return "{$fieldPrefix}{$wordEscaped}";
@@ -78,13 +78,13 @@ abstract class WordBase extends Visitor
     abstract protected function escapeWord($string);
 
     /**
-     * Return Solr backend field name for the given $token.
+     * Return backend field name for the given $token.
      *
      * @param \QueryTranslator\Languages\Galach\Values\Token\Word $token
      *
      * @return string|null
      */
-    private function getBackendField(WordToken $token)
+    private function getBackendFieldName(WordToken $token)
     {
         if ($token->domain === null) {
             return null;

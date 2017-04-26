@@ -11,8 +11,8 @@ use QueryTranslator\Languages\Galach\Values\Node\Mandatory;
 use QueryTranslator\Languages\Galach\Values\Node\Prohibited;
 use QueryTranslator\Languages\Galach\Values\Node\Query;
 use QueryTranslator\Languages\Galach\Values\Node\Term;
-use QueryTranslator\Values\Token;
 use QueryTranslator\Values\Node;
+use QueryTranslator\Values\Token;
 
 /**
  * Test case for node tree traversal.

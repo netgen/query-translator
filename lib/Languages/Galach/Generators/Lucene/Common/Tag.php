@@ -35,7 +35,7 @@ final class Tag extends Visitor
     {
         if (!$node instanceof Term) {
             throw new LogicException(
-                'Visitor implementation accepts instance of Term Node'
+                'Implementation accepts instance of Term Node'
             );
         }
 
@@ -43,7 +43,7 @@ final class Tag extends Visitor
 
         if (!$token instanceof TagToken) {
             throw new LogicException(
-                'Visitor implementation accepts instance of Tag Token'
+                'Implementation accepts instance of Tag Token'
             );
         }
 

@@ -13,7 +13,7 @@ final class Aggregate extends Visitor
     /**
      * @var \QueryTranslator\Languages\Galach\Generators\Common\Visitor[]
      */
-    private $visitors;
+    private $visitors = [];
 
     /**
      * Construct from the optional array of $visitors.

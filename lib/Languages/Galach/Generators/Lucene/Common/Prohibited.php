@@ -21,7 +21,7 @@ final class Prohibited extends Visitor
     {
         if (!$node instanceof ProhibitedNode) {
             throw new LogicException(
-                'Visitor implementation accepts instance of Prohibited Node'
+                'Implementation accepts instance of Prohibited Node'
             );
         }
 

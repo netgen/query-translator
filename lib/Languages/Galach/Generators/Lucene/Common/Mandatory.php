@@ -21,7 +21,7 @@ final class Mandatory extends Visitor
     {
         if (!$node instanceof MandatoryNode) {
             throw new LogicException(
-                'Visitor implementation accepts instance of Mandatory Node'
+                'Implementation accepts instance of Mandatory Node'
             );
         }
 

@@ -21,7 +21,7 @@ final class LogicalOr extends Visitor
     {
         if (!$node instanceof LogicalOrNode) {
             throw new LogicException(
-                'Visitor implementation accepts instance of LogicalOr Node'
+                'Implementation accepts instance of LogicalOr Node'
             );
         }
 

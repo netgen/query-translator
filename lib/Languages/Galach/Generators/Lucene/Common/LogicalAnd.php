@@ -21,7 +21,7 @@ final class LogicalAnd extends Visitor
     {
         if (!$node instanceof LogicalAndNode) {
             throw new LogicException(
-                'Visitor implementation accepts instance of LogicalAnd Node'
+                'Implementation accepts instance of LogicalAnd Node'
             );
         }
 

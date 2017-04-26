@@ -22,12 +22,12 @@ final class BinaryOperator extends Visitor
     {
         if (!$node instanceof LogicalAnd && !$node instanceof LogicalOrNode) {
             throw new LogicException(
-                'Visitor implementation accepts instance of LogicalAnd or LogicalOr Node'
+                'Implementation accepts instance of LogicalAnd or LogicalOr Node'
             );
         }
 
         if ($subVisitor === null) {
-            throw new LogicException('Visitor implementation requires sub-visitor');
+            throw new LogicException('Implementation requires sub-visitor');
         }
 
         $clauses = [

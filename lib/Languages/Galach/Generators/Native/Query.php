@@ -21,7 +21,7 @@ final class Query extends Visitor
     {
         if (!$node instanceof QueryNode) {
             throw new LogicException(
-                'Visitor implementation accepts instance of Query Node'
+                'Implementation accepts instance of Query Node'
             );
         }
 

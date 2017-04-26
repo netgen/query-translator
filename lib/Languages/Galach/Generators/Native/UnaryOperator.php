@@ -24,7 +24,7 @@ final class UnaryOperator extends Visitor
     {
         if (!$node instanceof Mandatory && !$node instanceof Prohibited && !$node instanceof LogicalNot) {
             throw new LogicException(
-                'Visitor implementation accepts instance of Mandatory, Prohibited or LogicalNot Node'
+                'Implementation accepts instance of Mandatory, Prohibited or LogicalNot Node'
             );
         }
 

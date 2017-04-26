@@ -49,7 +49,7 @@ final class Group extends Visitor
     {
         if (!$node instanceof GroupNode) {
             throw new LogicException(
-                'Visitor implementation accepts instance of LogicalOr Node'
+                'Implementation accepts instance of Group Node'
             );
         }
 

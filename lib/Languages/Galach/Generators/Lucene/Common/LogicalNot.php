@@ -21,7 +21,7 @@ final class LogicalNot extends Visitor
     {
         if (!$node instanceof LogicalNotNode) {
             throw new LogicException(
-                'Visitor implementation accepts instance of LogicalNot Node'
+                'Implementation accepts instance of LogicalNot Node'
             );
         }
 
