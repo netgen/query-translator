@@ -35,5 +35,11 @@
         "psr-4": {
             "QueryTranslator\\Tests\\": "tests"
         }
+    },
+    "scripts": {
+        "test": [
+            "@composer dump-autoload -o",
+            "phpunit"
+        ]
     }
 }
