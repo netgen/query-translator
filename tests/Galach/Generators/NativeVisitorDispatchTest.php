@@ -37,7 +37,6 @@ class NativeVisitorDispatchTest extends TestCase
             [
                 new BinaryOperator(),
                 $nodeMock,
-                // todo lose visitor...
                 'Implementation accepts instance of LogicalAnd or LogicalOr Node',
             ],
             [

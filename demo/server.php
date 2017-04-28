@@ -10,6 +10,7 @@ require_once $autoload;
 use QueryTranslator\Languages\Galach\Generators;
 use QueryTranslator\Languages\Galach\Parser;
 use QueryTranslator\Languages\Galach\TokenExtractor\Full;
+use QueryTranslator\Languages\Galach\TokenExtractor\Text;
 use QueryTranslator\Languages\Galach\Tokenizer;
 use QueryTranslator\Languages\Galach\Values\Node\Group;
 use QueryTranslator\Languages\Galach\Values\Node\LogicalAnd;
@@ -31,7 +32,12 @@ use QueryTranslator\Values\TokenSequence;
 $json = file_get_contents('php://input');
 $data = json_decode($json);
 
-$tokenExtractor = new Full();
+if (isset($_GET['full'])) {
+    $tokenExtractor = new Full();
+} else {
+    $tokenExtractor = new Text();
+}
+
 $tokenizer = new Tokenizer($tokenExtractor);
 $parser = new Parser();
 $nativeGenerator = new Generators\Native(

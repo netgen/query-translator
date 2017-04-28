@@ -1,9 +1,19 @@
 function process(query) {
     var xhr = new XMLHttpRequest();
-    xhr.open('POST', 'server.php');
+    xhr.open('POST', 'server.php?' + window.syntax);
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.onload = function() {showData(xhr);};
     xhr.send(JSON.stringify({query: query}));
+}
+
+function switchSyntax(syntax) {
+    window.syntax = syntax;
+    document.body.classList.remove('syntax-full');
+    document.body.classList.remove('syntax-text');
+    document.body.classList.add('syntax-' + syntax);
+
+    var input = document.getElementById('input');
+    process(input.value);
 }
 
 function showData(xhr) {

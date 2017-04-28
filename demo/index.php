@@ -2,20 +2,18 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Query Translator demo</title>
+    <title>Query Translator 1.0.0 demo</title>
     <link rel="stylesheet" type="text/css" href="style.css">
-    <script type="text/javascript" src="script.js" ></script>
+    <script type="text/javascript">var syntax = 'full';</script>
+    <script type="text/javascript" src="script.js"></script>
 </head>
-<body onload="process('')">
-    <h1>Query Translator demo</h1>
-    <p>Quick syntax info:</p>
+<body class="syntax-full" onload="process('')">
+    <h1>Query Translator 1.0.0 demo</h1>
+    <p>Switch between <a class="switch full" onclick="switchSyntax('full');">full</a> and <a class="switch text" onclick="switchSyntax('text');">text</a> syntax:</p>
     <p class="syntax">
         <span>word</span>
         <span>"phrase"</span>
         <span>'phrase'</span>
-        <span>#tag</span>
-        <span>@user</span>
-        <span>domain:term</span>
         <span>(group)</span>
         <span>+mandatory</span>
         <span>-prohibited</span>
@@ -25,23 +23,26 @@
         <span>||</span>
         <span>NOT</span>
         <span>!</span>
+        <span class="syntax-full">#tag</span>
+        <span class="syntax-full">@user</span>
+        <span class="syntax-full">domain:term</span>
     </p>
     <p>Escape these special characters with a backslash:</p>
     <p class="special">
         <span>(</span>
         <span>)</span>
-        <span>#</span>
-        <span>@</span>
         <span>+</span>
         <span>-</span>
         <span>!</span>
-        <span>:</span>
         <span>"</span>
         <span>'</span>
         <span>\</span>
         <span title="blank space">&blank;</span>
+        <span class="syntax-full">#</span>
+        <span class="syntax-full">@</span>
+        <span class="syntax-full">:</span>
     </p>
-    <textarea placeholder="type your query here" oninput="process(this.value)" autocomplete="off" spellcheck="false" autofocus></textarea>
+    <textarea id="input" placeholder="type your query here" oninput="process(this.value)" autocomplete="off" spellcheck="false" autofocus></textarea>
     <p id="execution">translated in <span id="time">...</span> seconds</p>
     <div class="tabs">
         <form>

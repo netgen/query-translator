@@ -4,6 +4,30 @@
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
+a {
+    color: dodgerblue;
+    text-decoration: none;
+}
+
+a.switch {
+    color: white;
+    background: darkgrey;
+    border-radius: 3px;
+    padding: 2px 5px;
+    cursor: pointer;
+    user-select: none;
+    -moz-user-select: none;
+}
+
+body.syntax-full a.switch.full,
+body.syntax-text a.switch.text {
+    background: #cc0000;
+}
+
+body.syntax-text span.syntax-full {
+    display: none;
+}
+
 textarea,
 table,
 td,
