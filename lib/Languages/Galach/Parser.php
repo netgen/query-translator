@@ -172,10 +172,6 @@ final class Parser implements Parsing
 
         $this->reduceQuery();
 
-        if (count($this->stack) !== 1) {
-            throw new RuntimeException('Found more than one element on the stack');
-        }
-
         return new SyntaxTree($this->stack->top(), $tokenSequence, $this->corrections);
     }
 
