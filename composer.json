@@ -39,8 +39,7 @@
     },
     "scripts": {
         "test": [
-            "@composer dump-autoload -o",
-            "phpunit"
+            "php vendor/bin/phpunit"
         ]
     }
 }
