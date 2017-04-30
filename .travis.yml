@@ -8,6 +8,8 @@ matrix:
     # mark as finished before allow_failures are run
     fast_finish: true
     include:
+        - php: 5.6
+          env: CONFIG="phpunit.xml" COVERGAGE="all"
         - php: 7.0
           env: CONFIG="phpunit.xml" COVERGAGE="all"
         - php: 7.1
