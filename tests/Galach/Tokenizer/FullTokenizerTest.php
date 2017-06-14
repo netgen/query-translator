@@ -320,6 +320,12 @@ class FullTokenizerTest extends TestCase
                 ],
             ],
             [
+                '@user.user',
+                [
+                    new UserToken('@user.user', 0, '@', 'user.user'),
+                ],
+            ],
+            [
                 '\@user',
                 [
                     new WordToken('\@user', 0, '', '@user'),
@@ -1165,6 +1171,7 @@ class FullTokenizerTest extends TestCase
                 ],
             ],
             [
+                // todo reuse blah
                 '"' . (
                     $blah = mb_convert_encoding(
                         '&#x1F469;&#x200D;&#x1F469;&#x200D;&#x1F467;&#x200D;&#x1F467;',

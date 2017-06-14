@@ -61,6 +61,9 @@ class TextTokenizerTest extends FullTokenizerTest
             '@user' => [
                 new WordToken('@user', 0, '', '@user'),
             ],
+            '@user.user' => [
+                new WordToken('@user.user', 0, '', '@user.user'),
+            ],
             '\@user' => [
                 new WordToken('\@user', 0, '', '\@user'),
             ],
