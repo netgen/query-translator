@@ -41,7 +41,7 @@
     },
     "scripts": {
         "test": [
-            "php vendor/bin/phpunit"
+            "./vendor/bin/phpunit"
         ]
     }
 }
