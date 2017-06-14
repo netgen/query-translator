@@ -46,7 +46,7 @@ final class Parser implements Parsing
     const CORRECTION_BINARY_OPERATOR_MISSING_RIGHT_OPERAND_IGNORED = 3;
 
     /**
-     * Parser ignored binary operator following another operator.
+     * Parser ignored binary operator following another operator and connecting operators.
      */
     const CORRECTION_BINARY_OPERATOR_FOLLOWING_OPERATOR_IGNORED = 4;
 
@@ -261,9 +261,15 @@ final class Parser implements Parsing
         }
 
         if ($this->isTopStackToken(self::$tokenShortcuts['operator'])) {
+            $precedingOperators = $this->ignorePrecedingOperators(self::$tokenShortcuts['operator']);
+            $followingOperators = $this->ignoreFollowingOperators();
             $this->addCorrection(
                 self::CORRECTION_BINARY_OPERATOR_FOLLOWING_OPERATOR_IGNORED,
-                $token
+                ...array_merge(
+                    $precedingOperators,
+                    [$token],
+                    $followingOperators
+                )
             );
 
             return null;

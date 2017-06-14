@@ -1108,7 +1108,7 @@ class IntegrationTest extends TestCase
             ],
             [
                 'AND AND one AND AND two',
-                'one AND two',
+                'one two',
                 [
                     $token1 = new Token(Tokenizer::TOKEN_LOGICAL_AND, 'AND', 0),
                     $token2 = new Token(Tokenizer::TOKEN_LOGICAL_AND, 'AND', 4),
@@ -1119,17 +1119,14 @@ class IntegrationTest extends TestCase
                 ],
                 new Query(
                     [
-                        new LogicalAnd(
-                            new Term($token3),
-                            new Term($token6),
-                            $token4
-                        ),
+                        new Term($token3),
+                        new Term($token6),
                     ]
                 ),
                 [
                     new Correction(Parser::CORRECTION_BINARY_OPERATOR_MISSING_LEFT_OPERAND_IGNORED, $token1),
                     new Correction(Parser::CORRECTION_BINARY_OPERATOR_MISSING_LEFT_OPERAND_IGNORED, $token2),
-                    new Correction(Parser::CORRECTION_BINARY_OPERATOR_FOLLOWING_OPERATOR_IGNORED, $token5),
+                    new Correction(Parser::CORRECTION_BINARY_OPERATOR_FOLLOWING_OPERATOR_IGNORED, $token4, $token5),
                 ],
             ],
             [
@@ -1156,7 +1153,7 @@ class IntegrationTest extends TestCase
             ],
             [
                 'OR OR one OR OR two',
-                'one OR two',
+                'one two',
                 [
                     $token1 = new Token(Tokenizer::TOKEN_LOGICAL_OR, 'OR', 0),
                     $token2 = new Token(Tokenizer::TOKEN_LOGICAL_OR, 'OR', 3),
@@ -1167,17 +1164,38 @@ class IntegrationTest extends TestCase
                 ],
                 new Query(
                     [
-                        new LogicalOr(
-                            new Term($token3),
-                            new Term($token6),
-                            $token4
-                        ),
+                        new Term($token3),
+                        new Term($token6),
                     ]
                 ),
                 [
                     new Correction(Parser::CORRECTION_BINARY_OPERATOR_MISSING_LEFT_OPERAND_IGNORED, $token1),
                     new Correction(Parser::CORRECTION_BINARY_OPERATOR_MISSING_LEFT_OPERAND_IGNORED, $token2),
-                    new Correction(Parser::CORRECTION_BINARY_OPERATOR_FOLLOWING_OPERATOR_IGNORED, $token5),
+                    new Correction(Parser::CORRECTION_BINARY_OPERATOR_FOLLOWING_OPERATOR_IGNORED, $token4, $token5),
+                ],
+            ],
+            [
+                'OR OR one OR OR AND two',
+                'one two',
+                [
+                    $token1 = new Token(Tokenizer::TOKEN_LOGICAL_OR, 'OR', 0),
+                    $token2 = new Token(Tokenizer::TOKEN_LOGICAL_OR, 'OR', 3),
+                    $token3 = new WordToken('one', 6, '', 'one'),
+                    $token4 = new Token(Tokenizer::TOKEN_LOGICAL_OR, 'OR', 10),
+                    $token5 = new Token(Tokenizer::TOKEN_LOGICAL_OR, 'OR', 13),
+                    $token6 = new Token(Tokenizer::TOKEN_LOGICAL_AND, 'AND', 16),
+                    $token7 = new WordToken('two', 20, '', 'two'),
+                ],
+                new Query(
+                    [
+                        new Term($token3),
+                        new Term($token7),
+                    ]
+                ),
+                [
+                    new Correction(Parser::CORRECTION_BINARY_OPERATOR_MISSING_LEFT_OPERAND_IGNORED, $token1),
+                    new Correction(Parser::CORRECTION_BINARY_OPERATOR_MISSING_LEFT_OPERAND_IGNORED, $token2),
+                    new Correction(Parser::CORRECTION_BINARY_OPERATOR_FOLLOWING_OPERATOR_IGNORED, $token4, $token5, $token6),
                 ],
             ],
             [
@@ -1201,14 +1219,13 @@ class IntegrationTest extends TestCase
                     ]
                 ),
                 [
-                    new Correction(Parser::CORRECTION_BINARY_OPERATOR_FOLLOWING_OPERATOR_IGNORED, $token5),
+                    new Correction(Parser::CORRECTION_BINARY_OPERATOR_FOLLOWING_OPERATOR_IGNORED, $token4, $token5),
                     new Correction(Parser::CORRECTION_UNARY_OPERATOR_MISSING_OPERAND_IGNORED, $token6),
-                    new Correction(Parser::CORRECTION_BINARY_OPERATOR_MISSING_RIGHT_OPERAND_IGNORED, $token4),
                 ],
             ],
             [
                 'AND OR one AND OR two AND OR three',
-                'one AND two AND three',
+                'one two three',
                 [
                     $token1 = new Token(Tokenizer::TOKEN_LOGICAL_AND, 'AND', 0),
                     $token2 = new Token(Tokenizer::TOKEN_LOGICAL_OR, 'OR', 4),
@@ -1222,27 +1239,21 @@ class IntegrationTest extends TestCase
                 ],
                 new Query(
                     [
-                        new LogicalAnd(
-                            new LogicalAnd(
-                                new Term($token3),
-                                new Term($token6),
-                                $token4
-                            ),
-                            new Term($token9),
-                            $token7
-                        ),
+                        new Term($token3),
+                        new Term($token6),
+                        new Term($token9),
                     ]
                 ),
                 [
                     new Correction(Parser::CORRECTION_BINARY_OPERATOR_MISSING_LEFT_OPERAND_IGNORED, $token1),
                     new Correction(Parser::CORRECTION_BINARY_OPERATOR_MISSING_LEFT_OPERAND_IGNORED, $token2),
-                    new Correction(Parser::CORRECTION_BINARY_OPERATOR_FOLLOWING_OPERATOR_IGNORED, $token5),
-                    new Correction(Parser::CORRECTION_BINARY_OPERATOR_FOLLOWING_OPERATOR_IGNORED, $token8),
+                    new Correction(Parser::CORRECTION_BINARY_OPERATOR_FOLLOWING_OPERATOR_IGNORED, $token4, $token5),
+                    new Correction(Parser::CORRECTION_BINARY_OPERATOR_FOLLOWING_OPERATOR_IGNORED, $token7, $token8),
                 ],
             ],
             [
                 'OR AND one OR AND two OR AND three',
-                'one OR two OR three',
+                'one two three',
                 [
                     $token1 = new Token(Tokenizer::TOKEN_LOGICAL_OR, 'OR', 0),
                     $token2 = new Token(Tokenizer::TOKEN_LOGICAL_AND, 'AND', 3),
@@ -1256,27 +1267,21 @@ class IntegrationTest extends TestCase
                 ],
                 new Query(
                     [
-                        new LogicalOr(
-                            new LogicalOr(
-                                new Term($token3),
-                                new Term($token6),
-                                $token4
-                            ),
-                            new Term($token9),
-                            $token7
-                        ),
+                        new Term($token3),
+                        new Term($token6),
+                        new Term($token9),
                     ]
                 ),
                 [
                     new Correction(Parser::CORRECTION_BINARY_OPERATOR_MISSING_LEFT_OPERAND_IGNORED, $token1),
                     new Correction(Parser::CORRECTION_BINARY_OPERATOR_MISSING_LEFT_OPERAND_IGNORED, $token2),
-                    new Correction(Parser::CORRECTION_BINARY_OPERATOR_FOLLOWING_OPERATOR_IGNORED, $token5),
-                    new Correction(Parser::CORRECTION_BINARY_OPERATOR_FOLLOWING_OPERATOR_IGNORED, $token8),
+                    new Correction(Parser::CORRECTION_BINARY_OPERATOR_FOLLOWING_OPERATOR_IGNORED, $token4, $token5),
+                    new Correction(Parser::CORRECTION_BINARY_OPERATOR_FOLLOWING_OPERATOR_IGNORED, $token7, $token8),
                 ],
             ],
             [
                 'one AND NOT AND two',
-                'one AND NOT two',
+                'one two',
                 [
                     $token1 = new WordToken('one', 0, '', 'one'),
                     $token2 = new Token(Tokenizer::TOKEN_LOGICAL_AND, 'AND', 4),
@@ -1286,23 +1291,17 @@ class IntegrationTest extends TestCase
                 ],
                 new Query(
                     [
-                        new LogicalAnd(
-                            new Term($token1),
-                            new LogicalNot(
-                                new Term($token5),
-                                $token3
-                            ),
-                            $token2
-                        ),
+                        new Term($token1),
+                        new Term($token5),
                     ]
                 ),
                 [
-                    new Correction(Parser::CORRECTION_BINARY_OPERATOR_FOLLOWING_OPERATOR_IGNORED, $token4),
+                    new Correction(Parser::CORRECTION_BINARY_OPERATOR_FOLLOWING_OPERATOR_IGNORED, $token2, $token3, $token4),
                 ],
             ],
             [
                 'one NOT AND two',
-                'one NOT two',
+                'one two',
                 [
                     $token1 = new WordToken('one', 0, '', 'one'),
                     $token2 = new Token(Tokenizer::TOKEN_LOGICAL_NOT, 'NOT', 4),
@@ -1312,19 +1311,16 @@ class IntegrationTest extends TestCase
                 new Query(
                     [
                         new Term($token1),
-                        new LogicalNot(
-                            new Term($token4),
-                            $token2
-                        ),
+                        new Term($token4),
                     ]
                 ),
                 [
-                    new Correction(Parser::CORRECTION_BINARY_OPERATOR_FOLLOWING_OPERATOR_IGNORED, $token3),
+                    new Correction(Parser::CORRECTION_BINARY_OPERATOR_FOLLOWING_OPERATOR_IGNORED, $token2, $token3),
                 ],
             ],
             [
                 'one NOT AND NOT two',
-                'one NOT NOT two',
+                'one NOT two',
                 [
                     $token1 = new WordToken('one', 0, '', 'one'),
                     $token2 = new Token(Tokenizer::TOKEN_LOGICAL_NOT, 'NOT', 4),
@@ -1336,21 +1332,18 @@ class IntegrationTest extends TestCase
                     [
                         new Term($token1),
                         new LogicalNot(
-                            new LogicalNot(
-                                new Term($token5),
-                                $token4
-                            ),
-                            $token2
+                            new Term($token5),
+                            $token4
                         ),
                     ]
                 ),
                 [
-                    new Correction(Parser::CORRECTION_BINARY_OPERATOR_FOLLOWING_OPERATOR_IGNORED, $token3),
+                    new Correction(Parser::CORRECTION_BINARY_OPERATOR_FOLLOWING_OPERATOR_IGNORED, $token2, $token3),
                 ],
             ],
             [
                 'one OR NOT OR two',
-                'one OR NOT two',
+                'one two',
                 [
                     $token1 = new WordToken('one', 0, '', 'one'),
                     $token2 = new Token(Tokenizer::TOKEN_LOGICAL_OR, 'OR', 4),
@@ -1360,23 +1353,17 @@ class IntegrationTest extends TestCase
                 ],
                 new Query(
                     [
-                        new LogicalOr(
-                            new Term($token1),
-                            new LogicalNot(
-                                new Term($token5),
-                                $token3
-                            ),
-                            $token2
-                        ),
+                        new Term($token1),
+                        new Term($token5),
                     ]
                 ),
                 [
-                    new Correction(Parser::CORRECTION_BINARY_OPERATOR_FOLLOWING_OPERATOR_IGNORED, $token4),
+                    new Correction(Parser::CORRECTION_BINARY_OPERATOR_FOLLOWING_OPERATOR_IGNORED, $token2, $token3, $token4),
                 ],
             ],
             [
                 'one NOT OR two',
-                'one NOT two',
+                'one two',
                 [
                     $token1 = new WordToken('one', 0, '', 'one'),
                     $token2 = new Token(Tokenizer::TOKEN_LOGICAL_NOT, 'NOT', 4),
@@ -1386,19 +1373,16 @@ class IntegrationTest extends TestCase
                 new Query(
                     [
                         new Term($token1),
-                        new LogicalNot(
-                            new Term($token4),
-                            $token2
-                        ),
+                        new Term($token4),
                     ]
                 ),
                 [
-                    new Correction(Parser::CORRECTION_BINARY_OPERATOR_FOLLOWING_OPERATOR_IGNORED, $token3),
+                    new Correction(Parser::CORRECTION_BINARY_OPERATOR_FOLLOWING_OPERATOR_IGNORED, $token2, $token3),
                 ],
             ],
             [
                 'one NOT OR NOT two',
-                'one NOT NOT two',
+                'one NOT two',
                 [
                     $token1 = new WordToken('one', 0, '', 'one'),
                     $token2 = new Token(Tokenizer::TOKEN_LOGICAL_NOT, 'NOT', 4),
@@ -1410,16 +1394,13 @@ class IntegrationTest extends TestCase
                     [
                         new Term($token1),
                         new LogicalNot(
-                            new LogicalNot(
-                                new Term($token5),
-                                $token4
-                            ),
-                            $token2
+                            new Term($token5),
+                            $token4
                         ),
                     ]
                 ),
                 [
-                    new Correction(Parser::CORRECTION_BINARY_OPERATOR_FOLLOWING_OPERATOR_IGNORED, $token3),
+                    new Correction(Parser::CORRECTION_BINARY_OPERATOR_FOLLOWING_OPERATOR_IGNORED, $token2, $token3),
                 ],
             ],
             [
@@ -1531,9 +1512,7 @@ class IntegrationTest extends TestCase
                     new Correction(Parser::CORRECTION_BINARY_OPERATOR_MISSING_LEFT_OPERAND_IGNORED, $token1),
                     new Correction(Parser::CORRECTION_BINARY_OPERATOR_MISSING_LEFT_OPERAND_IGNORED, $token5),
                     new Correction(Parser::CORRECTION_BINARY_OPERATOR_MISSING_LEFT_OPERAND_IGNORED, $token6),
-                    new Correction(Parser::CORRECTION_BINARY_OPERATOR_FOLLOWING_OPERATOR_IGNORED, $token10),
-                    new Correction(Parser::CORRECTION_UNARY_OPERATOR_MISSING_OPERAND_IGNORED, $token9),
-                    new Correction(Parser::CORRECTION_BINARY_OPERATOR_MISSING_RIGHT_OPERAND_IGNORED, $token8),
+                    new Correction(Parser::CORRECTION_BINARY_OPERATOR_FOLLOWING_OPERATOR_IGNORED, $token8, $token9, $token10),
                     new Correction(Parser::CORRECTION_UNARY_OPERATOR_MISSING_OPERAND_IGNORED, $token15),
                     new Correction(Parser::CORRECTION_BINARY_OPERATOR_MISSING_RIGHT_OPERAND_IGNORED, $token14),
                 ],
@@ -1723,9 +1702,8 @@ class IntegrationTest extends TestCase
                 ),
                 [
                     new Correction(Parser::CORRECTION_BINARY_OPERATOR_MISSING_LEFT_OPERAND_IGNORED, $token1),
-                    new Correction(Parser::CORRECTION_BINARY_OPERATOR_FOLLOWING_OPERATOR_IGNORED, $token8),
+                    new Correction(Parser::CORRECTION_BINARY_OPERATOR_FOLLOWING_OPERATOR_IGNORED, $token7, $token8),
                     new Correction(Parser::CORRECTION_UNARY_OPERATOR_MISSING_OPERAND_IGNORED, $token9),
-                    new Correction(Parser::CORRECTION_BINARY_OPERATOR_MISSING_RIGHT_OPERAND_IGNORED, $token7),
                     new Correction(Parser::CORRECTION_UNARY_OPERATOR_MISSING_OPERAND_IGNORED, $token14),
                     new Correction(Parser::CORRECTION_BINARY_OPERATOR_MISSING_RIGHT_OPERAND_IGNORED, $token13),
                 ],
