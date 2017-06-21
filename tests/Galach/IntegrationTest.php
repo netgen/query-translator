@@ -1765,9 +1765,9 @@ class IntegrationTest extends TestCase
                     ]
                 ),
                 [
-                    new Correction(Parser::CORRECTION_UNARY_OPERATOR_PRECEDING_OPERATOR_IGNORED, $token1),
-                    new Correction(Parser::CORRECTION_UNARY_OPERATOR_PRECEDING_OPERATOR_IGNORED, $token2),
-                    new Correction(Parser::CORRECTION_UNARY_OPERATOR_PRECEDING_OPERATOR_IGNORED, $token5),
+                    new Correction(Parser::CORRECTION_ADJACENT_UNARY_OPERATOR_PRECEDING_OPERATOR_IGNORED, $token1),
+                    new Correction(Parser::CORRECTION_ADJACENT_UNARY_OPERATOR_PRECEDING_OPERATOR_IGNORED, $token2),
+                    new Correction(Parser::CORRECTION_ADJACENT_UNARY_OPERATOR_PRECEDING_OPERATOR_IGNORED, $token5),
                 ],
             ],
             [
@@ -1798,9 +1798,9 @@ class IntegrationTest extends TestCase
                 ),
                 [
                     new Correction(Parser::CORRECTION_UNARY_OPERATOR_MISSING_OPERAND_IGNORED, $token3),
-                    new Correction(Parser::CORRECTION_UNARY_OPERATOR_PRECEDING_OPERATOR_IGNORED, $token4),
-                    new Correction(Parser::CORRECTION_UNARY_OPERATOR_PRECEDING_OPERATOR_IGNORED, $token6),
-                    new Correction(Parser::CORRECTION_UNARY_OPERATOR_PRECEDING_OPERATOR_IGNORED, $token7),
+                    new Correction(Parser::CORRECTION_ADJACENT_UNARY_OPERATOR_PRECEDING_OPERATOR_IGNORED, $token4),
+                    new Correction(Parser::CORRECTION_ADJACENT_UNARY_OPERATOR_PRECEDING_OPERATOR_IGNORED, $token6),
+                    new Correction(Parser::CORRECTION_ADJACENT_UNARY_OPERATOR_PRECEDING_OPERATOR_IGNORED, $token7),
                     new Correction(Parser::CORRECTION_UNARY_OPERATOR_MISSING_OPERAND_IGNORED, $token8),
                 ],
             ],
@@ -1838,10 +1838,10 @@ class IntegrationTest extends TestCase
                 ),
                 [
                     new Correction(Parser::CORRECTION_UNARY_OPERATOR_MISSING_OPERAND_IGNORED, $token3),
-                    new Correction(Parser::CORRECTION_UNARY_OPERATOR_PRECEDING_OPERATOR_IGNORED, $token4),
-                    new Correction(Parser::CORRECTION_UNARY_OPERATOR_PRECEDING_OPERATOR_IGNORED, $token6),
+                    new Correction(Parser::CORRECTION_ADJACENT_UNARY_OPERATOR_PRECEDING_OPERATOR_IGNORED, $token4),
+                    new Correction(Parser::CORRECTION_ADJACENT_UNARY_OPERATOR_PRECEDING_OPERATOR_IGNORED, $token6),
                     new Correction(Parser::CORRECTION_UNARY_OPERATOR_MISSING_OPERAND_IGNORED, $token7),
-                    new Correction(Parser::CORRECTION_UNARY_OPERATOR_PRECEDING_OPERATOR_IGNORED, $token10),
+                    new Correction(Parser::CORRECTION_ADJACENT_UNARY_OPERATOR_PRECEDING_OPERATOR_IGNORED, $token10),
                     new Correction(Parser::CORRECTION_UNARY_OPERATOR_MISSING_OPERAND_IGNORED, $token11),
                     new Correction(Parser::CORRECTION_UNARY_OPERATOR_MISSING_OPERAND_IGNORED, $token12),
                 ],
@@ -1912,10 +1912,10 @@ class IntegrationTest extends TestCase
                 ),
                 [
                     new Correction(Parser::CORRECTION_UNARY_OPERATOR_MISSING_OPERAND_IGNORED, $token5),
-                    new Correction(Parser::CORRECTION_UNARY_OPERATOR_PRECEDING_OPERATOR_IGNORED, $token6),
-                    new Correction(Parser::CORRECTION_UNARY_OPERATOR_PRECEDING_OPERATOR_IGNORED, $token8),
+                    new Correction(Parser::CORRECTION_ADJACENT_UNARY_OPERATOR_PRECEDING_OPERATOR_IGNORED, $token6),
+                    new Correction(Parser::CORRECTION_ADJACENT_UNARY_OPERATOR_PRECEDING_OPERATOR_IGNORED, $token8),
                     new Correction(Parser::CORRECTION_UNARY_OPERATOR_MISSING_OPERAND_IGNORED, $token9),
-                    new Correction(Parser::CORRECTION_UNARY_OPERATOR_PRECEDING_OPERATOR_IGNORED, $token12),
+                    new Correction(Parser::CORRECTION_ADJACENT_UNARY_OPERATOR_PRECEDING_OPERATOR_IGNORED, $token12),
                     new Correction(Parser::CORRECTION_UNARY_OPERATOR_MISSING_OPERAND_IGNORED, $token13),
                     new Correction(Parser::CORRECTION_UNARY_OPERATOR_MISSING_OPERAND_IGNORED, $token14),
                 ],
@@ -1961,9 +1961,9 @@ class IntegrationTest extends TestCase
                     ]
                 ),
                 [
-                    new Correction(Parser::CORRECTION_UNARY_OPERATOR_PRECEDING_OPERATOR_IGNORED, $token1),
-                    new Correction(Parser::CORRECTION_UNARY_OPERATOR_PRECEDING_OPERATOR_IGNORED, $token2),
-                    new Correction(Parser::CORRECTION_UNARY_OPERATOR_PRECEDING_OPERATOR_IGNORED, $token5),
+                    new Correction(Parser::CORRECTION_ADJACENT_UNARY_OPERATOR_PRECEDING_OPERATOR_IGNORED, $token1),
+                    new Correction(Parser::CORRECTION_ADJACENT_UNARY_OPERATOR_PRECEDING_OPERATOR_IGNORED, $token2),
+                    new Correction(Parser::CORRECTION_ADJACENT_UNARY_OPERATOR_PRECEDING_OPERATOR_IGNORED, $token5),
                 ],
             ],
             [
@@ -1994,9 +1994,9 @@ class IntegrationTest extends TestCase
                 ),
                 [
                     new Correction(Parser::CORRECTION_UNARY_OPERATOR_MISSING_OPERAND_IGNORED, $token3),
-                    new Correction(Parser::CORRECTION_UNARY_OPERATOR_PRECEDING_OPERATOR_IGNORED, $token4),
-                    new Correction(Parser::CORRECTION_UNARY_OPERATOR_PRECEDING_OPERATOR_IGNORED, $token6),
-                    new Correction(Parser::CORRECTION_UNARY_OPERATOR_PRECEDING_OPERATOR_IGNORED, $token7),
+                    new Correction(Parser::CORRECTION_ADJACENT_UNARY_OPERATOR_PRECEDING_OPERATOR_IGNORED, $token4),
+                    new Correction(Parser::CORRECTION_ADJACENT_UNARY_OPERATOR_PRECEDING_OPERATOR_IGNORED, $token6),
+                    new Correction(Parser::CORRECTION_ADJACENT_UNARY_OPERATOR_PRECEDING_OPERATOR_IGNORED, $token7),
                     new Correction(Parser::CORRECTION_UNARY_OPERATOR_MISSING_OPERAND_IGNORED, $token8),
                 ],
             ],
@@ -2034,10 +2034,10 @@ class IntegrationTest extends TestCase
                 ),
                 [
                     new Correction(Parser::CORRECTION_UNARY_OPERATOR_MISSING_OPERAND_IGNORED, $token3),
-                    new Correction(Parser::CORRECTION_UNARY_OPERATOR_PRECEDING_OPERATOR_IGNORED, $token4),
-                    new Correction(Parser::CORRECTION_UNARY_OPERATOR_PRECEDING_OPERATOR_IGNORED, $token6),
+                    new Correction(Parser::CORRECTION_ADJACENT_UNARY_OPERATOR_PRECEDING_OPERATOR_IGNORED, $token4),
+                    new Correction(Parser::CORRECTION_ADJACENT_UNARY_OPERATOR_PRECEDING_OPERATOR_IGNORED, $token6),
                     new Correction(Parser::CORRECTION_UNARY_OPERATOR_MISSING_OPERAND_IGNORED, $token7),
-                    new Correction(Parser::CORRECTION_UNARY_OPERATOR_PRECEDING_OPERATOR_IGNORED, $token10),
+                    new Correction(Parser::CORRECTION_ADJACENT_UNARY_OPERATOR_PRECEDING_OPERATOR_IGNORED, $token10),
                     new Correction(Parser::CORRECTION_UNARY_OPERATOR_MISSING_OPERAND_IGNORED, $token11),
                     new Correction(Parser::CORRECTION_UNARY_OPERATOR_MISSING_OPERAND_IGNORED, $token12),
                 ],
@@ -2108,10 +2108,10 @@ class IntegrationTest extends TestCase
                 ),
                 [
                     new Correction(Parser::CORRECTION_UNARY_OPERATOR_MISSING_OPERAND_IGNORED, $token5),
-                    new Correction(Parser::CORRECTION_UNARY_OPERATOR_PRECEDING_OPERATOR_IGNORED, $token6),
-                    new Correction(Parser::CORRECTION_UNARY_OPERATOR_PRECEDING_OPERATOR_IGNORED, $token8),
+                    new Correction(Parser::CORRECTION_ADJACENT_UNARY_OPERATOR_PRECEDING_OPERATOR_IGNORED, $token6),
+                    new Correction(Parser::CORRECTION_ADJACENT_UNARY_OPERATOR_PRECEDING_OPERATOR_IGNORED, $token8),
                     new Correction(Parser::CORRECTION_UNARY_OPERATOR_MISSING_OPERAND_IGNORED, $token9),
-                    new Correction(Parser::CORRECTION_UNARY_OPERATOR_PRECEDING_OPERATOR_IGNORED, $token12),
+                    new Correction(Parser::CORRECTION_ADJACENT_UNARY_OPERATOR_PRECEDING_OPERATOR_IGNORED, $token12),
                     new Correction(Parser::CORRECTION_UNARY_OPERATOR_MISSING_OPERAND_IGNORED, $token13),
                     new Correction(Parser::CORRECTION_UNARY_OPERATOR_MISSING_OPERAND_IGNORED, $token14),
                 ],
@@ -2133,7 +2133,7 @@ class IntegrationTest extends TestCase
                     ]
                 ),
                 [
-                    new Correction(Parser::CORRECTION_UNARY_OPERATOR_PRECEDING_OPERATOR_IGNORED, $token1),
+                    new Correction(Parser::CORRECTION_ADJACENT_UNARY_OPERATOR_PRECEDING_OPERATOR_IGNORED, $token1),
                 ],
             ],
             [
@@ -2150,7 +2150,7 @@ class IntegrationTest extends TestCase
                     ]
                 ),
                 [
-                    new Correction(Parser::CORRECTION_UNARY_OPERATOR_PRECEDING_OPERATOR_IGNORED, $token1),
+                    new Correction(Parser::CORRECTION_ADJACENT_UNARY_OPERATOR_PRECEDING_OPERATOR_IGNORED, $token1),
                     new Correction(Parser::CORRECTION_BINARY_OPERATOR_MISSING_LEFT_OPERAND_IGNORED, $token2),
                 ],
             ],
@@ -2168,7 +2168,7 @@ class IntegrationTest extends TestCase
                     ]
                 ),
                 [
-                    new Correction(Parser::CORRECTION_UNARY_OPERATOR_PRECEDING_OPERATOR_IGNORED, $token1),
+                    new Correction(Parser::CORRECTION_ADJACENT_UNARY_OPERATOR_PRECEDING_OPERATOR_IGNORED, $token1),
                     new Correction(Parser::CORRECTION_BINARY_OPERATOR_MISSING_LEFT_OPERAND_IGNORED, $token2),
                 ],
             ],
@@ -2189,7 +2189,7 @@ class IntegrationTest extends TestCase
                     ]
                 ),
                 [
-                    new Correction(Parser::CORRECTION_UNARY_OPERATOR_PRECEDING_OPERATOR_IGNORED, $token1),
+                    new Correction(Parser::CORRECTION_ADJACENT_UNARY_OPERATOR_PRECEDING_OPERATOR_IGNORED, $token1),
                 ],
             ],
             [
@@ -2206,7 +2206,7 @@ class IntegrationTest extends TestCase
                     ]
                 ),
                 [
-                    new Correction(Parser::CORRECTION_UNARY_OPERATOR_PRECEDING_OPERATOR_IGNORED, $token1),
+                    new Correction(Parser::CORRECTION_ADJACENT_UNARY_OPERATOR_PRECEDING_OPERATOR_IGNORED, $token1),
                     new Correction(Parser::CORRECTION_BINARY_OPERATOR_MISSING_LEFT_OPERAND_IGNORED, $token2),
                 ],
             ],
@@ -2224,7 +2224,7 @@ class IntegrationTest extends TestCase
                     ]
                 ),
                 [
-                    new Correction(Parser::CORRECTION_UNARY_OPERATOR_PRECEDING_OPERATOR_IGNORED, $token1),
+                    new Correction(Parser::CORRECTION_ADJACENT_UNARY_OPERATOR_PRECEDING_OPERATOR_IGNORED, $token1),
                     new Correction(Parser::CORRECTION_BINARY_OPERATOR_MISSING_LEFT_OPERAND_IGNORED, $token2),
                 ],
             ],
@@ -2724,7 +2724,7 @@ class IntegrationTest extends TestCase
                     ]
                 ),
                 [
-                    new Correction(Parser::CORRECTION_UNARY_OPERATOR_PRECEDING_OPERATOR_IGNORED, $token2),
+                    new Correction(Parser::CORRECTION_ADJACENT_UNARY_OPERATOR_PRECEDING_OPERATOR_IGNORED, $token2),
                     new Correction(Parser::CORRECTION_EMPTY_GROUP_IGNORED, $token1, $token3, $token4, $token5),
                 ],
             ],
@@ -2749,7 +2749,7 @@ class IntegrationTest extends TestCase
                     ]
                 ),
                 [
-                    new Correction(Parser::CORRECTION_UNARY_OPERATOR_PRECEDING_OPERATOR_IGNORED, $token2),
+                    new Correction(Parser::CORRECTION_ADJACENT_UNARY_OPERATOR_PRECEDING_OPERATOR_IGNORED, $token2),
                     new Correction(Parser::CORRECTION_EMPTY_GROUP_IGNORED, $token1, $token3, $token4, $token5),
                 ],
             ],
@@ -2932,7 +2932,7 @@ class IntegrationTest extends TestCase
                     ]
                 ),
                 [
-                    new Correction(Parser::CORRECTION_UNARY_OPERATOR_PRECEDING_OPERATOR_IGNORED, $token2),
+                    new Correction(Parser::CORRECTION_ADJACENT_UNARY_OPERATOR_PRECEDING_OPERATOR_IGNORED, $token2),
                     new Correction(Parser::CORRECTION_UNARY_OPERATOR_MISSING_OPERAND_IGNORED, $token3),
                 ],
             ],
@@ -2952,7 +2952,7 @@ class IntegrationTest extends TestCase
                     ]
                 ),
                 [
-                    new Correction(Parser::CORRECTION_UNARY_OPERATOR_PRECEDING_OPERATOR_IGNORED, $token3),
+                    new Correction(Parser::CORRECTION_ADJACENT_UNARY_OPERATOR_PRECEDING_OPERATOR_IGNORED, $token3),
                     new Correction(Parser::CORRECTION_UNARY_OPERATOR_MISSING_OPERAND_IGNORED, $token2),
                 ],
             ],
@@ -2972,7 +2972,7 @@ class IntegrationTest extends TestCase
                     ]
                 ),
                 [
-                    new Correction(Parser::CORRECTION_UNARY_OPERATOR_PRECEDING_OPERATOR_IGNORED, $token2),
+                    new Correction(Parser::CORRECTION_ADJACENT_UNARY_OPERATOR_PRECEDING_OPERATOR_IGNORED, $token2),
                     new Correction(Parser::CORRECTION_UNARY_OPERATOR_MISSING_OPERAND_IGNORED, $token3),
                 ],
             ],
@@ -2995,7 +2995,7 @@ class IntegrationTest extends TestCase
                     ]
                 ),
                 [
-                    new Correction(Parser::CORRECTION_UNARY_OPERATOR_PRECEDING_OPERATOR_IGNORED, $token2),
+                    new Correction(Parser::CORRECTION_ADJACENT_UNARY_OPERATOR_PRECEDING_OPERATOR_IGNORED, $token2),
                 ],
             ],
             [
@@ -3017,7 +3017,7 @@ class IntegrationTest extends TestCase
                     ]
                 ),
                 [
-                    new Correction(Parser::CORRECTION_UNARY_OPERATOR_PRECEDING_OPERATOR_IGNORED, $token2),
+                    new Correction(Parser::CORRECTION_ADJACENT_UNARY_OPERATOR_PRECEDING_OPERATOR_IGNORED, $token2),
                 ],
             ],
             [
@@ -3036,7 +3036,7 @@ class IntegrationTest extends TestCase
                     ]
                 ),
                 [
-                    new Correction(Parser::CORRECTION_UNARY_OPERATOR_PRECEDING_OPERATOR_IGNORED, $token2),
+                    new Correction(Parser::CORRECTION_ADJACENT_UNARY_OPERATOR_PRECEDING_OPERATOR_IGNORED, $token2),
                     new Correction(Parser::CORRECTION_UNARY_OPERATOR_MISSING_OPERAND_IGNORED, $token3),
                 ],
             ],
@@ -3334,7 +3334,7 @@ class IntegrationTest extends TestCase
                     ]
                 ),
                 [
-                    new Correction(Parser::CORRECTION_UNARY_OPERATOR_PRECEDING_OPERATOR_IGNORED, $token2),
+                    new Correction(Parser::CORRECTION_ADJACENT_UNARY_OPERATOR_PRECEDING_OPERATOR_IGNORED, $token2),
                 ],
             ],
             [
@@ -3376,7 +3376,7 @@ class IntegrationTest extends TestCase
                     ]
                 ),
                 [
-                    new Correction(Parser::CORRECTION_UNARY_OPERATOR_PRECEDING_OPERATOR_IGNORED, $token2),
+                    new Correction(Parser::CORRECTION_ADJACENT_UNARY_OPERATOR_PRECEDING_OPERATOR_IGNORED, $token2),
                     new Correction(Parser::CORRECTION_LOGICAL_NOT_OPERATORS_PRECEDING_PREFERENCE_IGNORED, $token1),
                 ],
             ],

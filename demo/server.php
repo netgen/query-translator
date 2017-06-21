@@ -182,11 +182,11 @@ class TranslationRenderer
 class CorrectionRenderer
 {
     private static $descriptions = [
-        Parser::CORRECTION_UNARY_OPERATOR_PRECEDING_OPERATOR_IGNORED => 'Parser ignored unary operator preceding another operator',
+        Parser::CORRECTION_ADJACENT_UNARY_OPERATOR_PRECEDING_OPERATOR_IGNORED => 'Parser ignored adjacent unary operator preceding another operator',
         Parser::CORRECTION_UNARY_OPERATOR_MISSING_OPERAND_IGNORED => 'Parser ignored unary operator missing operand',
         Parser::CORRECTION_BINARY_OPERATOR_MISSING_LEFT_OPERAND_IGNORED => 'Parser ignored binary operator missing left side operand',
         Parser::CORRECTION_BINARY_OPERATOR_MISSING_RIGHT_OPERAND_IGNORED => 'Parser ignored binary operator missing right side operand',
-        Parser::CORRECTION_BINARY_OPERATOR_FOLLOWING_OPERATOR_IGNORED => 'Parser ignored binary operator following another operator',
+        Parser::CORRECTION_BINARY_OPERATOR_FOLLOWING_OPERATOR_IGNORED => 'Parser ignored binary operator following another operator and connecting operators',
         Parser::CORRECTION_LOGICAL_NOT_OPERATORS_PRECEDING_PREFERENCE_IGNORED => 'Parser ignored logical not operators preceding inclusion/exclusion',
         Parser::CORRECTION_EMPTY_GROUP_IGNORED => 'Parser ignored empty group and connecting operators',
         Parser::CORRECTION_UNMATCHED_GROUP_LEFT_DELIMITER_IGNORED => 'Parser ignored unmatched left side group delimiter',

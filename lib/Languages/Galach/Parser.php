@@ -27,7 +27,7 @@ final class Parser implements Parsing
     /**
      * Parser ignored unary operator preceding another operator.
      */
-    const CORRECTION_UNARY_OPERATOR_PRECEDING_OPERATOR_IGNORED = 0;
+    const CORRECTION_ADJACENT_UNARY_OPERATOR_PRECEDING_OPERATOR_IGNORED = 0;
 
     /**
      * Parser ignored unary operator missing operand.
@@ -226,7 +226,7 @@ final class Parser implements Parsing
     {
         if ($this->isToken(reset($this->tokens), $tokenMask)) {
             $this->addCorrection(
-                self::CORRECTION_UNARY_OPERATOR_PRECEDING_OPERATOR_IGNORED,
+                self::CORRECTION_ADJACENT_UNARY_OPERATOR_PRECEDING_OPERATOR_IGNORED,
                 $token
             );
 
