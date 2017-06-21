@@ -9,7 +9,7 @@
 </head>
 <body class="syntax-full" onload="process('')">
     <h1>Query Translator 1.0.0 demo</h1>
-    <p>Switch between <a class="switch full" onclick="switchSyntax('full');">full</a> and <a class="switch text" onclick="switchSyntax('text');">text</a> syntax:</p>
+    <p>Switch query syntax: <a class="switch full" onclick="switchSyntax('full');">full</a> <a class="switch text" onclick="switchSyntax('text');">text</a></p>
     <p class="syntax">
         <span>word</span>
         <span>"phrase"</span>
