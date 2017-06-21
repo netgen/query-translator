@@ -17,7 +17,6 @@ use QueryTranslator\Values\Node;
 use QueryTranslator\Values\SyntaxTree;
 use QueryTranslator\Values\Token;
 use QueryTranslator\Values\TokenSequence;
-use RuntimeException;
 use SplStack;
 
 /**
