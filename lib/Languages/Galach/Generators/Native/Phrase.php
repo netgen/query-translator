@@ -34,7 +34,7 @@ final class Phrase extends Visitor
             );
         }
 
-        $domainPrefix = empty($token->domain) ? '' : "{$token->domain}:";
+        $domainPrefix = $token->domain === null ? '' : "{$token->domain}:";
         $phraseEscaped = preg_replace("/([\\{$token->quote}])/", '\\\\$1', $token->phrase);
 
         return "{$domainPrefix}{$token->quote}{$phraseEscaped}{$token->quote}";
