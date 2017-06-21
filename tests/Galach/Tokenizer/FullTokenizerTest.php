@@ -1171,14 +1171,7 @@ class FullTokenizerTest extends TestCase
                 ],
             ],
             [
-                // todo reuse blah
-                '"' . (
-                    $blah = mb_convert_encoding(
-                        '&#x1F469;&#x200D;&#x1F469;&#x200D;&#x1F467;&#x200D;&#x1F467;',
-                        'UTF-8',
-                        'HTML-ENTITIES'
-                    )
-                ),
+                '"' . $blah,
                 [
                     new Token(Tokenizer::TOKEN_BAILOUT, '"', 0),
                     new WordToken($blah, 1, '', $blah),
