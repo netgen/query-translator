@@ -111,9 +111,9 @@ class TranslationRenderer
         $visitors[] = new Generators\Lucene\Common\Prohibited();
         $visitors[] = new Generators\Lucene\Common\Group(
             [
-                'type' => 'type_s',
+                'type' => 'demo_type_s',
             ],
-            'default_s'
+            'demo_default_s'
         );
         $visitors[] = new Generators\Lucene\Common\Mandatory();
         $visitors[] = new Generators\Lucene\Common\LogicalAnd();
@@ -121,18 +121,18 @@ class TranslationRenderer
         $visitors[] = new Generators\Lucene\Common\LogicalOr();
         $visitors[] = new Generators\Lucene\Common\Phrase(
             [
-                'type' => 'type_s',
+                'type' => 'demo_type_s',
             ],
-            'default_s'
+            'demo_default_s'
         );
         $visitors[] = new Generators\Lucene\Common\Query();
         $visitors[] = new Generators\Lucene\Common\Tag('tag_ms');
         $visitors[] = new Generators\Lucene\Common\User('user_s');
         $visitors[] = new Generators\Lucene\ExtendedDisMax\Word(
             [
-                'type' => 'type_s',
+                'type' => 'demo_type_s',
             ],
-            'default_s'
+            'demo_default_s'
         );
 
         $aggregate = new Generators\Common\Aggregate($visitors);
@@ -148,9 +148,9 @@ class TranslationRenderer
         $visitors[] = new Generators\Lucene\Common\Prohibited();
         $visitors[] = new Generators\Lucene\Common\Group(
             [
-                'type' => 'type_s',
+                'type' => 'demo_type_s',
             ],
-            'default_s'
+            'demo_default_s'
         );
         $visitors[] = new Generators\Lucene\Common\Mandatory();
         $visitors[] = new Generators\Lucene\Common\LogicalAnd();
@@ -158,18 +158,18 @@ class TranslationRenderer
         $visitors[] = new Generators\Lucene\Common\LogicalOr();
         $visitors[] = new Generators\Lucene\Common\Phrase(
             [
-                'type' => 'type_s',
+                'type' => 'demo_type_s',
             ],
-            'default_s'
+            'demo_default_s'
         );
         $visitors[] = new Generators\Lucene\Common\Query();
         $visitors[] = new Generators\Lucene\Common\Tag('tag_ms');
         $visitors[] = new Generators\Lucene\Common\User('user_s');
         $visitors[] = new Generators\Lucene\QueryString\Word(
             [
-                'type' => 'type_s',
+                'type' => 'demo_type_s',
             ],
-            'default_s'
+            'demo_default_s'
         );
 
         $aggregate = new Generators\Common\Aggregate($visitors);
