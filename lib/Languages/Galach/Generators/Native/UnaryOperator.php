@@ -20,7 +20,7 @@ final class UnaryOperator extends Visitor
         return $node instanceof Mandatory || $node instanceof Prohibited || $node instanceof LogicalNot;
     }
 
-    public function visit(Node $node, Visitor $subVisitor = null)
+    public function visit(Node $node, Visitor $subVisitor = null, $options = null)
     {
         if (!$node instanceof Mandatory && !$node instanceof Prohibited && !$node instanceof LogicalNot) {
             throw new LogicException(
@@ -32,7 +32,7 @@ final class UnaryOperator extends Visitor
             throw new LogicException('Implementation requires sub-visitor');
         }
 
-        $clause = $subVisitor->visit($node->operand, $subVisitor);
+        $clause = $subVisitor->visit($node->operand, $subVisitor, $options);
 
         $padding = '';
         if ($node->token->type === Tokenizer::TOKEN_LOGICAL_NOT) {

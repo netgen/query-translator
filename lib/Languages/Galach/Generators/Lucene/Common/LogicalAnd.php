@@ -17,7 +17,7 @@ final class LogicalAnd extends Visitor
         return $node instanceof LogicalAndNode;
     }
 
-    public function visit(Node $node, Visitor $subVisitor = null)
+    public function visit(Node $node, Visitor $subVisitor = null, $options = null)
     {
         if (!$node instanceof LogicalAndNode) {
             throw new LogicException(
@@ -30,8 +30,8 @@ final class LogicalAnd extends Visitor
         }
 
         $clauses = [
-            $subVisitor->visit($node->leftOperand, $subVisitor),
-            $subVisitor->visit($node->rightOperand, $subVisitor),
+            $subVisitor->visit($node->leftOperand, $subVisitor, $options),
+            $subVisitor->visit($node->rightOperand, $subVisitor, $options),
         ];
 
         return implode(' AND ', $clauses);

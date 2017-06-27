@@ -18,7 +18,7 @@ final class User extends Visitor
         return $node instanceof Term && $node->token instanceof UserToken;
     }
 
-    public function visit(Node $node, Visitor $subVisitor = null)
+    public function visit(Node $node, Visitor $subVisitor = null, $options = null)
     {
         if (!$node instanceof Term) {
             throw new LogicException(

@@ -18,7 +18,7 @@ final class BinaryOperator extends Visitor
         return $node instanceof LogicalAnd || $node instanceof LogicalOrNode;
     }
 
-    public function visit(Node $node, Visitor $subVisitor = null)
+    public function visit(Node $node, Visitor $subVisitor = null, $options = null)
     {
         if (!$node instanceof LogicalAnd && !$node instanceof LogicalOrNode) {
             throw new LogicException(
@@ -31,8 +31,8 @@ final class BinaryOperator extends Visitor
         }
 
         $clauses = [
-            $subVisitor->visit($node->leftOperand, $subVisitor),
-            $subVisitor->visit($node->rightOperand, $subVisitor),
+            $subVisitor->visit($node->leftOperand, $subVisitor, $options),
+            $subVisitor->visit($node->rightOperand, $subVisitor, $options),
         ];
 
         return implode(" {$node->token->lexeme} ", $clauses);

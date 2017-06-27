@@ -23,8 +23,9 @@ abstract class Visitor
      *
      * @param \QueryTranslator\Values\Node $node
      * @param \QueryTranslator\Languages\Galach\Generators\Common\Visitor $subVisitor
+     * @param mixed $options
      *
      * @return string
      */
-    abstract public function visit(Node $node, Visitor $subVisitor = null);
+    abstract public function visit(Node $node, Visitor $subVisitor = null, $options = null);
 }

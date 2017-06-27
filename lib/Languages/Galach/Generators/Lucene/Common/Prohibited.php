@@ -17,7 +17,7 @@ final class Prohibited extends Visitor
         return $node instanceof ProhibitedNode;
     }
 
-    public function visit(Node $node, Visitor $subVisitor = null)
+    public function visit(Node $node, Visitor $subVisitor = null, $options = null)
     {
         if (!$node instanceof ProhibitedNode) {
             throw new LogicException(
@@ -29,7 +29,7 @@ final class Prohibited extends Visitor
             throw new LogicException('Implementation requires sub-visitor');
         }
 
-        $clause = $subVisitor->visit($node->operand, $subVisitor);
+        $clause = $subVisitor->visit($node->operand, $subVisitor, $options);
 
         return "-{$clause}";
     }

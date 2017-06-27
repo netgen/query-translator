@@ -42,11 +42,11 @@ final class Aggregate extends Visitor
         return true;
     }
 
-    public function visit(Node $node, Visitor $subVisitor = null)
+    public function visit(Node $node, Visitor $subVisitor = null, $options = null)
     {
         foreach ($this->visitors as $visitor) {
             if ($visitor->accept($node)) {
-                return $visitor->visit($node, $this);
+                return $visitor->visit($node, $this, $options);
             }
         }
 

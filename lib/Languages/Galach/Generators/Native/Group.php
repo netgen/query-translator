@@ -17,7 +17,7 @@ final class Group extends Visitor
         return $node instanceof GroupNode;
     }
 
-    public function visit(Node $node, Visitor $subVisitor = null)
+    public function visit(Node $node, Visitor $subVisitor = null, $options = null)
     {
         if (!$node instanceof GroupNode) {
             throw new LogicException(
@@ -32,7 +32,7 @@ final class Group extends Visitor
         $clauses = [];
 
         foreach ($node->nodes as $subNode) {
-            $clauses[] = $subVisitor->visit($subNode, $subVisitor);
+            $clauses[] = $subVisitor->visit($subNode, $subVisitor, $options);
         }
 
         $clauses = implode(' ', $clauses);
