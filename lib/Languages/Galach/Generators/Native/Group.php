@@ -36,7 +36,7 @@ final class Group extends Visitor
         }
 
         $clauses = implode(' ', $clauses);
-        $domainPrefix = empty($node->tokenLeft->domain) ? '' : "{$node->tokenLeft->domain}:";
+        $domainPrefix = $node->tokenLeft->domain === '' ? '' : "{$node->tokenLeft->domain}:";
 
         return "{$domainPrefix}{$node->tokenLeft->delimiter}{$clauses}{$node->tokenRight->lexeme}";
     }

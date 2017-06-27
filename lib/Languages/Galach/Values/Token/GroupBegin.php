@@ -33,7 +33,7 @@ final class GroupBegin extends Token
     public function __construct($lexeme, $position, $delimiter, $domain)
     {
         $this->delimiter = $delimiter;
-        $this->domain = $domain ?: null;
+        $this->domain = $domain;
 
         parent::__construct(Tokenizer::TOKEN_GROUP_BEGIN, $lexeme, $position);
     }

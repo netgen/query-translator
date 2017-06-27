@@ -61,9 +61,8 @@ abstract class WordBase extends Visitor
             );
         }
 
+        $fieldPrefix = $this->getSolrFieldPrefix($token);
         $wordEscaped = $this->escapeWord($token->word);
-        $fieldName = $this->getBackendFieldName($token);
-        $fieldPrefix = $fieldName === null ? '' : "{$fieldName}:";
 
         return "{$fieldPrefix}{$wordEscaped}";
     }
@@ -78,22 +77,22 @@ abstract class WordBase extends Visitor
     abstract protected function escapeWord($string);
 
     /**
-     * Return backend field name for the given $token.
+     * Return backend field name prefix for the given $token.
      *
      * @param \QueryTranslator\Languages\Galach\Values\Token\Word $token
      *
-     * @return string|null
+     * @return string
      */
-    private function getBackendFieldName(WordToken $token)
+    private function getSolrFieldPrefix(WordToken $token)
     {
-        if ($token->domain === null) {
-            return null;
+        if ($token->domain === '') {
+            return '';
         }
 
         if (isset($this->domainFieldMap[$token->domain])) {
-            return $this->domainFieldMap[$token->domain];
+            return $this->domainFieldMap[$token->domain] . ':';
         }
 
-        return $this->defaultFieldName;
+        return $this->defaultFieldName . ':';
     }
 }

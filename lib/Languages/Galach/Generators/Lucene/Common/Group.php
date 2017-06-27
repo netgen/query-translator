@@ -63,30 +63,29 @@ final class Group extends Visitor
             $clauses[] = $subVisitor->visit($subNode, $subVisitor);
         }
 
+        $fieldPrefix = $this->getSolrFieldPrefix($node->tokenLeft);
         $clauses = implode(' ', $clauses);
-        $fieldName = $this->getSolrField($node->tokenLeft);
-        $fieldPrefix = $fieldName === null ? '' : "{$fieldName}:";
 
         return "{$fieldPrefix}({$clauses})";
     }
 
     /**
-     * Return Solr backend field name for the given $token.
+     * Return Solr backend field name prefix for the given $token.
      *
      * @param \QueryTranslator\Languages\Galach\Values\Token\GroupBegin $token
      *
-     * @return string|null
+     * @return string
      */
-    private function getSolrField(GroupBegin $token)
+    private function getSolrFieldPrefix(GroupBegin $token)
     {
-        if ($token->domain === null) {
-            return null;
+        if ($token->domain === '') {
+            return '';
         }
 
         if (isset($this->domainFieldMap[$token->domain])) {
-            return $this->domainFieldMap[$token->domain];
+            return $this->domainFieldMap[$token->domain] . ':';
         }
 
-        return $this->defaultFieldName;
+        return $this->defaultFieldName . ':';
     }
 }

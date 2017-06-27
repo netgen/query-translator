@@ -61,30 +61,29 @@ final class Phrase extends Visitor
             );
         }
 
+        $fieldPrefix = $this->getSolrFieldPrefix($token);
         $phraseEscaped = preg_replace("/([\\{$token->quote}])/", '\\\\$1', $token->phrase);
-        $fieldName = $this->getSolrField($token);
-        $fieldPrefix = $fieldName === null ? '' : "{$fieldName}:";
 
         return "{$fieldPrefix}\"{$phraseEscaped}\"";
     }
 
     /**
-     * Return Solr backend field name for the given $token.
+     * Return Solr backend field name prefix for the given $token.
      *
      * @param \QueryTranslator\Languages\Galach\Values\Token\Phrase $token
      *
-     * @return string|null
+     * @return string
      */
-    private function getSolrField(PhraseToken $token)
+    private function getSolrFieldPrefix(PhraseToken $token)
     {
-        if ($token->domain === null) {
-            return null;
+        if ($token->domain === '') {
+            return '';
         }
 
         if (isset($this->domainFieldMap[$token->domain])) {
-            return $this->domainFieldMap[$token->domain];
+            return $this->domainFieldMap[$token->domain] . ':';
         }
 
-        return $this->defaultFieldName;
+        return $this->defaultFieldName . ':';
     }
 }

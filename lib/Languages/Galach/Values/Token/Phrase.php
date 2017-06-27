@@ -38,7 +38,7 @@ final class Phrase extends Token
      */
     public function __construct($lexeme, $position, $domain, $quote, $phrase)
     {
-        $this->domain = !empty($domain) ? $domain : null;
+        $this->domain = $domain;
         $this->quote = $quote;
         $this->phrase = $phrase;
 

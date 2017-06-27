@@ -32,7 +32,7 @@ final class Word extends Token
      */
     public function __construct($lexeme, $position, $domain, $word)
     {
-        $this->domain = $domain ?: null;
+        $this->domain = $domain;
         $this->word = $word;
 
         parent::__construct(Tokenizer::TOKEN_TERM, $lexeme, $position);
