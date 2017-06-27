@@ -26,11 +26,12 @@ final class ExtendedDisMax
      * Generate query string in Solr Extended DisMax format from the given $syntaxTree.
      *
      * @param \QueryTranslator\Values\SyntaxTree $syntaxTree
+     * @param mixed $options
      *
      * @return string
      */
-    public function generate(SyntaxTree $syntaxTree)
+    public function generate(SyntaxTree $syntaxTree, $options = null)
     {
-        return $this->visitor->visit($syntaxTree->rootNode);
+        return $this->visitor->visit($syntaxTree->rootNode, null, $options);
     }
 }
