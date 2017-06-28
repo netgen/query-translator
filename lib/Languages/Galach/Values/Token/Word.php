@@ -13,9 +13,9 @@ use QueryTranslator\Values\Token;
 final class Word extends Token
 {
     /**
-     * Holds domain identifier or null if not set.
+     * Holds domain string.
      *
-     * @var null|string
+     * @var string
      */
     public $domain;
 

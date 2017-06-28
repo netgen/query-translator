@@ -18,9 +18,9 @@ final class GroupBegin extends Token
     public $delimiter;
 
     /**
-     * Holds domain identifier or null if not set.
+     * Holds domain string.
      *
-     * @var null|string
+     * @var string
      */
     public $domain;
 
