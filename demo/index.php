@@ -18,7 +18,7 @@
         <span>+mandatory</span>
         <span>-prohibited</span>
         <span>AND</span>
-        <span>&&</span>
+        <span>&amp;&amp;</span>
         <span>OR</span>
         <span>||</span>
         <span>NOT</span>
