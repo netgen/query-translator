@@ -48,7 +48,7 @@ final class Text extends TokenExtractor
                 return new Word(
                     $lexeme,
                     $position,
-                    null,
+                    '',
                     // un-backslash special chars
                     preg_replace('/(?:\\\\(\\\\|([\'"+\-!() ])))/', '$1', $data['word'])
                 );
@@ -58,7 +58,7 @@ final class Text extends TokenExtractor
                 return new Phrase(
                     $lexeme,
                     $position,
-                    null,
+                    '',
                     $quote,
                     // un-backslash quote
                     preg_replace('/(?:\\\\([' . $quote . ']))/', '$1', $data['phrase'])
