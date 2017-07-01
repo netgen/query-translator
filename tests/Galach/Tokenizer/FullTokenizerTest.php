@@ -6,6 +6,7 @@ use PHPUnit\Framework\TestCase;
 use QueryTranslator\Languages\Galach\TokenExtractor;
 use QueryTranslator\Languages\Galach\Tokenizer;
 use QueryTranslator\Languages\Galach\Values\Token\GroupBegin as GroupBeginToken;
+use QueryTranslator\Languages\Galach\Values\Token\GroupBegin;
 use QueryTranslator\Languages\Galach\Values\Token\Phrase as PhraseToken;
 use QueryTranslator\Languages\Galach\Values\Token\Tag as TagToken;
 use QueryTranslator\Languages\Galach\Values\Token\User as UserToken;
@@ -134,21 +135,23 @@ class FullTokenizerTest extends TestCase
             [
                 "'phrase'",
                 [
-                    new PhraseToken("'phrase'", 0, '', "'", 'phrase'),
+                    new WordToken("'phrase'", 0, '', "'phrase'"),
                 ],
             ],
             [
                 "'phrase' 'phrase'",
                 [
-                    new PhraseToken("'phrase'", 0, '', "'", 'phrase'),
+                    new WordToken("'phrase'", 0, '', "'phrase'"),
                     new Token(Tokenizer::TOKEN_WHITESPACE, ' ', 8),
-                    new PhraseToken("'phrase'", 9, '', "'", 'phrase'),
+                    new WordToken("'phrase'", 9, '', "'phrase'"),
                 ],
             ],
             [
                 "'phrase\nphrase'",
                 [
-                    new PhraseToken("'phrase\nphrase'", 0, '', "'", "phrase\nphrase"),
+                    new WordToken("'phrase", 0, '', "'phrase"),
+                    new Token(Tokenizer::TOKEN_WHITESPACE, "\n", 7),
+                    new WordToken("phrase'", 8, '', "phrase'"),
                 ],
             ],
             [
@@ -160,7 +163,7 @@ class FullTokenizerTest extends TestCase
             [
                 "'phrase\\'phrase'",
                 [
-                    new PhraseToken("'phrase\\'phrase'", 0, '', "'", "phrase'phrase"),
+                    new WordToken("'phrase\\'phrase'", 0, '', "'phrase\\'phrase'"),
                 ],
             ],
             [
@@ -172,7 +175,9 @@ class FullTokenizerTest extends TestCase
             [
                 "'phrase\"phrase'",
                 [
-                    new PhraseToken("'phrase\"phrase'", 0, '', "'", 'phrase"phrase'),
+                    new WordToken("'phrase", 0, '', "'phrase"),
+                    new Token(Tokenizer::TOKEN_BAILOUT, '"', 7),
+                    new WordToken("phrase'", 8, '', "phrase'"),
                 ],
             ],
             [
@@ -184,7 +189,7 @@ class FullTokenizerTest extends TestCase
             [
                 "\\'not_phrase\\'",
                 [
-                    new WordToken("\\'not_phrase\\'", 0, '', "'not_phrase'"),
+                    new WordToken("\\'not_phrase\\'", 0, '', "\\'not_phrase\\'"),
                 ],
             ],
             [
@@ -200,15 +205,27 @@ class FullTokenizerTest extends TestCase
                 ],
             ],
             [
-                "'phrase + - ! ( ) AND OR NOT \\ phrase'",
+                "'word + - ! ( ) AND OR NOT \\ word'",
                 [
-                    new PhraseToken(
-                        "'phrase + - ! ( ) AND OR NOT \\ phrase'",
-                        0,
-                        '',
-                        "'",
-                        'phrase + - ! ( ) AND OR NOT \\ phrase'
-                    ),
+                    new WordToken("'word", 0, '', "'word"),
+                    new Token(Tokenizer::TOKEN_WHITESPACE, ' ', 5),
+                    new Token(Tokenizer::TOKEN_MANDATORY, '+', 6),
+                    new Token(Tokenizer::TOKEN_WHITESPACE, ' ', 7),
+                    new Token(Tokenizer::TOKEN_PROHIBITED, '-', 8),
+                    new Token(Tokenizer::TOKEN_WHITESPACE, ' ', 9),
+                    new Token(Tokenizer::TOKEN_LOGICAL_NOT_2, '!', 10),
+                    new Token(Tokenizer::TOKEN_WHITESPACE, ' ', 11),
+                    new GroupBegin('(', 12, '(', ''),
+                    new Token(Tokenizer::TOKEN_WHITESPACE, ' ', 13),
+                    new Token(Tokenizer::TOKEN_GROUP_END, ')', 14),
+                    new Token(Tokenizer::TOKEN_WHITESPACE, ' ', 15),
+                    new Token(Tokenizer::TOKEN_LOGICAL_AND, 'AND', 16),
+                    new Token(Tokenizer::TOKEN_WHITESPACE, ' ', 19),
+                    new Token(Tokenizer::TOKEN_LOGICAL_OR, 'OR', 20),
+                    new Token(Tokenizer::TOKEN_WHITESPACE, ' ', 22),
+                    new Token(Tokenizer::TOKEN_LOGICAL_NOT, 'NOT', 23),
+                    new Token(Tokenizer::TOKEN_WHITESPACE, ' ', 26),
+                    new WordToken("\\ word'", 27, '', " word'"),
                 ],
             ],
             [
@@ -224,15 +241,29 @@ class FullTokenizerTest extends TestCase
                 ],
             ],
             [
-                "'phrase \\+ \\- \\! \\( \\) \\AND \\OR \\NOT \\\\ phrase'",
+                "'word \\+ \\- \\! \\( \\) \\AND \\OR \\NOT \\\\ word'",
                 [
-                    new PhraseToken(
-                        "'phrase \\+ \\- \\! \\( \\) \\AND \\OR \\NOT \\\\ phrase'",
-                        0,
-                        '',
-                        "'",
-                        'phrase \\+ \\- \\! \\( \\) \\AND \\OR \\NOT \\\\ phrase'
-                    ),
+                    new WordToken("'word", 0, '', "'word"),
+                    new Token(Tokenizer::TOKEN_WHITESPACE, ' ', 5),
+                    new WordToken("\\+", 6, '', '+'),
+                    new Token(Tokenizer::TOKEN_WHITESPACE, ' ', 8),
+                    new WordToken("\\-", 9, '', '-'),
+                    new Token(Tokenizer::TOKEN_WHITESPACE, ' ', 11),
+                    new WordToken("\\!", 12, '', '!'),
+                    new Token(Tokenizer::TOKEN_WHITESPACE, ' ', 14),
+                    new WordToken("\\(", 15, '', '('),
+                    new Token(Tokenizer::TOKEN_WHITESPACE, ' ', 17),
+                    new WordToken("\\)", 18, '', ')'),
+                    new Token(Tokenizer::TOKEN_WHITESPACE, ' ', 20),
+                    new WordToken("\\AND", 21, '', '\AND'),
+                    new Token(Tokenizer::TOKEN_WHITESPACE, ' ', 25),
+                    new WordToken("\\OR", 26, '', '\OR'),
+                    new Token(Tokenizer::TOKEN_WHITESPACE, ' ', 29),
+                    new WordToken("\\NOT", 30, '', '\NOT'),
+                    new Token(Tokenizer::TOKEN_WHITESPACE, ' ', 34),
+                    new WordToken("\\\\", 35, '', '\\'),
+                    new Token(Tokenizer::TOKEN_WHITESPACE, ' ', 37),
+                    new WordToken("word'", 38, '', "word'"),
                 ],
             ],
             [
@@ -1084,7 +1115,7 @@ class FullTokenizerTest extends TestCase
             [
                 'one\\\'two',
                 [
-                    new WordToken('one\\\'two', 0, '', "one'two"),
+                    new WordToken('one\\\'two', 0, '', "one\\'two"),
                 ],
             ],
             [
@@ -1131,6 +1162,36 @@ class FullTokenizerTest extends TestCase
                     new WordToken('type:', 0, '', 'type:'),
                     new Token(Tokenizer::TOKEN_WHITESPACE, ' ', 5),
                     new Token(Tokenizer::TOKEN_LOGICAL_AND, 'AND', 6),
+                ],
+            ],
+            [
+                "word'",
+                [
+                    new WordToken("word'", 0, '', "word'"),
+                ],
+            ],
+            [
+                'one\'two',
+                [
+                    new WordToken("one'two", 0, '', "one'two"),
+                ],
+            ],
+            [
+                "AND'",
+                [
+                    new WordToken("AND'", 0, '', "AND'"),
+                ],
+            ],
+            [
+                "OR'",
+                [
+                    new WordToken("OR'", 0, '', "OR'"),
+                ],
+            ],
+            [
+                "NOT'",
+                [
+                    new WordToken("NOT'", 0, '', "NOT'"),
                 ],
             ],
         ];
@@ -1185,21 +1246,6 @@ class FullTokenizerTest extends TestCase
                 ],
             ],
             [
-                "word'",
-                [
-                    new WordToken('word', 0, '', 'word'),
-                    new Token(Tokenizer::TOKEN_BAILOUT, "'", 4),
-                ],
-            ],
-            [
-                'one\'two',
-                [
-                    new WordToken('one', 0, '', 'one'),
-                    new Token(Tokenizer::TOKEN_BAILOUT, "'", 3),
-                    new WordToken('two', 4, '', 'two'),
-                ],
-            ],
-            [
                 'one"two',
                 [
                     new WordToken('one', 0, '', 'one'),
@@ -1223,13 +1269,6 @@ class FullTokenizerTest extends TestCase
                 ],
             ],
             [
-                "AND'",
-                [
-                    new Token(Tokenizer::TOKEN_LOGICAL_AND, 'AND', 0),
-                    new Token(Tokenizer::TOKEN_BAILOUT, "'", 3),
-                ],
-            ],
-            [
                 'OR"',
                 [
                     new Token(Tokenizer::TOKEN_LOGICAL_OR, 'OR', 0),
@@ -1237,24 +1276,10 @@ class FullTokenizerTest extends TestCase
                 ],
             ],
             [
-                "OR'",
-                [
-                    new Token(Tokenizer::TOKEN_LOGICAL_OR, 'OR', 0),
-                    new Token(Tokenizer::TOKEN_BAILOUT, "'", 2),
-                ],
-            ],
-            [
                 'NOT"',
                 [
                     new Token(Tokenizer::TOKEN_LOGICAL_NOT, 'NOT', 0),
                     new Token(Tokenizer::TOKEN_BAILOUT, '"', 3),
-                ],
-            ],
-            [
-                "NOT'",
-                [
-                    new Token(Tokenizer::TOKEN_LOGICAL_NOT, 'NOT', 0),
-                    new Token(Tokenizer::TOKEN_BAILOUT, "'", 3),
                 ],
             ],
         ];

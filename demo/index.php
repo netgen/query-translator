@@ -13,7 +13,6 @@
     <p class="syntax">
         <span>word</span>
         <span>"phrase"</span>
-        <span>'phrase'</span>
         <span>(group)</span>
         <span>+mandatory</span>
         <span>-prohibited</span>
@@ -35,7 +34,6 @@
         <span>-</span>
         <span>!</span>
         <span>"</span>
-        <span>'</span>
         <span>\</span>
         <span title="blank space">&blank;</span>
         <span class="syntax-full">#</span>

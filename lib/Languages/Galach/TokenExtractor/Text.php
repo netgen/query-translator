@@ -26,12 +26,12 @@ final class Text extends TokenExtractor
         '/(?<lexeme>-)/Au' => Tokenizer::TOKEN_PROHIBITED,
         '/(?<lexeme>!)/Au' => Tokenizer::TOKEN_LOGICAL_NOT_2,
         '/(?<lexeme>\))/Au' => Tokenizer::TOKEN_GROUP_END,
-        '/(?<lexeme>NOT)(?:[\s"\'()+\-!]|$)/Au' => Tokenizer::TOKEN_LOGICAL_NOT,
-        '/(?<lexeme>(?:AND|&&))(?:[\s"\'()+\-!]|$)/Au' => Tokenizer::TOKEN_LOGICAL_AND,
-        '/(?<lexeme>(?:OR|\|\|))(?:[\s"\'()+\-!]|$)/Au' => Tokenizer::TOKEN_LOGICAL_OR,
+        '/(?<lexeme>NOT)(?:[\s"()+\-!]|$)/Au' => Tokenizer::TOKEN_LOGICAL_NOT,
+        '/(?<lexeme>(?:AND|&&))(?:[\s"()+\-!]|$)/Au' => Tokenizer::TOKEN_LOGICAL_AND,
+        '/(?<lexeme>(?:OR|\|\|))(?:[\s"()+\-!]|$)/Au' => Tokenizer::TOKEN_LOGICAL_OR,
         '/(?<lexeme>(?:(?<domain>[a-zA-Z_][a-zA-Z0-9_\-]*):)?(?<delimiter>\())/Au' => Tokenizer::TOKEN_GROUP_BEGIN,
-        '/(?<lexeme>(?<quote>(?<!\\\\)["\'])(?<phrase>.*?)(?:(?<!\\\\)(?P=quote)))/Aus' => Tokenizer::TOKEN_TERM,
-        '/(?<lexeme>(?<word>(?:\\\\\\\\|\\\\ |\\\\\(|\\\\\)|\\\\"|\\\\\'|[^"\'()\s])+?))(?:(?<!\\\\)["\']|\(|\)|$|\s)/Au' => Tokenizer::TOKEN_TERM,
+        '/(?<lexeme>(?<quote>(?<!\\\\)["])(?<phrase>.*?)(?:(?<!\\\\)(?P=quote)))/Aus' => Tokenizer::TOKEN_TERM,
+        '/(?<lexeme>(?<word>(?:\\\\\\\\|\\\\ |\\\\\(|\\\\\)|\\\\"|[^"()\s])+?))(?:(?<!\\\\)["]|\(|\)|$|\s)/Au' => Tokenizer::TOKEN_TERM,
     ];
 
     protected function getExpressionTypeMap()
@@ -50,7 +50,7 @@ final class Text extends TokenExtractor
                     $position,
                     '',
                     // un-backslash special chars
-                    preg_replace('/(?:\\\\(\\\\|([\'"+\-!() ])))/', '$1', $data['word'])
+                    preg_replace('/(?:\\\\(\\\\|(["+\-!() ])))/', '$1', $data['word'])
                 );
             case isset($data['phrase']):
                 $quote = $data['quote'];

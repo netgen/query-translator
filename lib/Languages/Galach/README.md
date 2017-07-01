@@ -16,12 +16,10 @@ used by both Solr and Elasticsearch.
     another\ word
     ```
 
-2. `Phrase` term is formed by enclosing words within quotation marks.
-
-    Both single and double quotes are supported: `"`, `'`
+2. `Phrase` term is formed by enclosing words within double quotation marks `"`.
 
     ```
-    'reality exists'
+    "reality exists"
     ```
     ```
     "what's not real doesn't exist"
@@ -201,7 +199,6 @@ such by the engine. These are:
 - `-` minus
 - `!` exclamation mark
 - `"` double quote
-- `'` single quote
 - `#` hash
 - `@` at sign
 - `:` colon
@@ -215,9 +212,6 @@ joined\ word
 ```
 ```
 "escaped \"double quote\""
-```
-```
-'escaped \'single quote\''
 ```
 ```
 escaped \+operator domain\:word \@user \#tag \(and so on\)
