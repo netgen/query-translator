@@ -31,6 +31,10 @@ class ExtendedDisMaxTest extends TestCase
                 "'one'",
             ],
             [
+                '"one"',
+                '"one"',
+            ],
+            [
                 'one two',
                 'one two',
             ],
@@ -101,6 +105,14 @@ class ExtendedDisMaxTest extends TestCase
             [
                 "domain:'one'",
                 "special_text_t:'one'",
+            ],
+            [
+                'unexpected:"one"',
+                'default_text_t:"one"',
+            ],
+            [
+                'domain:"one"',
+                'special_text_t:"one"',
             ],
             [
                 '\\',
