@@ -12,7 +12,7 @@ final class Word extends WordBase
     /**
      * {@inheritdoc}
      *
-     * @link https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-query-string-query.html
+     * @link http://lucene.apache.org/core/5_0_0/queryparser/org/apache/lucene/queryparser/classic/package-summary.html#Escaping_Special_Characters
      *
      * Note: additionally to what is defined above we also escape blank space.
      *
