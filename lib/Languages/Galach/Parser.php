@@ -375,21 +375,12 @@ final class Parser implements Parsing
     {
         $rightDelimiter = $this->stack->pop();
 
+        // Pop dangling tokens
         $this->popTokens(~Tokenizer::TOKEN_GROUP_BEGIN);
 
         if ($this->isTopStackToken(Tokenizer::TOKEN_GROUP_BEGIN)) {
             $leftDelimiter = $this->stack->pop();
-            $precedingOperators = $this->ignorePrecedingOperators(self::$tokenShortcuts['operator']);
-            $followingOperators = $this->ignoreFollowingOperators();
-            $this->addCorrection(
-                self::CORRECTION_EMPTY_GROUP_IGNORED,
-                ...array_merge(
-                    $precedingOperators,
-                    [$leftDelimiter, $rightDelimiter],
-                    $followingOperators
-                )
-            );
-            $this->reduceRemainingLogicalOr(true);
+            $this->ignoreEmptyGroup($leftDelimiter, $rightDelimiter);
 
             return null;
         }
@@ -406,6 +397,21 @@ final class Parser implements Parsing
         $group->tokenRight = $rightDelimiter;
 
         return $group;
+    }
+
+    private function ignoreEmptyGroup(Token $leftDelimiter, Token $rightDelimiter)
+    {
+        $precedingOperators = $this->ignorePrecedingOperators(self::$tokenShortcuts['operator']);
+        $followingOperators = $this->ignoreFollowingOperators();
+        $this->addCorrection(
+            self::CORRECTION_EMPTY_GROUP_IGNORED,
+            ...array_merge(
+                $precedingOperators,
+                [$leftDelimiter, $rightDelimiter],
+                $followingOperators
+            )
+        );
+        $this->reduceRemainingLogicalOr(true);
     }
 
     /**
