@@ -5,6 +5,7 @@
 [![Downloads](https://img.shields.io/packagist/dt/netgen/query-translator.svg?style=flat-square)](https://packagist.org/packages/netgen/query-translator)
 [![Latest stable](https://img.shields.io/packagist/v/netgen/query-translator.svg?style=flat-square)](https://packagist.org/packages/netgen/query-translator)
 [![License](https://img.shields.io/packagist/l/netgen/query-translator.svg?style=flat-square)](https://packagist.org/packages/netgen/query-translator)
+[![PHP](https://img.shields.io/badge/php-%3E%3D%205.6-8892BF.svg?style=flat-square)](https://secure.php.net/)
 
 Query Translator is a search query [translator](https://en.wikipedia.org/wiki/Translator_(computing))
 with [abstract syntax tree](https://en.wikipedia.org/wiki/Abstract_syntax_tree) representation.
