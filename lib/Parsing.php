@@ -10,7 +10,7 @@ use QueryTranslator\Values\TokenSequence;
 interface Parsing
 {
     /**
-     * Parse the given array of $tokens.
+     * Parse the given $tokenSequence.
      *
      * @param \QueryTranslator\Values\TokenSequence $tokenSequence
      *

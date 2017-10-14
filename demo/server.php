@@ -350,7 +350,7 @@ class TokenRenderer
 class SyntaxTreeRenderer
 {
     /**
-     * Renders structured tree representation of the given syntax $tree.
+     * Renders structured tree representation of the given $syntaxTree.
      *
      * @param \QueryTranslator\Values\SyntaxTree $syntaxTree
      *

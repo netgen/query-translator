@@ -21,7 +21,7 @@ abstract class TokenExtractor
      * @param string $string Input string
      * @param int $position Position in the input string to extract from
      *
-     * @return \QueryTranslator\Values\Token|null Extracted token or null if it could not be extracted
+     * @return \QueryTranslator\Values\Token Extracted token
      */
     final public function extract($string, $position)
     {
@@ -51,7 +51,7 @@ abstract class TokenExtractor
     /**
      * Return a map of regular expressions to token types.
      *
-     * The returned map must an array where key is a regular expression
+     * The returned map must be an array where key is a regular expression
      * and value is a corresponding token type.
      *
      * @return array
