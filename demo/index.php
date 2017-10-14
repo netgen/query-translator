@@ -2,13 +2,13 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Query Translator 1.0.2 demo</title>
+    <title>Query Translator 1.0.x-dev demo</title>
     <link rel="stylesheet" type="text/css" href="style.css">
     <script type="text/javascript">var syntax = 'full';</script>
     <script type="text/javascript" src="script.js"></script>
 </head>
 <body class="syntax-full" onload="process('')">
-    <h1>Query Translator 1.0.2 demo</h1>
+    <h1>Query Translator 1.0.x-dev demo</h1>
     <p>Switch query syntax: <a class="switch full" onclick="switchSyntax('full');">full</a> <a class="switch text" onclick="switchSyntax('text');">text</a></p>
     <p class="syntax">
         <span>word</span>
