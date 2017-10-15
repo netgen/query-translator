@@ -174,7 +174,7 @@ final class Parser implements Parsing
         return new SyntaxTree($this->stack->top(), $tokenSequence, $this->corrections);
     }
 
-    protected function shift()
+    private function shift()
     {
         $token = array_shift($this->tokens);
         $shift = self::$shifts[$token->type];
@@ -182,7 +182,7 @@ final class Parser implements Parsing
         return $this->{$shift}($token);
     }
 
-    protected function reduce(Node $node)
+    private function reduce(Node $node)
     {
         $previousNode = null;
         $reductionIndex = null;
