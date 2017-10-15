@@ -1523,7 +1523,7 @@ class IntegrationTest extends TestCase
                 [
                     $token1 = new WordToken('one', 0, '', 'one'),
                     $token2 = new GroupBeginToken('(', 4, '(', null),
-                    $token3 = new Token(Tokenizer::TOKEN_GROUP_END, ')', 5, null),
+                    $token3 = new Token(Tokenizer::TOKEN_GROUP_END, ')', 5),
                 ],
                 new Query(
                     [
