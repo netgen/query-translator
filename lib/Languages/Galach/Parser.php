@@ -490,7 +490,7 @@ final class Parser implements Parsing
     }
 
     /**
-     * Removes all Tokens from the top of the query stack.
+     * Remove all Tokens from the top of the query stack and log Corrections as necessary.
      *
      * Optionally also checks that Token matches given $typeMask.
      *
