@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <title>Query Translator 1.0.x-dev demo</title>
     <link rel="stylesheet" type="text/css" href="style.css">
-    <script type="text/javascript">var syntax = 'full';</script>
     <script type="text/javascript" src="script.js"></script>
 </head>
 <body class="syntax-full" onload="process('')">

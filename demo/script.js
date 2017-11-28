@@ -1,3 +1,5 @@
+window.syntax = 'full';
+
 function process(query) {
     var xhr = new XMLHttpRequest();
     xhr.open('POST', 'server.php?' + window.syntax);
