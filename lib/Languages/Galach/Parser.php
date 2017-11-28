@@ -401,6 +401,7 @@ final class Parser implements Parsing
         if ($this->isTopStackToken(Tokenizer::TOKEN_GROUP_BEGIN)) {
             $leftDelimiter = $this->stack->pop();
             $this->ignoreEmptyGroup($leftDelimiter, $rightDelimiter);
+            $this->reduceRemainingLogicalOr(true);
 
             return null;
         }
@@ -423,6 +424,7 @@ final class Parser implements Parsing
     {
         $precedingOperators = $this->ignorePrecedingOperators(self::$tokenShortcuts['operator']);
         $followingOperators = $this->ignoreFollowingOperators();
+
         $this->addCorrection(
             self::CORRECTION_EMPTY_GROUP_IGNORED,
             ...array_merge(
@@ -431,7 +433,6 @@ final class Parser implements Parsing
                 $followingOperators
             )
         );
-        $this->reduceRemainingLogicalOr(true);
     }
 
     /**
