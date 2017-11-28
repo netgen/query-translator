@@ -260,21 +260,27 @@ final class Parser implements Parsing
         }
 
         if ($this->isTopStackToken(self::$tokenShortcuts['operator'])) {
-            $precedingOperators = $this->ignorePrecedingOperators(self::$tokenShortcuts['operator']);
-            $followingOperators = $this->ignoreFollowingOperators();
-            $this->addCorrection(
-                self::CORRECTION_BINARY_OPERATOR_FOLLOWING_OPERATOR_IGNORED,
-                ...array_merge(
-                    $precedingOperators,
-                    [$token],
-                    $followingOperators
-                )
-            );
+            $this->ignoreBinaryOperatorFollowingOperator($token);
 
             return null;
         }
 
         $this->stack->push($token);
+    }
+
+    private function ignoreBinaryOperatorFollowingOperator(Token $token)
+    {
+        $precedingOperators = $this->ignorePrecedingOperators(self::$tokenShortcuts['operator']);
+        $followingOperators = $this->ignoreFollowingOperators();
+
+        $this->addCorrection(
+            self::CORRECTION_BINARY_OPERATOR_FOLLOWING_OPERATOR_IGNORED,
+            ...array_merge(
+                $precedingOperators,
+                [$token],
+                $followingOperators
+            )
+        );
     }
 
     protected function shiftTerm(Token $token)
@@ -321,18 +327,24 @@ final class Parser implements Parsing
         }
 
         if ($node instanceof Mandatory || $node instanceof Prohibited) {
-            $precedingOperators = $this->ignorePrecedingOperators(self::$tokenShortcuts['operatorNot']);
-            if (!empty($precedingOperators)) {
-                $this->addCorrection(
-                    self::CORRECTION_LOGICAL_NOT_OPERATORS_PRECEDING_PREFERENCE_IGNORED,
-                    ...$precedingOperators
-                );
-            }
+            $this->ignoreLogicalNotOperatorsPrecedingPreferenceOperator();
 
             return $node;
         }
 
         return new LogicalNot($node, $this->stack->pop());
+    }
+
+    public function ignoreLogicalNotOperatorsPrecedingPreferenceOperator()
+    {
+        $precedingOperators = $this->ignorePrecedingOperators(self::$tokenShortcuts['operatorNot']);
+
+        if (!empty($precedingOperators)) {
+            $this->addCorrection(
+                self::CORRECTION_LOGICAL_NOT_OPERATORS_PRECEDING_PREFERENCE_IGNORED,
+                ...$precedingOperators
+            );
+        }
     }
 
     protected function reduceLogicalAnd(Node $node)
