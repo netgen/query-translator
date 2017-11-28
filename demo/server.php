@@ -183,7 +183,7 @@ class CorrectionRenderer
 {
     private static $descriptions = [
         Parser::CORRECTION_ADJACENT_UNARY_OPERATOR_PRECEDING_OPERATOR_IGNORED => 'Parser ignored adjacent unary operator preceding another operator',
-        Parser::CORRECTION_UNARY_OPERATOR_MISSING_OPERAND_IGNORED => 'Parser ignored unary operator missing operand',
+        Parser::CORRECTION_UNARY_OPERATOR_MISSING_OPERAND_IGNORED => 'Parser ignored unary operator missing an operand',
         Parser::CORRECTION_BINARY_OPERATOR_MISSING_LEFT_OPERAND_IGNORED => 'Parser ignored binary operator missing left side operand',
         Parser::CORRECTION_BINARY_OPERATOR_MISSING_RIGHT_OPERAND_IGNORED => 'Parser ignored binary operator missing right side operand',
         Parser::CORRECTION_BINARY_OPERATOR_FOLLOWING_OPERATOR_IGNORED => 'Parser ignored binary operator following another operator and connecting operators',
