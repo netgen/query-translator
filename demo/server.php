@@ -91,13 +91,13 @@ class TranslationRenderer
 
         $extendedDisMaxTranslation = self::getExtendedDisMaxTranslation($syntaxTree);
         $extendedDisMaxMarkup = '<p><strong>ExtendedDisMax</strong></p>';
-        $extendedDisMaxMarkup .= '<p>Translation for <a href="https://cwiki.apache.org/confluence/display/solr/The+Extended+DisMax+Query+Parser">Solr Extended DisMax Query Parser</a>.</p>';
+        $extendedDisMaxMarkup .= '<p>Translation for <code>q</code> parameter of the <a href="https://cwiki.apache.org/confluence/display/solr/The+Extended+DisMax+Query+Parser">Solr Extended DisMax Query Parser</a>.</p>';
         $extendedDisMaxMarkup .= "<div class='overflow'><pre class='translation'><span>{$extendedDisMaxTranslation}</span></pre></div>";
         $extendedDisMaxMarkup = "<li>{$extendedDisMaxMarkup}</li>";
 
         $queryStringTranslation = self::getQueryStringTranslation($syntaxTree);
         $queryStringMarkup = '<p><strong>QueryString</strong></p>';
-        $queryStringMarkup .= '<p>Translation for <a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-query-string-query.html">Elasticsearch Query String Query</a>.</p>';
+        $queryStringMarkup .= '<p>Translation for <code>query</code> parameter of the <a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-query-string-query.html">Elasticsearch Query String Query</a>.</p>';
         $queryStringMarkup .= "<div class='overflow'><pre class='translation'><span>{$queryStringTranslation}</span></pre></div>";
         $queryStringMarkup = "<li>{$queryStringMarkup}</li>";
 

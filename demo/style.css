@@ -181,6 +181,15 @@ p.special span {
     cursor: default;
 }
 
+code {
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+    font-size: 85%;
+    background: rgba(27,31,35,0.05);
+    padding: 3px 6px;
+    border-radius: 3px;
+    cursor: default;
+}
+
 p.syntax {
     margin: 0.5em 0 0.75em;
 }
