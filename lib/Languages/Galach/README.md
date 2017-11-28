@@ -1,292 +1,458 @@
 # Galach query language
 
+To better understand parts of the language processor described below, run the demo:
+
+1. Clone the repository and position into it
+2. Generate autoloader using composer `composer dump-autoload -o`
+3. Start the web server with demo document root `php -S localhost:8005 -t demo`
+4. Open [http://localhost:8005](http://localhost:8005) in your browser
+
+Demo will present behavior of Query Translator in an interactive way.
+
+### Syntax
+
 Galach is based on a syntax that seems to be the unofficial standard for search query as user input.
-You're probably already somewhat familiar with it, as the same basic syntax is used by virtually all
-popular web search engines out there. It is also very similar to [Lucene Query Parser syntax](https://lucene.apache.org/core/2_9_4/queryparsersyntax.html),
-used by both Solr and Elasticsearch.
+It should come familiar, as the same basic syntax is used by any popular text-based search engine
+out there. It is also very similar to
+[Lucene Query Parser syntax](https://lucene.apache.org/core/2_9_4/queryparsersyntax.html), used by
+both Solr and Elasticsearch.
 
-## Terms
+Read about it more detail in the [syntax documentation](SYNTAX.md), here we'll only show a quick
+cheat sheet:
 
-1. `Word` term is a string not containing whitespace, unless that whitespace is escaped.
+`word` `"phrase"` `(group)` `+mandatory` `-prohibited` `AND` `&&` `OR` `||` `NOT` `!` `#tag` `@user`
+`domain:term`
+
+And an example:
+
+```
+cheese AND (bacon OR eggs) +type:breakfast
+```
+
+### How it works
+
+Implementation has some of the usual language processor phases, starting with lexical analysis in
+[Tokenizer](Tokenizer.php), followed by syntax analysis in [Parser](Parser.php) and ending with
+target code generation in a [Generator](Generators). Output of the Parser is a hierarchical tree
+structure. It represents the syntax of the query in an abstract way and is easy to process using
+[tree traversal](https://en.wikipedia.org/wiki/Tree_traversal). From that syntax tree a target
+output is generated.
+
+Broken into parts, we have a sequence like this:
+
+1. User writes a query string
+2. Query string is given to Tokenizer, which produces an instance of
+[TokenSequence](../../Values/TokenSequence.php)
+3. TokenSequence instance is given to Parser, which produces an instance of
+[SyntaxTree](../../Values/SyntaxTree.php)
+4. SyntaxTree instance is given to the Generator to produce a target output
+5. Target output is passed to it's consumer
+
+Here's how that could look in code:
+
+```php
+use QueryTranslator\Languages\Galach\Tokenizer;
+use QueryTranslator\Languages\Galach\TokenExtractor\Full as FullTokenExtractor;
+use QueryTranslator\Languages\Galach\Parser;
+use QueryTranslator\Languages\Galach\Generators;
+
+// 1. User writes a query string
+
+$queryString = $_GET['query_string'];
+
+// This is the place where you would perform some sanity checks that are out of the scope
+// of this library, for example checking the length of the query string
+
+// 2. Query string is given to Tokenizer, which produces an instance of TokenSequence
+
+// Note that Tokenizer needs a TokenExtractor, which is an extension point
+// Here we use Full TokenExtractor, which provides full Galach syntax
+
+$tokenExtractor = new FullTokenExtractor();
+$tokenizer = new Tokenizer($tokenExtractor);
+$tokenSequence = $tokenizer->tokenize($queryString);
+
+// 3. TokenSequence instance is given to Parser, which produces an instance of SyntaxTree
+
+$parser = new Parser();
+$syntaxTree = $parser->parse($tokenSequence);
+
+// If needed, here you can access corrections
+
+foreach ($syntaxTree->corrections as $correction) {
+    echo $correction->type;
+}
+ 
+// 4. Now we can build a generator, in this example a ExtendedDisMax generator to target
+//    Solr's Extended DisMax Query Parser
+
+// This part is a little bit more involved, since we need to build all visitors for different
+// Nodes in the syntax tree
+
+$generator = new Generators\ExtendedDisMax(
+    new Generators\Common\Aggregate([
+        new Generators\Lucene\Common\BinaryOperator(),
+        new Generators\Lucene\Common\Group(),
+        new Generators\Lucene\Common\Phrase(),
+        new Generators\Lucene\Common\Query(),
+        new Generators\Lucene\Common\Tag(),
+        new Generators\Lucene\Common\UnaryOperator(),
+        new Generators\Lucene\Common\User(),
+        new Generators\Lucene\ExtendedDisMax\Word(),
+    ])
+);
+
+// Now we can use the generator to generate the target output
+
+$targetString = $generator->generate($syntaxTree);
+
+// Finally we can send the generated string to Solr
+
+$result = $solrClient->search($targetString);
+```
+
+### Error handling
+
+No input is considered invalid. Both Tokenizer and Parser are made to be resistant to errors and
+will try to process anything you throw at them. When input does contain an error, a correction will
+be applied. This will be repeated as necessary. Corrections are applied during parsing and are made
+available in the SyntaxTree as an array of [Correction](../../Values/Correction.php) instances.
+They will contain information about the type of the correction and the tokens affected by it.
+
+One type of correction starts in the Tokenizer. When no [Token](../../Values/Token.php) can be
+extracted at a current position in the input string, a single character will be read as a special
+`Tokenizer::TOKEN_BAILOUT` type Token. All Tokens of that type will be ignored by the parser. The
+only known case where this can happen is occurrence of an unclosed phrase delimiter `"`.
+
+Note that while applying corrections, the best effort is made to preserve intended meaning of the
+query. Following is a list of corrections, with correction type constant and an example of incorrect
+input and the corrected result.
+
+1. Adjacent unary operator preceding another operator is ignored
+
+    `Parser::CORRECTION_ADJACENT_UNARY_OPERATOR_PRECEDING_OPERATOR_IGNORED`
+
+    ```
+    ++one +-two
+    ```
+    ```
+    +one -two
+    ```
+
+2. Unary operator missing an operand is ignored
+
+    `Parser::CORRECTION_UNARY_OPERATOR_MISSING_OPERAND_IGNORED`
+
+    ```
+    one NOT
+    ```
+    ```
+    one
+    ```
+
+3. Binary operator missing left side operand is ignored
+
+    `Parser::CORRECTION_BINARY_OPERATOR_MISSING_LEFT_OPERAND_IGNORED`
+
+    ```
+    AND two
+    ```
+    ```
+    two
+    ```
+
+4. Binary operator missing right side operand is ignored
+
+    `Parser::CORRECTION_BINARY_OPERATOR_MISSING_RIGHT_OPERAND_IGNORED`
+
+    ```
+    one AND
+    ```
+    ```
+    one
+    ```
+
+5. Binary operator following another operator is ignored together with connecting operators
+
+    `Parser::CORRECTION_BINARY_OPERATOR_FOLLOWING_OPERATOR_IGNORED`
+
+    ```
+    one AND OR AND two
+    ```
+    ```
+    one two
+    ```
+
+6. Logical not operators preceding mandatory or prohibited operator is ignored
+
+    `Parser::CORRECTION_LOGICAL_NOT_OPERATORS_PRECEDING_PREFERENCE_IGNORED`
+
+    ```
+    NOT +one NOT -two
+    ```
+    ```
+    +one -two
+    ```
+
+7. Empty group is ignored together with connecting operators
+
+    `Parser::CORRECTION_EMPTY_GROUP_IGNORED`
+
+    ```
+    one AND () OR two
+    ```
+    ```
+    one two
+    ```
+
+8. Unmatched left side group delimiter is ignored
+
+    `Parser::CORRECTION_UNMATCHED_GROUP_LEFT_DELIMITER_IGNORED`
+
+    ```
+    one ( AND two
+    ```
+    ```
+    one AND two
+    ```
+
+9. Unmatched left side group delimiter is ignored
+
+    `Parser::CORRECTION_UNMATCHED_GROUP_RIGHT_DELIMITER_IGNORED`
+
+    ```
+    one AND ) two
+    ```
+    ```
+    one AND two
+    ```
+
+10. Any Token of `Tokenizer::TOKEN_BAILOUT` type is ignored
+
+    `Parser::CORRECTION_BAILOUT_TOKEN_IGNORED`
+
+    ```
+    one " two
+    ```
+    ```
+    one two
+    ```
+
+### Customization
+
+You can modify Galach language in a limited way, which includes:
+
+- Changing special characters and sequences of characters used as part of the language syntax:
+    - operators: `AND` `&&` `OR` `||` `NOT` `!` `+` `-`
+    - grouping and phrase delimiters: `(` `)` `"`
+    - user and tag markers: `@` `#`
+    - domain prefix: `domain:`
+- Choosing parts of the language that you want to use. You might want to use only a subset of the
+  full syntax, maybe without grouping feature, using only `+` and `-` operators, disabling domains
+  and so on.
+- Implementing custom `Tokenizer::TOKEN_TERM` type token, more on that below.
+
+Customization happens during lexical analysis. Tokenizer is actually marked as `final`, and is not
+intended for extension. You will need to implement your own [TokenExtractor](TokenExtractor.php),
+a dependency to the Tokenizer. TokenExtractor controls the syntax through regular expressions used
+to recognize a [Token](../../Values/Token.php), which is a sequence of characters forming a smallest
+syntactic unit of the language. Following is a list of supported Token types, together with their
+`Tokenizer::TOKEN_*` constants and an example:
+
+1. Term token, represents a category of term type tokens.
+
+    Note that [Word](Values/Token/Word.php) and [Phrase](Values/Token/Phrase.php) term tokens can
+    have domain prefix. This can't be used on [User](Values/Token/User.php) and
+    [Tag](Values/Token/Tag.php) term tokens, because those define implicit domains of their own.
+
+    `Tokenizer::TOKEN_TERM`
 
     ```
     word
     ```
     ```
-    another\ word
-    ```
-
-2. `Phrase` term is formed by enclosing words within double quotation marks `"`.
-
-    ```
-    "reality exists"
+    title:word
     ```
     ```
-    "what's not real doesn't exist"
-    ```
-
-3. `User` term is defined by a leading `@` character, followed by at least one alphanumeric or
-    underscore character, followed by arbitrary  sequence of alphanumeric characters, hyphens,
-    underscores and dots.
-
-    Regular expression:
-
-    ```
-    @[a-zA-Z0-9_][a-zA-Z0-9_\-.]*
-    ```
-
-    Examples:
-
-    ```
-    @joe.watt
+    "this is a phrase"
     ```
     ```
-    @_alice83
+    body:"this is a phrase"
     ```
     ```
-    @The-Ronald
-    ```
-
-4. `Tag` term is defined by a leading `#` character, followed by at least one alphanumeric or
-    underscore character, followed by arbitrary sequence of alphanumeric characters, hyphens,
-    underscores and dots.
-
-    Regular expression:
-
-    ```
-    \#[a-zA-Z0-9_][a-zA-Z0-9_\-.]*
-    ```
-
-    Examples:
-
-    ```
-    #php
+    @user
     ```
     ```
-    #PHP-7.1
-    ```
-    ```
-    #query_parser
+    #tag
     ```
 
-## Operators
+2. Whitespace token, represents the whitespace in the input string.
 
-Terms can be combined or modified using binary and unary operators:
-
-1. `Logical and` is a binary operator that combines left and right operands so that both must
-    match.
-
-    It comes in two forms: `AND`, `&&`
-
-    In both cases it must be separated from it's operands by whitespace.
+    `Tokenizer::TOKEN_WHITESPACE`
 
     ```
-    coffee AND milk
-    ```
-    ```
-    tea && lemon
+    one two
+       ^
     ```
 
-2. `Logical or` is a binary operator that combines left and right operands so that at least one of
-    them has to match.
+3. Logical AND token, combines two adjoining elements with logical AND.
 
-    It comes in two forms: `OR`, `||`
-
-    In both cases it must be separated from it's operands by whitespace.
+    `Tokenizer::TOKEN_LOGICAL_AND`
 
     ```
-    potato OR tomato
-    ```
-    ```
-    true || false
+    one AND two
+        ^^^
     ```
 
-3. `Logical not` is a unary operator that modifies it's operand so that it must not match.
+4. Logical OR token, combines two adjoining elements with logical OR.
 
-    It comes in two forms: `NOT`, `!`
-
-    When `NOT` form is used, it must be separated from it's operand by whitespace:
+    `Tokenizer::TOKEN_LOGICAL_OR`
 
     ```
-    NOT important
+    one OR two
+        ^^
     ```
 
-    When shorthand form `!` is used it must be adjacent to it's operand:
+5. Logical NOT token, applies logical NOT to the next (right-side) element.
+
+    `Tokenizer::TOKEN_LOGICAL_NOT`
 
     ```
-    !important
+    NOT one
+    ^^^
     ```
 
-4. `Mandatory` is a unary operator that modifies it's operand so that it must match.
-    It's represented by plus sign `+` and must be placed adjacent to it's operand.
+6. Shorthand logical NOT token, applies logical NOT to the next (right-side) element.
+
+    This is an alternative to the `Tokenizer::TOKEN_LOGICAL_NOT` above, with the difference that
+    parser will expect it's placed next (left) to the element it applies to, without the whitespace
+    in between.
+
+    `Tokenizer::TOKEN_LOGICAL_NOT_2`
 
     ```
-    +coffee
+    !one
+    ^
     ```
 
-5. `Prohibited` is a unary operator that modifies it's operand so that it must not match.
-    It's represented by minus sign `-` and must be placed adjacent to it's operand.
+7. Mandatory operator, applies mandatory inclusion to the next (right-side) element.
+
+    `Tokenizer::TOKEN_MANDATORY`
 
     ```
-    -cake
+    +one
+    ^
     ```
 
-### Operator precedence
+8. Prohibited operator, applies mandatory exclusion to the next (right-side) element.
 
-Unary operators are applied first, followed by binary operators. When it comes to binary operators, `Logical and` precedes `Logical or`:
+    `Tokenizer::TOKEN_PROHIBITED`
 
-1. `Logical not`, `Mandatory`, `Prohibited`
-2. `Logical and`
-3. `Logical or`
+    ```
+    -one
+    ^
+    ```
 
-## Grouping
+9. Left side delimiter of a group.
 
-Terms and expressions can be grouped using round brackets. A group is processed as a whole.
-Following two examples will be processed as the same, since grouping follows operator associativity:
+    Note that left side group delimiter can have domain prefix.
 
-```
-one OR NOT two AND three
-```
-```
-one OR ((NOT two) AND three)
-```
+    `Tokenizer::TOKEN_GROUP_BEGIN`
 
-But you can also use grouping to change the meaning that would follow from operator associativity:
+    ```
+    (one AND two)
+    ^
+    ```
+    ```
+    text:(one AND two)
+    ^^^^^^
+    ```
 
-```
-(one OR NOT two) AND three
-```
-```
-one OR NOT (two AND three)
-```
+10. Right side delimiter of a group.
 
-## Domains
+    `Tokenizer::TOKEN_GROUP_END`
 
-Domain is an abstract category on which the term or group applies. It's defined by prefixing the
-term or group with a domain string, followed by a colon `:`. Domain string must start with at least
-one alphanumeric or underscore character, and is followed by arbitrary sequence of alphanumeric
-characters, hyphens `-` and underscores `_`.
+    ```
+    (one AND two)
+                ^
+    ```
 
-Note that domain cannot be used on `Tag` and `User` terms. These two in fact define implicit domains
-of their own.
+11. Bailout token.
 
-Regular expression for domain string:
+    `Tokenizer::TOKEN_BAILOUT`
 
-```
-[a-zA-Z_][a-zA-Z0-9_\-]*
-```
+    ```
+    not exactly a phrase"
+                        ^
+    ```
 
-Examples:
+By changing regular expressions you can change how tokens are recognized, including special
+characters used as part of the language syntax. You can also omit regular expressions for some token
+types. Through that you can control which elements of the language you want to use. There are two
+abstract methods to implement when extending the base [TokenExtractor](TokenExtractor.php):
 
-```
-type:aeroplane
-```
-```
-title:"Language processor"
-```
-```
-description:(wings AND propeller)
-```
+- `getExpressionTypeMap(): array`
 
-## Special characters
+    Here you must return a map of regular expressions to corresponding Token types. Token type
+    can be one of the predefined constants `Tokenizer::TOKEN_*`.
 
-Characters that are part of the language syntax must be escaped in order not to be recognized as
-such by the engine. These are:
+- `createTermToken($position, array $data): Token`
 
-- `(` left paren
-- `)` right paren
-- `+` plus
-- `-` minus
-- `!` exclamation mark
-- `"` double quote
-- `#` hash
-- `@` at sign
-- `:` colon
-- `\` backslash
-- `␣` blank space
+    Here you receive Token data extracted through regular expression matching and a position where
+    the data was extracted at. From from that you must return a corresponding Token instance of the
+    `Tokenizer::TOKEN_TERM` type.
 
-Character used for escaping is backslash `\`:
+    If needed, here you can return an instance of your own Token subtype. You can use regular
+    expressions with named capturing groups to extract meaning from the input string and pass it to
+    the constructor method.
 
-```
-joined\ word
-```
-```
-"escaped \"double quote\""
-```
-```
-escaped \+operator domain\:word \@user \#tag \(and so on\)
-```
-```
-double backslash \\ is a backslash escaped
-```
+Two TokenExtractor implementations are provided out of the box. You can use them as an example and a
+starting point to implement you own. These are:
 
-Aside from quotation marks themselves, escaping is not required inside phrases. Since quotes are
-used as delimiters, everything between them is taken as-is. Hence, these will be processed as the
-same:
+- [Full](TokenExtractor/Full.php) TokenExtractor, supports full syntax of the language
+- [Text](TokenExtractor/Text.php) TokenExtractor, supports text related subset of the language
 
-```
-"+one -two"
-```
-```
-"\+one \-two"
-```
+#### Parser
 
-In some cases tokenizer will automatically assume that special character is to be interpreted as if
-it was escaped. Following pairs will be processed as the same:
+Parser is the core of the library. It's marked as `final` and is not intended for extension. Method
+`Parser::parse()` accepts TokenSequence, but it only cares about the type of the Token, so it will
+be oblivious to any customizations you might do in the Tokenizer. That includes both recognizing
+only a subset of the full syntax and custom `Tokenizer::TOKEN_TERM` type tokens. While it's possible
+to implement a custom Parser, at that point you should consider calling it a new language, rather
+than customization of Galach.
 
-1. Colon at the end of a `Word` is considered part of the `Word`
+### Generators
 
-   ```
-   word:
-   ```
-   ```
-   word\:
-   ```
+Generator is used to generate a target output from the SyntaxTree. Three different ones are provided
+out of the box:
 
-2. Colon placed after a domain colon is considered part of the `Word`
+1. [Native](Generators/Native.php)
 
-   ```
-   domain:domain:domain
-   ```
-   ```
-   domain:domain\:domain
-   ```
+   `Native` generator produces query string in the Galach format. This is mostly useful as an
+   example and for cleanup of the user input. In case corrections were applied on the input, the
+   output will be corrected. Also, it will not contain any superfluous whitespace and special
+   characters will be explicitly escaped.
 
-3. Domain can't be used on a `Tag` and `User` terms
+2. [ExtendedDisMax](Generators/ExtendedDisMax.php)
 
-   ```
-   domain:#tag domain:@user
-   ```
-   ```
-   domain:\#tag domain:\@user
-   ```
+   Output of `ExtendedDisMax` generator is intended for `q` parameter of the
+   [Solr Extended DisMax Query Parser](https://cwiki.apache.org/confluence/display/solr/The+Extended+DisMax+Query+Parser).
 
-4. Characters used for `Mandatory`, `Prohibited` and shorthand `Logical not` operators can be
-   considered part of the `Word`:
+3. [QueryString](Generators/QueryString.php)
 
-   - When placed after domain colon
+   Output of `QueryString` generator is intended for the `query` parameter of the
+   [Elasticsearch Query String Query](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-query-string-query.html).
 
-      ```
-      domain:+word domain:-word domain:!word
-      ```
-      ```
-      domain:\+word domain:\-word domain:\!word
-      ```
+All generators use the same hierarchical [Visitor](Generators/Common/Visitor.php) pattern. Each
+concrete [Node](../../Values/Node.php) instance has it's own visitor, dispatched by checking on the
+class it implements. This enables customization per Node visitor. Since Term Node can cover
+different Term tokens (including your custom ones), Term visitors should be dispatched both by the
+Node instance and the type of Token it aggregates. Visit method also propagates optional `$options`
+parameter. If needed that can be used to control behavior of the generator from the outside.
 
-   - When placed in the middle of the word
+This approach should be useful for most custom implementations.
 
-      ```
-      one+two one-two one!two
-      ```
-      ```
-      one\+two one\-two one\!two
-      ```
-
-   - When placed at the end of the `Word`
-
-      ```
-      one+ two- three!
-      ```
-      ```
-      one\+ two\- three\!
-      ```
+Note that Generator interface is not provided. That is because generator's output can't be assumed,
+being specific to the intended target. The main job of the Query Translator is producing the syntax
+tree, from which it's easy to generate anything you might need. Following from that -- if the
+provided generators don't meet your needs, feel free to customize them or implement your own.
