@@ -25,12 +25,12 @@ use SplStack;
 final class Parser implements Parsing
 {
     /**
-     * Parser ignored unary operator preceding another operator.
+     * Parser ignored adjacent unary operator preceding another operator.
      */
     const CORRECTION_ADJACENT_UNARY_OPERATOR_PRECEDING_OPERATOR_IGNORED = 0;
 
     /**
-     * Parser ignored unary operator missing operand.
+     * Parser ignored unary operator missing an operand.
      */
     const CORRECTION_UNARY_OPERATOR_MISSING_OPERAND_IGNORED = 1;
 
@@ -50,7 +50,7 @@ final class Parser implements Parsing
     const CORRECTION_BINARY_OPERATOR_FOLLOWING_OPERATOR_IGNORED = 4;
 
     /**
-     * Parser ignored logical not operators preceding preference (mandatory/prohibited) operator.
+     * Parser ignored logical not operators preceding mandatory or prohibited operator.
      */
     const CORRECTION_LOGICAL_NOT_OPERATORS_PRECEDING_PREFERENCE_IGNORED = 5;
 
@@ -347,13 +347,21 @@ final class Parser implements Parsing
         return new LogicalAnd($leftOperand, $node, $token);
     }
 
+    /**
+     * Reduce logical OR.
+     *
+     * @param \QueryTranslator\Values\Node $node
+     * @param bool $inGroup Reduce inside a group
+     *
+     * @return null|\QueryTranslator\Languages\Galach\Values\Node\LogicalOr|\QueryTranslator\Values\Node
+     */
     protected function reduceLogicalOr(Node $node, $inGroup = false)
     {
         if ($this->stack->count() <= 1 || !$this->isTopStackToken(Tokenizer::TOKEN_LOGICAL_OR)) {
             return $node;
         }
 
-        // Don't look outside of a group
+        // If inside a group don't look for following logical AND
         if (!$inGroup) {
             $this->popWhitespace();
             // If the next token is logical AND, put the node on stack
@@ -538,6 +546,11 @@ final class Parser implements Parsing
         return $tokens;
     }
 
+    /**
+     * Reduce logical OR possibly remaining after reaching end of group or query.
+     *
+     * @param bool $inGroup Reduce inside a group
+     */
     private function reduceRemainingLogicalOr($inGroup = false)
     {
         if (!$this->stack->isEmpty() && !$this->isTopStackToken()) {

@@ -6,6 +6,7 @@ namespace QueryTranslator\Values;
  * Token sequence holds an array of tokens extracted from the query string.
  *
  * @see \QueryTranslator\Tokenizing::tokenize()
+ * @see \QueryTranslator\Values\Token
  */
 class TokenSequence
 {
