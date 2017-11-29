@@ -436,7 +436,7 @@ final class Parser implements Parsing
     }
 
     /**
-     * Initializes the parser with given array of $tokens.
+     * Initialize the parser with given array of $tokens.
      *
      * @param \QueryTranslator\Values\Token[] $tokens
      */
@@ -473,7 +473,7 @@ final class Parser implements Parsing
     }
 
     /**
-     * Checks if the given $token is an instance of Token.
+     * Check if the given $token is an instance of Token.
      *
      * Optionally also checks given Token $typeMask.
      *
@@ -501,7 +501,7 @@ final class Parser implements Parsing
     }
 
     /**
-     * Removes whitespace Tokens from the beginning of the token array.
+     * Remove whitespace Tokens from the beginning of the token array.
      */
     private function popWhitespace()
     {
@@ -573,7 +573,7 @@ final class Parser implements Parsing
     }
 
     /**
-     * Cleans up group delimiter tokens, removing unmatched left and right delimiter.
+     * Clean up group delimiter tokens, removing unmatched left and right delimiter.
      *
      * Closest group delimiters will be matched first, unmatched remainder is removed.
      *
