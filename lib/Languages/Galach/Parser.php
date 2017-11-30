@@ -408,16 +408,27 @@ final class Parser implements Parsing
 
         $this->reduceRemainingLogicalOr(true);
 
-        $nodes = [];
-        while (!$this->stack->isEmpty() && $this->stack->top() instanceof Node) {
-            array_unshift($nodes, $this->stack->pop());
-        }
-
-        $group->nodes = $nodes;
+        $group->nodes = $this->collectTopStackNodes();
         $group->tokenLeft = $this->stack->pop();
         $group->tokenRight = $rightDelimiter;
 
         return $group;
+    }
+
+    /**
+     * Collect all Nodes from the top of the stack.
+     *
+     * @return \QueryTranslator\Values\Node[]
+     */
+    private function collectTopStackNodes()
+    {
+        $nodes = [];
+
+        while (!$this->stack->isEmpty() && $this->stack->top() instanceof Node) {
+            array_unshift($nodes, $this->stack->pop());
+        }
+
+        return $nodes;
     }
 
     private function ignoreEmptyGroup(Token $leftDelimiter, Token $rightDelimiter)
