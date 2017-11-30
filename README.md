@@ -8,13 +8,13 @@
 [![PHP](https://img.shields.io/badge/php-%3E%3D%205.6-8892BF.svg?style=flat-square)](https://secure.php.net/)
 
 Query Translator takes a search string as user input and converts it into something a search backend
-can understand. Technically it's a search query
+can understand. Technically, it's a search query
 [translator](https://en.wikipedia.org/wiki/Translator_(computing)) with
 [abstract syntax tree](https://en.wikipedia.org/wiki/Abstract_syntax_tree) representation. From the
-produced syntax tree translation target can be anything you need, usually a search backend like Solr
-and Elasticsearch or a database abstraction layer.
+produced syntax tree, translation target can be anything you need. Usually it's a search backend,
+like Solr and Elasticsearch, or a database abstraction layer.
 
-A set of interfaces to implement a language processor is provided, with a single implemented
+A set of interfaces for implementing a language processor is provided, with a single implemented
 language named [Galach](lib/Languages/Galach). Galach implements a syntax that is based on what
 seems to be the unofficial standard for search query as user input. Quick cheat sheet:
 
@@ -23,16 +23,16 @@ seems to be the unofficial standard for search query as user input. Quick cheat 
 
 ### Error handling
 
-User input means you have to count on errors and also handle them gracefully. Because of that parser
+User input means you have to expect errors and handle them gracefully. Because of that, the parser
 is completely resistant to errors. Syntax tree will contain detailed information about corrections
 applied to make sense of the user input. This can be useful to clean up the input or implement rich
 input interface, with features like suggestions, syntax highlighting and error feedback.
 
 ### Customization
 
-Implementation was made with customization in mind. You can change which special characters will be
-used as part of the syntax, pick out elements of the language you want to use, implement your own
-term clauses or change how the syntax tree is converted to the target output.
+The implementation was made with customization in mind. You can change the special characters which
+will be used as part of the syntax, pick out elements of the language you want to use, implement
+your own term clauses, or change how the syntax tree is converted to the target output.
 
 ### Some use cases
 
@@ -56,8 +56,8 @@ First add the library to your project:
 composer require netgen/query-translator:^1.0
 ```
 
-Then make use of the features provided out of the box. If those are not enough, use extension points
-to customize various parts of the translator to fit your needs. See
+After that, make use of the features provided out of the box. If those are not enough, use extension
+points to customize various parts of the translator to fit your needs. See
 [Galach documentation](lib/Languages/Galach) to find out more.
 
 ## Run the demo
