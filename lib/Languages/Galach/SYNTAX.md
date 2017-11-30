@@ -20,9 +20,9 @@
     "what's not real doesn't exist"
     ```
 
-3. `User` term is defined by a leading `@` character, followed by at least one alphanumeric or
-    underscore character, followed by arbitrary  sequence of alphanumeric characters, hyphens,
-    underscores and dots.
+3. `User` term is defined by the leading `@` character, followed by at least one alphanumeric or
+    underscore character, followed by an arbitrary sequence of alphanumeric characters, hyphens,
+    underscores, and dots.
 
     Regular expression:
 
@@ -42,9 +42,9 @@
     @The-Ronald
     ```
 
-4. `Tag` term is defined by a leading `#` character, followed by at least one alphanumeric or
-    underscore character, followed by arbitrary sequence of alphanumeric characters, hyphens,
-    underscores and dots.
+4. `Tag` term is defined by the leading `#` character, followed by at least one alphanumeric or
+    underscore character, followed by an arbitrary sequence of alphanumeric characters, hyphens,
+    underscores, and dots.
 
     Regular expression:
 
@@ -73,7 +73,7 @@ Terms can be combined or modified using binary and unary operators:
 
     It comes in two forms: `AND`, `&&`
 
-    In both cases it must be separated from it's operands by whitespace.
+    In both cases, it must be separated from its operands by whitespace.
 
     ```
     coffee AND milk
@@ -87,7 +87,7 @@ Terms can be combined or modified using binary and unary operators:
 
     It comes in two forms: `OR`, `||`
 
-    In both cases it must be separated from it's operands by whitespace.
+    In both cases, it must be separated from its operands by whitespace.
 
     ```
     potato OR tomato
@@ -96,31 +96,31 @@ Terms can be combined or modified using binary and unary operators:
     true || false
     ```
 
-3. `Logical not` is a unary operator that modifies it's operand so that it must not match.
+3. `Logical not` is a unary operator that modifies its operand so that it must not match.
 
     It comes in two forms: `NOT`, `!`
 
-    When `NOT` form is used, it must be separated from it's operand by whitespace:
+    When `NOT` form is used, it must be separated from its operand by whitespace:
 
     ```
     NOT important
     ```
 
-    When shorthand form `!` is used it must be adjacent to it's operand:
+    When shorthand form `!` is used, it must be adjacent to its operand:
 
     ```
     !important
     ```
 
-4. `Mandatory` is a unary operator that modifies it's operand so that it must match.
-    It's represented by plus sign `+` and must be placed adjacent to it's operand.
+4. `Mandatory` is a unary operator that modifies its operand so that it must match.
+    It's represented by a plus sign `+` and must be placed adjacent to its operand.
 
     ```
     +coffee
     ```
 
-5. `Prohibited` is a unary operator that modifies it's operand so that it must not match.
-    It's represented by minus sign `-` and must be placed adjacent to it's operand.
+5. `Prohibited` is a unary operator that modifies its operand so that it must not match.
+    It's represented by a minus sign `-` and must be placed adjacent to its operand.
 
     ```
     -cake
@@ -128,7 +128,7 @@ Terms can be combined or modified using binary and unary operators:
 
 ### Operator precedence
 
-Unary operators are applied first. Since they apply on the first element to the left, they never
+Unary operators are applied first. Since they apply to the first element to the left, they never
 conflict. They are followed by binary operators, with `Logical and` preceding `Logical or`:
 
 1. `Logical not`, `Mandatory`, `Prohibited`
@@ -137,8 +137,8 @@ conflict. They are followed by binary operators, with `Logical and` preceding `L
 
 ## Grouping
 
-Terms and expressions can be grouped using round brackets. A group is processed as a whole.
-Following two examples will be processed as the same, since grouping follows operator precedence:
+Terms and expressions can be grouped using round brackets. A group is processed as a whole. The
+following two examples will be processed as the same since grouping follows operator precedence:
 
 ```
 one OR NOT two AND three
@@ -160,11 +160,11 @@ one OR NOT (two AND three)
 
 Domain is an abstract category on which the term or group applies. It's defined by prefixing the
 term or group with a domain string, followed by a colon `:`. Domain string must start with at least
-one alphanumeric or underscore character, and is followed by arbitrary sequence of alphanumeric
+one alphanumeric or underscore character and is followed by an arbitrary sequence of alphanumeric
 characters, hyphens `-` and underscores `_`.
 
-Note that domain cannot be used on `Tag` and `User` terms. These two in fact define implicit domains
-of their own.
+Note that the domain cannot be used on `Tag` and `User` terms. These two, in fact, define implicit
+domains of their own.
 
 Regular expression for domain string:
 
@@ -186,7 +186,7 @@ description:(wings AND propeller)
 
 ## Special characters
 
-Characters that are part of the language syntax must be escaped in order not to be recognized as
+The characters that are part of the language syntax must be escaped in order not to be recognized as
 such by the engine. These are:
 
 - `(` left paren
@@ -216,7 +216,7 @@ escaped \+operator domain\:word \@user \#tag \(and so on\)
 double backslash \\ is a backslash escaped
 ```
 
-Aside from quotation marks themselves, escaping is not required inside phrases. Since quotes are
+Aside from the quotation marks themselves, escaping is not required inside phrases. Since quotes are
 used as delimiters, everything between them is taken as-is. Hence these will be interpreted as equal
 in meaning:
 
@@ -227,8 +227,8 @@ in meaning:
 "\+one \-two"
 ```
 
-In some cases tokenizer will automatically assume that special character is to be interpreted as if
-it was escaped. Following pairs will be processed as the same:
+In some cases the tokenizer will automatically assume that a special character is to be interpreted
+as if it was escaped. The following pairs will be processed as the same:
 
 1. Colon at the end of a `Word` is considered part of the `Word`
 
