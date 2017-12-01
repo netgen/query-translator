@@ -65,4 +65,4 @@ points to customize various parts of the translator to fit your needs. See
 1. Clone the repository and position into it
 2. Generate autoloader using composer `composer dump-autoload -o`
 3. Start the web server with demo document root `php -S localhost:8005 -t demo`
-4. Open [http://localhost:8005](http://localhost:8005) in your browser
+4. Open [http://localhost:8005](http://localhost:8005) in your browser ![Query Translator demo](demo/animation.gif)
