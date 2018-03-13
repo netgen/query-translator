@@ -242,7 +242,7 @@ example of an incorrect input and a corrected result.
 
 You can modify the Galach language in a limited way:
 
-- By hanging special characters and sequences of characters used as part of the language syntax:
+- By changing special characters and sequences of characters used as part of the language syntax:
     - operators: `AND` `&&` `OR` `||` `NOT` `!` `+` `-`
     - grouping and phrase delimiters: `(` `)` `"`
     - user and tag markers: `@` `#`
