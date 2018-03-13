@@ -36,6 +36,7 @@ your own term clauses, or change how the syntax tree is converted to the target 
 
 ### Some use cases
 
+- User-level query language on top of your search backend
 - Common query language on top of different search backends
 - Control over options of the query language that is already provided by the search backend
 - Better error handling than provided by the search backend
