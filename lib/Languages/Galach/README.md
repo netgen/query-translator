@@ -406,6 +406,19 @@ abstract methods to implement when extending the base [TokenExtractor](TokenExtr
     expressions with named capturing groups to extract meaning from the input string and pass it to
     the constructor method.
 
+Optionally you can override the `createGroupBeginToken()` method. This is useful if you want to
+customize token of the `Tokenizer::TOKEN_GROUP_BEGIN` type:
+
+- `createGroupBeginToken($position, array $data): Token`
+
+    Here you receive Token data extracted through regular expression matching and a position where
+    the data was extracted at. From that, you must return the corresponding Token instance of the
+    `Tokenizer::TOKEN_GROUP_BEGIN` type.
+
+    If needed, here you can return an instance of your own Token subtype. You can use regular
+    expressions with named capturing groups to extract meaning from the input string and pass it to
+    the constructor method.
+
 Two TokenExtractor implementations are provided out of the box. You can use them as an example and a
 starting point to implement your own. These are:
 
