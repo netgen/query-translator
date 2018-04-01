@@ -128,6 +128,18 @@ class TextTokenizerTest extends FullTokenizerTest
                 new WordToken('domain\:', 0, '', 'domain\:'),
                 new PhraseToken('"phrase"', 8, '', '"', 'phrase'),
             ],
+            'domain:(one)' => [
+                new WordToken('domain:', 0, '', 'domain:'),
+                new GroupBeginToken('(', 7, '(', ''),
+                new WordToken('one', 8, '', 'one'),
+                new Token(Tokenizer::TOKEN_GROUP_END, ')', 11),
+            ],
+            'some.domain:(one)' => [
+                new WordToken('some.domain:', 0, '', 'some.domain:'),
+                new GroupBeginToken('(', 12, '(', ''),
+                new WordToken('one', 13, '', 'one'),
+                new Token(Tokenizer::TOKEN_GROUP_END, ')', 16),
+            ],
         ];
     }
 
