@@ -10,7 +10,6 @@ use QueryTranslator\Languages\Galach\Values\Node\Mandatory;
 use QueryTranslator\Languages\Galach\Values\Node\Prohibited;
 use QueryTranslator\Languages\Galach\Values\Node\Query;
 use QueryTranslator\Languages\Galach\Values\Node\Term;
-use QueryTranslator\Languages\Galach\Values\Token\GroupBegin;
 use QueryTranslator\Parsing;
 use QueryTranslator\Values\Correction;
 use QueryTranslator\Values\Node;
@@ -288,7 +287,7 @@ final class Parser implements Parsing
         return new Term($token);
     }
 
-    protected function shiftGroupBegin(GroupBegin $token)
+    protected function shiftGroupBegin(Token $token)
     {
         $this->stack->push($token);
     }
