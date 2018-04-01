@@ -52,7 +52,9 @@ abstract class TokenExtractor
      * Return a map of regular expressions to token types.
      *
      * The returned map must be an array where key is a regular expression
-     * and value is a corresponding token type.
+     * and value is a corresponding token type. Regular expression must define
+     * named capturing group 'lexeme' that identifies part of the input string
+     * recognized as token.
      *
      * @return array
      */
