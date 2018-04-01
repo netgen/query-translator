@@ -4,6 +4,7 @@ namespace QueryTranslator\Languages\Galach\TokenExtractor;
 
 use QueryTranslator\Languages\Galach\TokenExtractor;
 use QueryTranslator\Languages\Galach\Tokenizer;
+use QueryTranslator\Languages\Galach\Values\Token\GroupBegin;
 use QueryTranslator\Languages\Galach\Values\Token\Phrase;
 use QueryTranslator\Languages\Galach\Values\Token\Word;
 use RuntimeException;
@@ -29,7 +30,7 @@ final class Text extends TokenExtractor
         '/(?<lexeme>NOT)(?:[\s"()+\-!]|$)/Au' => Tokenizer::TOKEN_LOGICAL_NOT,
         '/(?<lexeme>(?:AND|&&))(?:[\s"()+\-!]|$)/Au' => Tokenizer::TOKEN_LOGICAL_AND,
         '/(?<lexeme>(?:OR|\|\|))(?:[\s"()+\-!]|$)/Au' => Tokenizer::TOKEN_LOGICAL_OR,
-        '/(?<lexeme>(?:(?<domain>[a-zA-Z_][a-zA-Z0-9_\-.]*):)?(?<delimiter>\())/Au' => Tokenizer::TOKEN_GROUP_BEGIN,
+        '/(?<lexeme>\()/Au' => Tokenizer::TOKEN_GROUP_BEGIN,
         '/(?<lexeme>(?<quote>(?<!\\\\)["])(?<phrase>.*?)(?:(?<!\\\\)(?P=quote)))/Aus' => Tokenizer::TOKEN_TERM,
         '/(?<lexeme>(?<word>(?:\\\\\\\\|\\\\ |\\\\\(|\\\\\)|\\\\"|[^"()\s])+?))(?:(?<!\\\\)["]|\(|\)|$|\s)/Au' => Tokenizer::TOKEN_TERM,
     ];
@@ -66,5 +67,10 @@ final class Text extends TokenExtractor
         }
 
         throw new RuntimeException('Could not extract term token from the given data');
+    }
+
+    protected function createGroupBeginToken($position, array $data)
+    {
+        return new GroupBegin($data['lexeme'], $position, $data['lexeme'], '');
     }
 }
