@@ -161,7 +161,7 @@ one OR NOT (two AND three)
 Domain is an abstract category on which the term or group applies. It's defined by prefixing the
 term or group with a domain string, followed by a colon `:`. Domain string must start with at least
 one alphanumeric or underscore character and is followed by an arbitrary sequence of alphanumeric
-characters, hyphens `-` and underscores `_`.
+characters, hyphens `-`, underscores `_` and dots `.`.
 
 Note that the domain cannot be used on `Tag` and `User` terms. These two, in fact, define implicit
 domains of their own.
@@ -169,7 +169,7 @@ domains of their own.
 Regular expression for domain string:
 
 ```
-[a-zA-Z_][a-zA-Z0-9_\-]*
+[a-zA-Z_][a-zA-Z0-9_\-.]*
 ```
 
 Examples:

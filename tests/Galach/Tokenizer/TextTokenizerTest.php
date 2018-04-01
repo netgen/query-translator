@@ -98,6 +98,9 @@ class TextTokenizerTest extends FullTokenizerTest
             'domain:domain:' => [
                 new WordToken('domain:domain:', 0, '', 'domain:domain:'),
             ],
+            'some.domain:some.domain:' => [
+                new WordToken('some.domain:some.domain:', 0, '', 'some.domain:some.domain:'),
+            ],
             'domain:domain:domain:domain' => [
                 new WordToken('domain:domain:domain:domain', 0, '', 'domain:domain:domain:domain'),
             ],
@@ -116,6 +119,10 @@ class TextTokenizerTest extends FullTokenizerTest
             'domain:"phrase"' => [
                 new WordToken('domain:', 0, '', 'domain:'),
                 new PhraseToken('"phrase"', 7, '', '"', 'phrase'),
+            ],
+            'some.domain:"phrase"' => [
+                new WordToken('some.domain:', 0, '', 'some.domain:'),
+                new PhraseToken('"phrase"', 12, '', '"', 'phrase'),
             ],
             'domain\:"phrase"' => [
                 new WordToken('domain\:', 0, '', 'domain\:'),
