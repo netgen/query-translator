@@ -82,7 +82,7 @@ abstract class TokenExtractor
     private function createToken($type, $position, array $data)
     {
         if ($type === Tokenizer::TOKEN_GROUP_BEGIN) {
-            return $this->createGroupToken($position, $data);
+            return $this->createGroupBeginToken($position, $data);
         }
 
         if ($type === Tokenizer::TOKEN_TERM) {
@@ -98,9 +98,9 @@ abstract class TokenExtractor
      * @param $position
      * @param array $data
      *
-     * @return \QueryTranslator\Languages\Galach\Values\Token\GroupBegin
+     * @return \QueryTranslator\Values\Token
      */
-    private function createGroupToken($position, array $data)
+    protected function createGroupBeginToken($position, array $data)
     {
         return new GroupBegin($data['lexeme'], $position, $data['delimiter'], $data['domain']);
     }
