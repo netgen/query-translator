@@ -29,7 +29,7 @@ final class Text extends TokenExtractor
         '/(?<lexeme>NOT)(?:[\s"()+\-!]|$)/Au' => Tokenizer::TOKEN_LOGICAL_NOT,
         '/(?<lexeme>(?:AND|&&))(?:[\s"()+\-!]|$)/Au' => Tokenizer::TOKEN_LOGICAL_AND,
         '/(?<lexeme>(?:OR|\|\|))(?:[\s"()+\-!]|$)/Au' => Tokenizer::TOKEN_LOGICAL_OR,
-        '/(?<lexeme>(?:(?<domain>[a-zA-Z_][a-zA-Z0-9_\-]*):)?(?<delimiter>\())/Au' => Tokenizer::TOKEN_GROUP_BEGIN,
+        '/(?<lexeme>(?:(?<domain>[a-zA-Z_][a-zA-Z0-9_\-.]*):)?(?<delimiter>\())/Au' => Tokenizer::TOKEN_GROUP_BEGIN,
         '/(?<lexeme>(?<quote>(?<!\\\\)["])(?<phrase>.*?)(?:(?<!\\\\)(?P=quote)))/Aus' => Tokenizer::TOKEN_TERM,
         '/(?<lexeme>(?<word>(?:\\\\\\\\|\\\\ |\\\\\(|\\\\\)|\\\\"|[^"()\s])+?))(?:(?<!\\\\)["]|\(|\)|$|\s)/Au' => Tokenizer::TOKEN_TERM,
     ];

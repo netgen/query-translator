@@ -435,9 +435,21 @@ class FullTokenizerTest extends TestCase
                 ],
             ],
             [
+                'some.domain:',
+                [
+                    new WordToken('some.domain:', 0, '', 'some.domain:'),
+                ],
+            ],
+            [
                 'domain:domain:',
                 [
                     new WordToken('domain:domain:', 0, 'domain', 'domain:'),
+                ],
+            ],
+            [
+                'some.domain:some.domain:',
+                [
+                    new WordToken('some.domain:some.domain:', 0, 'some.domain', 'some.domain:'),
                 ],
             ],
             [
@@ -477,10 +489,32 @@ class FullTokenizerTest extends TestCase
                 ],
             ],
             [
+                'some.domain:"phrase"',
+                [
+                    new PhraseToken('some.domain:"phrase"', 0, 'some.domain', '"', 'phrase'),
+                ],
+            ],
+            [
                 'domain\:"phrase"',
                 [
                     new WordToken('domain\:', 0, '', 'domain:'),
                     new PhraseToken('"phrase"', 8, '', '"', 'phrase'),
+                ],
+            ],
+            [
+                'domain:(one)',
+                [
+                    new GroupBeginToken('domain:(', 0, '(', 'domain'),
+                    new WordToken('one', 8, '', 'one'),
+                    new Token(Tokenizer::TOKEN_GROUP_END, ')', 11),
+                ],
+            ],
+            [
+                'some.domain:(one)',
+                [
+                    new GroupBeginToken('some.domain:(', 0, '(', 'some.domain'),
+                    new WordToken('one', 13, '', 'one'),
+                    new Token(Tokenizer::TOKEN_GROUP_END, ')', 16),
                 ],
             ],
             [
