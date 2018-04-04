@@ -8,6 +8,7 @@ use QueryTranslator\Languages\Galach\Tokenizer;
 use QueryTranslator\Languages\Galach\Values\Token\GroupBegin as GroupBeginToken;
 use QueryTranslator\Languages\Galach\Values\Token\GroupBegin;
 use QueryTranslator\Languages\Galach\Values\Token\Phrase as PhraseToken;
+use QueryTranslator\Languages\Galach\Values\Token\Range as RangeToken;
 use QueryTranslator\Languages\Galach\Values\Token\Tag as TagToken;
 use QueryTranslator\Languages\Galach\Values\Token\User as UserToken;
 use QueryTranslator\Languages\Galach\Values\Token\Word as WordToken;
@@ -110,6 +111,12 @@ class FullTokenizerTest extends TestCase
                 'word\\ word',
                 [
                     new WordToken('word\\ word', 0, '', 'word word'),
+                ],
+            ],
+            [
+                '[a TO b]',
+                [
+                    new RangeToken('[a TO b]', 0, '', 'a', 'b'),
                 ],
             ],
             [

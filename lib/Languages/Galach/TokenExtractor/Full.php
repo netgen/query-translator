@@ -5,6 +5,7 @@ namespace QueryTranslator\Languages\Galach\TokenExtractor;
 use QueryTranslator\Languages\Galach\TokenExtractor;
 use QueryTranslator\Languages\Galach\Tokenizer;
 use QueryTranslator\Languages\Galach\Values\Token\Phrase;
+use QueryTranslator\Languages\Galach\Values\Token\Range;
 use QueryTranslator\Languages\Galach\Values\Token\Tag;
 use QueryTranslator\Languages\Galach\Values\Token\User;
 use QueryTranslator\Languages\Galach\Values\Token\Word;
@@ -35,6 +36,7 @@ final class Full extends TokenExtractor
         '/(?<lexeme>(?:(?<marker>(?<!\\\\)\#)(?<tag>[a-zA-Z0-9_][a-zA-Z0-9_\-.]*)))(?:[\s"()+!]|$)/Au' => Tokenizer::TOKEN_TERM,
         '/(?<lexeme>(?:(?<marker>(?<!\\\\)@)(?<user>[a-zA-Z0-9_][a-zA-Z0-9_\-.]*)))(?:[\s"()+!]|$)/Au' => Tokenizer::TOKEN_TERM,
         '/(?<lexeme>(?:(?<domain>[a-zA-Z_][a-zA-Z0-9_\-.]*):)?(?<quote>(?<!\\\\)["])(?<phrase>.*?)(?:(?<!\\\\)(?P=quote)))/Aus' => Tokenizer::TOKEN_TERM,
+        '/(?<lexeme>(?:(?<domain>[a-zA-Z_][a-zA-Z0-9_\-.]*):)?\[(?<rangeFrom>[a-zA-Z0-9]+) TO (?<rangeTo>[a-zA-Z0-9]+)\])/Aus' => Tokenizer::TOKEN_TERM,
         '/(?<lexeme>(?:(?<domain>[a-zA-Z_][a-zA-Z0-9_\-.]*):)?(?<word>(?:\\\\\\\\|\\\\ |\\\\\(|\\\\\)|\\\\"|[^"()\s])+?))(?:(?<!\\\\)["]|\(|\)|$|\s)/Au' => Tokenizer::TOKEN_TERM,
     ];
 
@@ -48,6 +50,13 @@ final class Full extends TokenExtractor
         $lexeme = $data['lexeme'];
 
         switch (true) {
+            case isset($data['rangeFrom']) && isset($data['rangeTo']):
+                return new Range(
+                    $lexeme,
+                    $position,
+                    $data['domain'],
+                    $data['rangeFrom'], $data['rangeTo']
+                );
             case isset($data['word']):
                 return new Word(
                     $lexeme,
