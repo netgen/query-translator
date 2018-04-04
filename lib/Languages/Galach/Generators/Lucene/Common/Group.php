@@ -33,7 +33,7 @@ final class Group extends Visitor
      */
     public function __construct(array $domainFieldMap = null, $defaultFieldName = null)
     {
-        if ($domainFieldMap !== null) {
+        if (null !== $domainFieldMap) {
             $this->domainFieldMap = $domainFieldMap;
         }
 
@@ -53,7 +53,7 @@ final class Group extends Visitor
             );
         }
 
-        if ($subVisitor === null) {
+        if (null === $subVisitor) {
             throw new LogicException('Implementation requires sub-visitor');
         }
 
@@ -78,7 +78,7 @@ final class Group extends Visitor
      */
     private function getSolrFieldPrefix(GroupBegin $token)
     {
-        if ($token->domain === '') {
+        if ('' === $token->domain) {
             return '';
         }
 

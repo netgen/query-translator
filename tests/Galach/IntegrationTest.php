@@ -3459,7 +3459,7 @@ class IntegrationTest extends TestCase
 
         $tokensWithoutWhitespace = [];
         foreach ($tokenSequence->tokens as $token) {
-            if ($token->type !== Tokenizer::TOKEN_WHITESPACE) {
+            if (Tokenizer::TOKEN_WHITESPACE !== $token->type) {
                 $tokensWithoutWhitespace[] = $token;
             }
         }

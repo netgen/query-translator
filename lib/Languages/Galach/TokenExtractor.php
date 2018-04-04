@@ -73,28 +73,6 @@ abstract class TokenExtractor
     abstract protected function createTermToken($position, array $data);
 
     /**
-     * Create a token object from the given parameters.
-     *
-     * @param int $type Token type
-     * @param int $position Position of the token in the input string
-     * @param array $data Regex match data, depends on the type of the token
-     *
-     * @return \QueryTranslator\Values\Token
-     */
-    private function createToken($type, $position, array $data)
-    {
-        if ($type === Tokenizer::TOKEN_GROUP_BEGIN) {
-            return $this->createGroupBeginToken($position, $data);
-        }
-
-        if ($type === Tokenizer::TOKEN_TERM) {
-            return $this->createTermToken($position, $data);
-        }
-
-        return new Token($type, $data['lexeme'], $position);
-    }
-
-    /**
      * Create an instance of Group token by the given parameters.
      *
      * @param $position
@@ -105,6 +83,28 @@ abstract class TokenExtractor
     protected function createGroupBeginToken($position, array $data)
     {
         return new GroupBegin($data['lexeme'], $position, $data['delimiter'], $data['domain']);
+    }
+
+    /**
+     * Create a token object from the given parameters.
+     *
+     * @param int $type Token type
+     * @param int $position Position of the token in the input string
+     * @param array $data Regex match data, depends on the type of the token
+     *
+     * @return \QueryTranslator\Values\Token
+     */
+    private function createToken($type, $position, array $data)
+    {
+        if (Tokenizer::TOKEN_GROUP_BEGIN === $type) {
+            return $this->createGroupBeginToken($position, $data);
+        }
+
+        if (Tokenizer::TOKEN_TERM === $type) {
+            return $this->createTermToken($position, $data);
+        }
+
+        return new Token($type, $data['lexeme'], $position);
     }
 
     /**

@@ -1,13 +1,14 @@
 <?php
 
 $finder = PhpCsFixer\Finder::create()
-    ->in(__DIR__)
-    ->exclude([])
-    ->files()->name('*.php')
+    ->exclude('vendor/')
+    ->in('lib')
+    ->in('tests')
 ;
 
 return PhpCsFixer\Config::create()
     ->setRules([
+        '@PHPUnit60Migration:risky' => true,
         '@Symfony' => true,
         '@Symfony:risky' => true,
         'concat_space' => ['spacing' => 'one'],

@@ -33,7 +33,7 @@ final class Phrase extends Visitor
      */
     public function __construct(array $domainFieldMap = null, $defaultFieldName = null)
     {
-        if ($domainFieldMap !== null) {
+        if (null !== $domainFieldMap) {
             $this->domainFieldMap = $domainFieldMap;
         }
 
@@ -76,7 +76,7 @@ final class Phrase extends Visitor
      */
     private function getSolrFieldPrefix(PhraseToken $token)
     {
-        if ($token->domain === '') {
+        if ('' === $token->domain) {
             return '';
         }
 

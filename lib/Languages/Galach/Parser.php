@@ -173,6 +173,18 @@ final class Parser implements Parsing
         return new SyntaxTree($this->stack->top(), $tokenSequence, $this->corrections);
     }
 
+    public function ignoreLogicalNotOperatorsPrecedingPreferenceOperator()
+    {
+        $precedingOperators = $this->ignorePrecedingOperators(self::$tokenShortcuts['operatorNot']);
+
+        if (!empty($precedingOperators)) {
+            $this->addCorrection(
+                self::CORRECTION_LOGICAL_NOT_OPERATORS_PRECEDING_PREFERENCE_IGNORED,
+                ...$precedingOperators
+            );
+        }
+    }
+
     private function shift()
     {
         $token = array_shift($this->tokens);
@@ -195,7 +207,7 @@ final class Parser implements Parsing
             // If there are no reductions to try, put the Node on the stack
             // and continue shifting
             $reduction = $this->getReduction($node, $reductionIndex);
-            if ($reduction === null) {
+            if (null === $reduction) {
                 $this->stack->push($node);
                 break;
             }
@@ -206,7 +218,7 @@ final class Parser implements Parsing
         }
     }
 
-    protected function shiftWhitespace()
+    private function shiftWhitespace()
     {
         if ($this->isTopStackToken(self::$tokenShortcuts['operatorPrefix'])) {
             $this->addCorrection(
@@ -216,12 +228,12 @@ final class Parser implements Parsing
         }
     }
 
-    protected function shiftPreference(Token $token)
+    private function shiftPreference(Token $token)
     {
         return $this->shiftAdjacentUnaryOperator($token, self::$tokenShortcuts['operator']);
     }
 
-    protected function shiftAdjacentUnaryOperator(Token $token, $tokenMask)
+    private function shiftAdjacentUnaryOperator(Token $token, $tokenMask)
     {
         if ($this->isToken(reset($this->tokens), $tokenMask)) {
             $this->addCorrection(
@@ -235,19 +247,19 @@ final class Parser implements Parsing
         $this->stack->push($token);
     }
 
-    protected function shiftLogicalNot(Token $token)
+    private function shiftLogicalNot(Token $token)
     {
         $this->stack->push($token);
     }
 
-    protected function shiftLogicalNot2(Token $token)
+    private function shiftLogicalNot2(Token $token)
     {
         $tokenMask = self::$tokenShortcuts['operator'] & ~Tokenizer::TOKEN_LOGICAL_NOT_2;
 
         return $this->shiftAdjacentUnaryOperator($token, $tokenMask);
     }
 
-    protected function shiftBinaryOperator(Token $token)
+    private function shiftBinaryOperator(Token $token)
     {
         if ($this->stack->isEmpty() || $this->isTopStackToken(Tokenizer::TOKEN_GROUP_BEGIN)) {
             $this->addCorrection(
@@ -282,29 +294,29 @@ final class Parser implements Parsing
         );
     }
 
-    protected function shiftTerm(Token $token)
+    private function shiftTerm(Token $token)
     {
         return new Term($token);
     }
 
-    protected function shiftGroupBegin(Token $token)
+    private function shiftGroupBegin(Token $token)
     {
         $this->stack->push($token);
     }
 
-    protected function shiftGroupEnd(Token $token)
+    private function shiftGroupEnd(Token $token)
     {
         $this->stack->push($token);
 
         return new Group();
     }
 
-    protected function shiftBailout(Token $token)
+    private function shiftBailout(Token $token)
     {
         $this->addCorrection(self::CORRECTION_BAILOUT_TOKEN_IGNORED, $token);
     }
 
-    protected function reducePreference(Node $node)
+    private function reducePreference(Node $node)
     {
         if (!$this->isTopStackToken(self::$tokenShortcuts['operatorPreference'])) {
             return $node;
@@ -319,7 +331,7 @@ final class Parser implements Parsing
         return new Prohibited($node, $token);
     }
 
-    protected function reduceLogicalNot(Node $node)
+    private function reduceLogicalNot(Node $node)
     {
         if (!$this->isTopStackToken(self::$tokenShortcuts['operatorNot'])) {
             return $node;
@@ -334,19 +346,7 @@ final class Parser implements Parsing
         return new LogicalNot($node, $this->stack->pop());
     }
 
-    public function ignoreLogicalNotOperatorsPrecedingPreferenceOperator()
-    {
-        $precedingOperators = $this->ignorePrecedingOperators(self::$tokenShortcuts['operatorNot']);
-
-        if (!empty($precedingOperators)) {
-            $this->addCorrection(
-                self::CORRECTION_LOGICAL_NOT_OPERATORS_PRECEDING_PREFERENCE_IGNORED,
-                ...$precedingOperators
-            );
-        }
-    }
-
-    protected function reduceLogicalAnd(Node $node)
+    private function reduceLogicalAnd(Node $node)
     {
         if ($this->stack->count() <= 1 || !$this->isTopStackToken(Tokenizer::TOKEN_LOGICAL_AND)) {
             return $node;
@@ -366,7 +366,7 @@ final class Parser implements Parsing
      *
      * @return null|\QueryTranslator\Languages\Galach\Values\Node\LogicalOr|\QueryTranslator\Values\Node
      */
-    protected function reduceLogicalOr(Node $node, $inGroup = false)
+    private function reduceLogicalOr(Node $node, $inGroup = false)
     {
         if ($this->stack->count() <= 1 || !$this->isTopStackToken(Tokenizer::TOKEN_LOGICAL_OR)) {
             return $node;
@@ -390,7 +390,7 @@ final class Parser implements Parsing
         return new LogicalOr($leftOperand, $node, $token);
     }
 
-    protected function reduceGroup(Group $group)
+    private function reduceGroup(Group $group)
     {
         $rightDelimiter = $this->stack->pop();
 
@@ -598,7 +598,7 @@ final class Parser implements Parsing
             $token = $tokens[$lastIndex];
             unset($tokens[$lastIndex]);
 
-            if ($token->type === Tokenizer::TOKEN_GROUP_BEGIN) {
+            if (Tokenizer::TOKEN_GROUP_BEGIN === $token->type) {
                 $this->addCorrection(
                     self::CORRECTION_UNMATCHED_GROUP_LEFT_DELIMITER_IGNORED,
                     $token

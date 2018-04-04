@@ -47,7 +47,7 @@ final class User extends Visitor
             );
         }
 
-        $fieldPrefix = $this->fieldName === null ? '' : "{$this->fieldName}:";
+        $fieldPrefix = null === $this->fieldName ? '' : "{$this->fieldName}:";
 
         return "{$fieldPrefix}{$token->user}";
     }

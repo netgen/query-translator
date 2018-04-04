@@ -5,8 +5,8 @@ namespace QueryTranslator\Tests\Galach\Tokenizer;
 use PHPUnit\Framework\TestCase;
 use QueryTranslator\Languages\Galach\TokenExtractor;
 use QueryTranslator\Languages\Galach\Tokenizer;
-use QueryTranslator\Languages\Galach\Values\Token\GroupBegin as GroupBeginToken;
 use QueryTranslator\Languages\Galach\Values\Token\GroupBegin;
+use QueryTranslator\Languages\Galach\Values\Token\GroupBegin as GroupBeginToken;
 use QueryTranslator\Languages\Galach\Values\Token\Phrase as PhraseToken;
 use QueryTranslator\Languages\Galach\Values\Token\Tag as TagToken;
 use QueryTranslator\Languages\Galach\Values\Token\User as UserToken;
@@ -245,23 +245,23 @@ class FullTokenizerTest extends TestCase
                 [
                     new WordToken("'word", 0, '', "'word"),
                     new Token(Tokenizer::TOKEN_WHITESPACE, ' ', 5),
-                    new WordToken("\\+", 6, '', '+'),
+                    new WordToken('\\+', 6, '', '+'),
                     new Token(Tokenizer::TOKEN_WHITESPACE, ' ', 8),
-                    new WordToken("\\-", 9, '', '-'),
+                    new WordToken('\\-', 9, '', '-'),
                     new Token(Tokenizer::TOKEN_WHITESPACE, ' ', 11),
-                    new WordToken("\\!", 12, '', '!'),
+                    new WordToken('\\!', 12, '', '!'),
                     new Token(Tokenizer::TOKEN_WHITESPACE, ' ', 14),
-                    new WordToken("\\(", 15, '', '('),
+                    new WordToken('\\(', 15, '', '('),
                     new Token(Tokenizer::TOKEN_WHITESPACE, ' ', 17),
-                    new WordToken("\\)", 18, '', ')'),
+                    new WordToken('\\)', 18, '', ')'),
                     new Token(Tokenizer::TOKEN_WHITESPACE, ' ', 20),
-                    new WordToken("\\AND", 21, '', '\AND'),
+                    new WordToken('\\AND', 21, '', '\AND'),
                     new Token(Tokenizer::TOKEN_WHITESPACE, ' ', 25),
-                    new WordToken("\\OR", 26, '', '\OR'),
+                    new WordToken('\\OR', 26, '', '\OR'),
                     new Token(Tokenizer::TOKEN_WHITESPACE, ' ', 29),
-                    new WordToken("\\NOT", 30, '', '\NOT'),
+                    new WordToken('\\NOT', 30, '', '\NOT'),
                     new Token(Tokenizer::TOKEN_WHITESPACE, ' ', 34),
-                    new WordToken("\\\\", 35, '', '\\'),
+                    new WordToken('\\\\', 35, '', '\\'),
                     new Token(Tokenizer::TOKEN_WHITESPACE, ' ', 37),
                     new WordToken("word'", 38, '', "word'"),
                 ],

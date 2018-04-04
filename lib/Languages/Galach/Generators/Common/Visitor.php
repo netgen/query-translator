@@ -27,5 +27,5 @@ abstract class Visitor
      *
      * @return string
      */
-    abstract public function visit(Node $node, Visitor $subVisitor = null, $options = null);
+    abstract public function visit(Node $node, self $subVisitor = null, $options = null);
 }

@@ -25,7 +25,7 @@ final class Group extends Visitor
             );
         }
 
-        if ($subVisitor === null) {
+        if (null === $subVisitor) {
             throw new LogicException('Implementation requires sub-visitor');
         }
 
@@ -36,7 +36,7 @@ final class Group extends Visitor
         }
 
         $clauses = implode(' ', $clauses);
-        $domainPrefix = $node->tokenLeft->domain === '' ? '' : "{$node->tokenLeft->domain}:";
+        $domainPrefix = '' === $node->tokenLeft->domain ? '' : "{$node->tokenLeft->domain}:";
 
         return "{$domainPrefix}{$node->tokenLeft->delimiter}{$clauses}{$node->tokenRight->lexeme}";
     }

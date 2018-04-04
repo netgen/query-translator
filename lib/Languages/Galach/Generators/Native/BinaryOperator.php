@@ -26,7 +26,7 @@ final class BinaryOperator extends Visitor
             );
         }
 
-        if ($subVisitor === null) {
+        if (null === $subVisitor) {
             throw new LogicException('Implementation requires sub-visitor');
         }
 

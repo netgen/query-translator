@@ -47,7 +47,7 @@ final class Tag extends Visitor
             );
         }
 
-        $fieldPrefix = $this->fieldName === null ? '' : "{$this->fieldName}:";
+        $fieldPrefix = null === $this->fieldName ? '' : "{$this->fieldName}:";
 
         return "{$fieldPrefix}{$token->tag}";
     }

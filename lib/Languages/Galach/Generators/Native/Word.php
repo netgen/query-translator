@@ -34,7 +34,7 @@ final class Word extends Visitor
             );
         }
 
-        $domainPrefix = $token->domain === '' ? '' : "{$token->domain}:";
+        $domainPrefix = '' === $token->domain ? '' : "{$token->domain}:";
         $wordEscaped = preg_replace('/([\\\'"+\-!():#@ ])/', '\\\\$1', $token->word);
 
         return "{$domainPrefix}{$wordEscaped}";

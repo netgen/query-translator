@@ -19,12 +19,11 @@ class AggregateVisitorDispatchTest extends TestCase
         $this->assertTrue((new Aggregate())->accept($nodeMock));
     }
 
-    /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage No visitor available for Mock
-     */
     public function testVisitThrowsException()
     {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('No visitor available for Mock');
+
         /** @var \QueryTranslator\Values\Node $nodeMock */
         $nodeMock = $this->getMockBuilder(Node::class)->getMock();
 

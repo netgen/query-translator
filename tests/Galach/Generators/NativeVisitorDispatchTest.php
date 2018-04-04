@@ -80,7 +80,6 @@ class NativeVisitorDispatchTest extends TestCase
     /**
      * @dataProvider providerForTestVisitThrowsLogicExceptionNode
      *
-     * @expectedException \LogicException
      *
      * @param \QueryTranslator\Languages\Galach\Generators\Common\Visitor $visitor
      * @param \QueryTranslator\Values\Node $node
@@ -88,6 +87,8 @@ class NativeVisitorDispatchTest extends TestCase
      */
     public function testVisitThrowsLogicExceptionNode(Visitor $visitor, Node $node, $expectedExceptionMessage)
     {
+        $this->expectException(\LogicException::class);
+
         try {
             $visitor->visit($node);
         } catch (LogicException $e) {
@@ -129,7 +130,6 @@ class NativeVisitorDispatchTest extends TestCase
     /**
      * @dataProvider providerForTestVisitThrowsLogicExceptionToken
      *
-     * @expectedException \LogicException
      *
      * @param \QueryTranslator\Languages\Galach\Generators\Common\Visitor $visitor
      * @param \QueryTranslator\Values\Node $node
@@ -137,6 +137,8 @@ class NativeVisitorDispatchTest extends TestCase
      */
     public function testVisitThrowsLogicExceptionToken(Visitor $visitor, Node $node, $expectedExceptionMessage)
     {
+        $this->expectException(\LogicException::class);
+
         try {
             $visitor->visit($node);
         } catch (LogicException $e) {
@@ -182,14 +184,15 @@ class NativeVisitorDispatchTest extends TestCase
     /**
      * @dataProvider providerForTestVisitThrowsLogicExceptionSubVisitor
      *
-     * @expectedException \LogicException
-     * @expectedExceptionMessage Implementation requires sub-visitor
      *
      * @param \QueryTranslator\Languages\Galach\Generators\Common\Visitor $visitor
      * @param \QueryTranslator\Values\Node $node
      */
     public function testVisitThrowsLogicExceptionSubVisitor(Visitor $visitor, Node $node)
     {
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('Implementation requires sub-visitor');
+
         $visitor->visit($node);
     }
 }

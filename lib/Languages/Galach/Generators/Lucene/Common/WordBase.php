@@ -33,7 +33,7 @@ abstract class WordBase extends Visitor
      */
     public function __construct(array $domainFieldMap = null, $defaultFieldName = null)
     {
-        if ($domainFieldMap !== null) {
+        if (null !== $domainFieldMap) {
             $this->domainFieldMap = $domainFieldMap;
         }
 
@@ -85,7 +85,7 @@ abstract class WordBase extends Visitor
      */
     private function getSolrFieldPrefix(WordToken $token)
     {
-        if ($token->domain === '') {
+        if ('' === $token->domain) {
             return '';
         }
 

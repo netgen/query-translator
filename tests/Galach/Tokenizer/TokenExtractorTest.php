@@ -13,12 +13,11 @@ use QueryTranslator\Languages\Galach\Tokenizer;
  */
 class TokenExtractorTest extends TestCase
 {
-    /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage PCRE regex error code: 2
-     */
     public function testExtractThrowsExceptionPCRE()
     {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('PCRE regex error code: 2');
+
         /** @var \QueryTranslator\Languages\Galach\TokenExtractor|\PHPUnit_Framework_MockObject_MockObject $extractor */
         $extractor = $this->getMockBuilder(TokenExtractor::class)
             ->setMethods(['getExpressionTypeMap'])
@@ -35,12 +34,11 @@ class TokenExtractorTest extends TestCase
         $extractor->extract('foobar foobar foobar', 0);
     }
 
-    /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage Could not extract term token from the given data
-     */
     public function testFullExtractTermTokenThrowsException()
     {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Could not extract term token from the given data');
+
         $extractor = new Full();
         $reflectedClass = new \ReflectionClass($extractor);
         $reflectedProperty = $reflectedClass->getProperty('expressionTypeMap');
@@ -54,12 +52,11 @@ class TokenExtractorTest extends TestCase
         $extractor->extract('foobar', 0);
     }
 
-    /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage Could not extract term token from the given data
-     */
     public function testTextExtractTermTokenThrowsException()
     {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Could not extract term token from the given data');
+
         $extractor = new Text();
         $reflectedClass = new \ReflectionClass($extractor);
         $reflectedProperty = $reflectedClass->getProperty('expressionTypeMap');
