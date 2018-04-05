@@ -36,7 +36,7 @@ final class Full extends TokenExtractor
         '/(?<lexeme>(?:(?<marker>(?<!\\\\)\#)(?<tag>[a-zA-Z0-9_][a-zA-Z0-9_\-.]*)))(?:[\s"()+!]|$)/Au' => Tokenizer::TOKEN_TERM,
         '/(?<lexeme>(?:(?<marker>(?<!\\\\)@)(?<user>[a-zA-Z0-9_][a-zA-Z0-9_\-.]*)))(?:[\s"()+!]|$)/Au' => Tokenizer::TOKEN_TERM,
         '/(?<lexeme>(?:(?<domain>[a-zA-Z_][a-zA-Z0-9_\-.]*):)?(?<quote>(?<!\\\\)["])(?<phrase>.*?)(?:(?<!\\\\)(?P=quote)))/Aus' => Tokenizer::TOKEN_TERM,
-        '/(?<lexeme>(?:(?<domain>[a-zA-Z_][a-zA-Z0-9_\-.]*):)?\[(?<rangeFrom>[a-zA-Z0-9]+) TO (?<rangeTo>[a-zA-Z0-9]+)\])/Aus' => Tokenizer::TOKEN_TERM,
+        '/(?<lexeme>(?:(?<domain>[a-zA-Z_][a-zA-Z0-9_\-.]*):)?(?<rangeStartSymbol>[\[\{])(?<rangeFrom>[a-zA-Z0-9]+) TO (?<rangeTo>[a-zA-Z0-9]+)[\]\}])/Aus' => Tokenizer::TOKEN_TERM,
         '/(?<lexeme>(?:(?<domain>[a-zA-Z_][a-zA-Z0-9_\-.]*):)?(?<word>(?:\\\\\\\\|\\\\ |\\\\\(|\\\\\)|\\\\"|[^"()\s])+?))(?:(?<!\\\\)["]|\(|\)|$|\s)/Au' => Tokenizer::TOKEN_TERM,
     ];
 
@@ -50,12 +50,13 @@ final class Full extends TokenExtractor
         $lexeme = $data['lexeme'];
 
         switch (true) {
-            case isset($data['rangeFrom']) && isset($data['rangeTo']):
+            case isset($data['rangeStartSymbol']):
                 return new Range(
                     $lexeme,
                     $position,
                     $data['domain'],
-                    $data['rangeFrom'], $data['rangeTo']
+                    $data['rangeFrom'], $data['rangeTo'],
+                    Range::getTypeByStart($data['rangeStartSymbol'])
                 );
             case isset($data['word']):
                 return new Word(

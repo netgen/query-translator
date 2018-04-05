@@ -116,7 +116,13 @@ class FullTokenizerTest extends TestCase
             [
                 '[a TO b]',
                 [
-                    new RangeToken('[a TO b]', 0, '', 'a', 'b'),
+                    new RangeToken('[a TO b]', 0, '', 'a', 'b', 'inclusive'),
+                ],
+            ],
+            [
+                '{a TO b}',
+                [
+                    new RangeToken('{a TO b}', 0, '', 'a', 'b', 'exclusive'),
                 ],
             ],
             [
