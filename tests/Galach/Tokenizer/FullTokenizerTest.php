@@ -138,6 +138,24 @@ class FullTokenizerTest extends TestCase
                 ],
             ],
             [
+                '[2017-01-01 TO 2017-01-05]',
+                [
+                    new RangeToken('[2017-01-01 TO 2017-01-05]', 0, '', '2017-01-01', '2017-01-05', 'inclusive', 'inclusive'),
+                ],
+            ],
+            [
+                '[20 TO *]',
+                [
+                    new RangeToken('[20 TO *]', 0, '', '20', '*', 'inclusive', 'inclusive'),
+                ],
+            ],
+            [
+                '[* TO 20]',
+                [
+                    new RangeToken('[* TO 20]', 0, '', '*', '20', 'inclusive', 'inclusive'),
+                ],
+            ],
+            [
                 '"phrase"',
                 [
                     new PhraseToken('"phrase"', 0, '', '"', 'phrase'),
