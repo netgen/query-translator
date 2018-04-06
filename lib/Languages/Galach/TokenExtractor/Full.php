@@ -36,7 +36,7 @@ final class Full extends TokenExtractor
         '/(?<lexeme>(?:(?<marker>(?<!\\\\)\#)(?<tag>[a-zA-Z0-9_][a-zA-Z0-9_\-.]*)))(?:[\s"()+!]|$)/Au' => Tokenizer::TOKEN_TERM,
         '/(?<lexeme>(?:(?<marker>(?<!\\\\)@)(?<user>[a-zA-Z0-9_][a-zA-Z0-9_\-.]*)))(?:[\s"()+!]|$)/Au' => Tokenizer::TOKEN_TERM,
         '/(?<lexeme>(?:(?<domain>[a-zA-Z_][a-zA-Z0-9_\-.]*):)?(?<quote>(?<!\\\\)["])(?<phrase>.*?)(?:(?<!\\\\)(?P=quote)))/Aus' => Tokenizer::TOKEN_TERM,
-        '/(?<lexeme>(?:(?<domain>[a-zA-Z_][a-zA-Z0-9_\-.]*):)?(?<rangeStartSymbol>[\[\{])(?<rangeFrom>[a-zA-Z0-9]+) TO (?<rangeTo>[a-zA-Z0-9]+)[\]\}])/Aus' => Tokenizer::TOKEN_TERM,
+        '/(?<lexeme>(?:(?<domain>[a-zA-Z_][a-zA-Z0-9_\-.]*):)?(?<rangeStartSymbol>[\[\{])(?<rangeFrom>[a-zA-Z0-9]+) TO (?<rangeTo>[a-zA-Z0-9]+)(?<rangeEndSymbol>[\]\}]))/Aus' => Tokenizer::TOKEN_TERM,
         '/(?<lexeme>(?:(?<domain>[a-zA-Z_][a-zA-Z0-9_\-.]*):)?(?<word>(?:\\\\\\\\|\\\\ |\\\\\(|\\\\\)|\\\\"|[^"()\s])+?))(?:(?<!\\\\)["]|\(|\)|$|\s)/Au' => Tokenizer::TOKEN_TERM,
     ];
 
@@ -50,13 +50,14 @@ final class Full extends TokenExtractor
         $lexeme = $data['lexeme'];
 
         switch (true) {
-            case isset($data['rangeStartSymbol']):
+            case (isset($data['rangeStartSymbol']) && isset($data['rangeEndSymbol'])):
                 return new Range(
                     $lexeme,
                     $position,
                     $data['domain'],
                     $data['rangeFrom'], $data['rangeTo'],
-                    Range::getTypeByStart($data['rangeStartSymbol'])
+                    $this->getRangeTypeBySymbol($data['rangeStartSymbol']),
+                    $this->getRangeTypeBySymbol($data['rangeEndSymbol'])
                 );
             case isset($data['word']):
                 return new Word(
@@ -94,5 +95,21 @@ final class Full extends TokenExtractor
         }
 
         throw new RuntimeException('Could not extract term token from the given data');
+    }
+
+    /**
+     * Returns the range type, given the symbol.
+     *
+     * @param string $symbol the range start/end symbol
+     *
+     * @return string
+     */
+    protected function getRangeTypeBySymbol($symbol)
+    {
+        if (in_array($symbol, ['{','}'], true)) {
+            return Range::TYPE_EXCLUSIVE;
+        }
+
+        return Range::TYPE_INCLUSIVE;
     }
 }

@@ -26,7 +26,7 @@ class RangeTest extends TestCase
     public function acceptDataprovider()
     {
         return [
-            [true, new Term(new RangeToken('[a TO b]', 0, '', 'a', 'b', 'inclusive'))],
+            [true, new Term(new RangeToken('[a TO b]', 0, '', 'a', 'b', 'inclusive', 'inclusive'))],
             [false, new Term(new Word('word', 0, '', 'a'))],
         ];
     }
@@ -45,8 +45,10 @@ class RangeTest extends TestCase
     public function visitDataprovider()
     {
         return [
-            ['[a TO b]', new Term(new RangeToken('[a TO b]', 0, '', 'a', 'b', 'inclusive'))],
-            ['{a TO b}', new Term(new RangeToken('{a TO b}', 0, '', 'a', 'b', 'exclusive'))],
+            ['[a TO b]', new Term(new RangeToken('[a TO b]', 0, '', 'a', 'b', 'inclusive', 'inclusive'))],
+            ['[a TO b}', new Term(new RangeToken('[a TO b}', 0, '', 'a', 'b', 'inclusive', 'exclusive'))],
+            ['{a TO b}', new Term(new RangeToken('{a TO b}', 0, '', 'a', 'b', 'exclusive', 'exclusive'))],
+            ['{a TO b]', new Term(new RangeToken('{a TO b]', 0, '', 'a', 'b', 'exclusive', 'inclusive'))],
         ];
     }
 
@@ -81,10 +83,25 @@ class RangeTest extends TestCase
        $this->visitor->visit($node);
     }
 
-    public function testVisitUnknownTypeFails()
+    public function testVisitUnknownRangeStartTypeFails()
     {
+        $token = new RangeToken('{a TO b}', 0, '', 'a', 'b', 'inclusive', 'inclusive');
+        $token->startType = 'unknown';
+        $node = new Term($token);
+
         $this->expectException(\LogicException::class);
-        $node = new Term(new RangeToken('{a TO b}', 0, '', 'a', 'b', 'unknown'));
+        $this->expectExceptionMessage('Range start type unknown is not supported');
+        $this->visitor->visit($node);
+    }
+
+    public function testVisitUnknownRangeEndTypeFails()
+    {
+        $token = new RangeToken('{a TO b}', 0, '', 'a', 'b', 'inclusive', 'inclusive');
+        $token->endType = 'unknown';
+        $node = new Term($token);
+
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('Range end type unknown is not supported');
         $this->visitor->visit($node);
     }
 }

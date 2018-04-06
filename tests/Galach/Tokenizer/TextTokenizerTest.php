@@ -102,12 +102,26 @@ class TextTokenizerTest extends FullTokenizerTest
                 new Token(Tokenizer::TOKEN_WHITESPACE, ' ', 5),
                 new WordToken('b]', 6, '', 'b]'),
             ],
+            '[a TO b}' => [
+                new WordToken('[a', 0, '', '[a'),
+                new Token(Tokenizer::TOKEN_WHITESPACE, ' ', 2),
+                new WordToken('TO', 3, '', 'TO'),
+                new Token(Tokenizer::TOKEN_WHITESPACE, ' ', 5),
+                new WordToken('b}', 6, '', 'b}'),
+            ],
             '{a TO b}' => [
                 new WordToken('{a', 0, '', '{a'),
                 new Token(Tokenizer::TOKEN_WHITESPACE, ' ', 2),
                 new WordToken('TO', 3, '', 'TO'),
                 new Token(Tokenizer::TOKEN_WHITESPACE, ' ', 5),
                 new WordToken('b}', 6, '', 'b}'),
+            ],
+            '{a TO b]' => [
+                new WordToken('{a', 0, '', '{a'),
+                new Token(Tokenizer::TOKEN_WHITESPACE, ' ', 2),
+                new WordToken('TO', 3, '', 'TO'),
+                new Token(Tokenizer::TOKEN_WHITESPACE, ' ', 5),
+                new WordToken('b]', 6, '', 'b]'),
             ],
             'domain:domain:' => [
                 new WordToken('domain:domain:', 0, '', 'domain:domain:'),

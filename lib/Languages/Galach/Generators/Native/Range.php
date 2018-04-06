@@ -36,15 +36,45 @@ final class Range extends Visitor
 
         $domainPrefix = '' === $token->domain ? '' : "{$token->domain}:";
 
-        switch ($token->type) {
+        return $domainPrefix.
+            $this->buildRangeStart($token).
+            ' TO '.
+            $this->buildRangeEnd($token);
+    }
+
+    /**
+     * @param RangeToken $token
+     * @return string
+     */
+    private function buildRangeStart($token)
+    {
+        switch ($token->startType) {
             case RangeToken::TYPE_INCLUSIVE:
-                return $domainPrefix . '[' . $token->rangeFrom . ' TO ' . $token->rangeTo . ']';
+                return '[' . $token->rangeFrom;
 
             case RangeToken::TYPE_EXCLUSIVE:
-                return $domainPrefix . '{' . $token->rangeFrom . ' TO ' . $token->rangeTo . '}';
+                return '{' . $token->rangeFrom;
 
             default:
-                throw new LogicException(sprintf('Range type %s is not supported', $token->type));
+                throw new LogicException(sprintf('Range start type %s is not supported', $token->startType));
+        }
+    }
+
+    /**
+     * @param RangeToken $token
+     * @return string
+     */
+    private function buildRangeEnd($token)
+    {
+        switch ($token->endType) {
+            case RangeToken::TYPE_INCLUSIVE:
+                return $token->rangeTo. ']';
+
+            case RangeToken::TYPE_EXCLUSIVE:
+                return $token->rangeTo. '}';
+
+            default:
+                throw new LogicException(sprintf('Range end type %s is not supported', $token->endType));
         }
     }
 }

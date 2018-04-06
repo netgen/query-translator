@@ -35,7 +35,12 @@ final class Range extends Token
     /**
      * @var string
      */
-    public $type;
+    public $startType;
+
+    /**
+     * @var string
+     */
+    public $endType;
 
     /**
      * @param string $lexeme
@@ -43,39 +48,27 @@ final class Range extends Token
      * @param string $domain
      * @param string $rangeFrom
      * @param string $rangeTo
-     * @param string $type
+     * @param string $startType
+     * @param string $endType
      */
-    public function __construct($lexeme, $position, $domain, $rangeFrom, $rangeTo, $type)
+    public function __construct($lexeme, $position, $domain, $rangeFrom, $rangeTo, $startType, $endType)
     {
-        if (!in_array($type, [self::TYPE_EXCLUSIVE, self::TYPE_INCLUSIVE])) {
-            throw new \InvalidArgumentException(sprintf('Invalid range type: %s', $type));
-        }
+        $this->ensureValidType($startType);
+        $this->ensureValidType($endType);
 
         parent::__construct(Tokenizer::TOKEN_TERM, $lexeme, $position);
 
         $this->domain = $domain;
         $this->rangeFrom = $rangeFrom;
         $this->rangeTo = $rangeTo;
-        $this->type = $type;
+        $this->startType = $startType;
+        $this->endType = $endType;
     }
 
-    /**
-     * Returns the range type, given the starting symbol.
-     *
-     * @param string $startSymbol the start symbol, either '[' or '{'
-     *
-     * @return string
-     */
-    public static function getTypeByStart($startSymbol)
+    private function ensureValidType($type)
     {
-        if ('[' === $startSymbol) {
-            return self::TYPE_INCLUSIVE;
+        if (!in_array($type, [self::TYPE_EXCLUSIVE, self::TYPE_INCLUSIVE])) {
+            throw new \InvalidArgumentException(sprintf('Invalid range type: %s', $type));
         }
-
-        if ('{' === $startSymbol) {
-            return self::TYPE_EXCLUSIVE;
-        }
-
-        throw new \InvalidArgumentException(sprintf('Invalid range start symbol: %s', $startSymbol));
     }
 }
