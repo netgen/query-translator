@@ -63,4 +63,4 @@ points to customize various parts of the translator to fit your needs. See
 
 ## Run the demo
 
-Use the [Query Translaor Demo](https://github.com/netgen/query-translator-demo).
+Demo is available as a separate repository, see [Query Translator Demo](https://github.com/netgen/query-translator-demo).
