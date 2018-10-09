@@ -64,3 +64,10 @@ points to customize various parts of the translator to fit your needs. See
 ## Run the demo
 
 Demo is available as a separate repository at [netgen/query-translator-demo](https://github.com/netgen/query-translator-demo).
+
+Steps for running the demo:
+
+1. Create the demo project using composer `composer create-project netgen/query-translator-demo`
+2. Position into the demo project directory `cd query-translator-demo`
+3. Start the web server with `src` as the document root `php -S localhost:8005 -t src`
+4. Open [http://localhost:8005](http://localhost:8005) in your browser ![Query Translator demo](https://raw.githubusercontent.com/netgen/query-translator-demo/master/src/animation.gif)
