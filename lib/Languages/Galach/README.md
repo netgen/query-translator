@@ -216,7 +216,7 @@ example of an incorrect input and a corrected result.
     one AND two
     ```
 
-9. Unmatched left side group delimiter is ignored
+9. Unmatched right side group delimiter is ignored
 
     `Parser::CORRECTION_UNMATCHED_GROUP_RIGHT_DELIMITER_IGNORED`
 
