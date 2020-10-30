@@ -18,6 +18,8 @@ matrix:
           env: CONFIG="phpunit.xml" COVERGAGE="all"
         - php: 7.3
           env: CONFIG="phpunit.xml" COVERGAGE="all"
+        - php: 7.4
+          env: CONFIG="phpunit.xml" COVERGAGE="all"
 
 # test only master (+ pull requests)
 branches:
