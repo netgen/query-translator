@@ -78,6 +78,7 @@ final class Tokenizer implements Tokenizing
      * @see \QueryTranslator\Languages\Galach\Values\Token\Tag
      * @see \QueryTranslator\Languages\Galach\Values\Token\User
      * @see \QueryTranslator\Languages\Galach\Values\Token\Word
+     * @see \QueryTranslator\Languages\Galach\Values\Token\Range
      */
     const TOKEN_TERM = 512;
 

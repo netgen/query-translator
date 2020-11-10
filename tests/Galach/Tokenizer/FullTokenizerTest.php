@@ -8,6 +8,7 @@ use QueryTranslator\Languages\Galach\Tokenizer;
 use QueryTranslator\Languages\Galach\Values\Token\GroupBegin as GroupBeginToken;
 use QueryTranslator\Languages\Galach\Values\Token\GroupBegin;
 use QueryTranslator\Languages\Galach\Values\Token\Phrase as PhraseToken;
+use QueryTranslator\Languages\Galach\Values\Token\Range as RangeToken;
 use QueryTranslator\Languages\Galach\Values\Token\Tag as TagToken;
 use QueryTranslator\Languages\Galach\Values\Token\User as UserToken;
 use QueryTranslator\Languages\Galach\Values\Token\Word as WordToken;
@@ -110,6 +111,48 @@ class FullTokenizerTest extends TestCase
                 'word\\ word',
                 [
                     new WordToken('word\\ word', 0, '', 'word word'),
+                ],
+            ],
+            [
+                '[a TO b]',
+                [
+                    new RangeToken('[a TO b]', 0, '', 'a', 'b', 'inclusive', 'inclusive'),
+                ],
+            ],
+            [
+                '[a TO b}',
+                [
+                    new RangeToken('[a TO b}', 0, '', 'a', 'b', 'inclusive', 'exclusive'),
+                ],
+            ],
+            [
+                '{a TO b}',
+                [
+                    new RangeToken('{a TO b}', 0, '', 'a', 'b', 'exclusive', 'exclusive'),
+                ],
+            ],
+            [
+                '{a TO b]',
+                [
+                    new RangeToken('{a TO b]', 0, '', 'a', 'b', 'exclusive', 'inclusive'),
+                ],
+            ],
+            [
+                '[2017-01-01 TO 2017-01-05]',
+                [
+                    new RangeToken('[2017-01-01 TO 2017-01-05]', 0, '', '2017-01-01', '2017-01-05', 'inclusive', 'inclusive'),
+                ],
+            ],
+            [
+                '[20 TO *]',
+                [
+                    new RangeToken('[20 TO *]', 0, '', '20', '*', 'inclusive', 'inclusive'),
+                ],
+            ],
+            [
+                '[* TO 20]',
+                [
+                    new RangeToken('[* TO 20]', 0, '', '*', '20', 'inclusive', 'inclusive'),
                 ],
             ],
             [
