@@ -21,128 +21,6 @@ class TextTokenizerTest extends FullTokenizerTest
      */
     protected static $fixtureOverride;
 
-    public static function setUpBeforeClass()
-    {
-        self::$fixtureOverride = [
-            '#tag' => [
-                new WordToken('#tag', 0, '', '#tag'),
-            ],
-            '\#tag' => [
-                new WordToken('\#tag', 0, '', '\#tag'),
-            ],
-            '#_tag-tag' => [
-                new WordToken('#_tag-tag', 0, '', '#_tag-tag'),
-            ],
-            '#tag+' => [
-                new WordToken('#tag+', 0, '', '#tag+'),
-            ],
-            '#tag-' => [
-                new WordToken('#tag-', 0, '', '#tag-'),
-            ],
-            '#tag!' => [
-                new WordToken('#tag!', 0, '', '#tag!'),
-            ],
-            "#tag\n" => [
-                new WordToken('#tag', 0, '', '#tag'),
-                new Token(Tokenizer::TOKEN_WHITESPACE, "\n", 4),
-            ],
-            '#tag ' => [
-                new WordToken('#tag', 0, '', '#tag'),
-                new Token(Tokenizer::TOKEN_WHITESPACE, ' ', 4),
-            ],
-            '#tag(' => [
-                new WordToken('#tag', 0, '', '#tag'),
-                new GroupBeginToken('(', 4, '(', null),
-            ],
-            '#tag)' => [
-                new WordToken('#tag', 0, '', '#tag'),
-                new Token(Tokenizer::TOKEN_GROUP_END, ')', 4),
-            ],
-            '@user' => [
-                new WordToken('@user', 0, '', '@user'),
-            ],
-            '@user.user' => [
-                new WordToken('@user.user', 0, '', '@user.user'),
-            ],
-            '\@user' => [
-                new WordToken('\@user', 0, '', '\@user'),
-            ],
-            '@_user-user' => [
-                new WordToken('@_user-user', 0, '', '@_user-user'),
-            ],
-            '@user+' => [
-                new WordToken('@user+', 0, '', '@user+'),
-            ],
-            '@user-' => [
-                new WordToken('@user-', 0, '', '@user-'),
-            ],
-            '@user!' => [
-                new WordToken('@user!', 0, '', '@user!'),
-            ],
-            "@user\n" => [
-                new WordToken('@user', 0, '', '@user'),
-                new Token(Tokenizer::TOKEN_WHITESPACE, "\n", 5),
-            ],
-            '@user ' => [
-                new WordToken('@user', 0, '', '@user'),
-                new Token(Tokenizer::TOKEN_WHITESPACE, ' ', 5),
-            ],
-            '@user(' => [
-                new WordToken('@user', 0, '', '@user'),
-                new GroupBeginToken('(', 5, '(', null),
-            ],
-            '@user)' => [
-                new WordToken('@user', 0, '', '@user'),
-                new Token(Tokenizer::TOKEN_GROUP_END, ')', 5),
-            ],
-            'domain:domain:' => [
-                new WordToken('domain:domain:', 0, '', 'domain:domain:'),
-            ],
-            'some.domain:some.domain:' => [
-                new WordToken('some.domain:some.domain:', 0, '', 'some.domain:some.domain:'),
-            ],
-            'domain:domain:domain:domain' => [
-                new WordToken('domain:domain:domain:domain', 0, '', 'domain:domain:domain:domain'),
-            ],
-            'domain\:' => [
-                new WordToken('domain\:', 0, '', 'domain\:'),
-            ],
-            'domain\::' => [
-                new WordToken('domain\::', 0, '', 'domain\::'),
-            ],
-            'domain:word' => [
-                new WordToken('domain:word', 0, '', 'domain:word'),
-            ],
-            'domain\:word' => [
-                new WordToken('domain\:word', 0, '', 'domain\:word'),
-            ],
-            'domain:"phrase"' => [
-                new WordToken('domain:', 0, '', 'domain:'),
-                new PhraseToken('"phrase"', 7, '', '"', 'phrase'),
-            ],
-            'some.domain:"phrase"' => [
-                new WordToken('some.domain:', 0, '', 'some.domain:'),
-                new PhraseToken('"phrase"', 12, '', '"', 'phrase'),
-            ],
-            'domain\:"phrase"' => [
-                new WordToken('domain\:', 0, '', 'domain\:'),
-                new PhraseToken('"phrase"', 8, '', '"', 'phrase'),
-            ],
-            'domain:(one)' => [
-                new WordToken('domain:', 0, '', 'domain:'),
-                new GroupBeginToken('(', 7, '(', ''),
-                new WordToken('one', 8, '', 'one'),
-                new Token(Tokenizer::TOKEN_GROUP_END, ')', 11),
-            ],
-            'some.domain:(one)' => [
-                new WordToken('some.domain:', 0, '', 'some.domain:'),
-                new GroupBeginToken('(', 12, '(', ''),
-                new WordToken('one', 13, '', 'one'),
-                new Token(Tokenizer::TOKEN_GROUP_END, ')', 16),
-            ],
-        ];
-    }
-
     /**
      * @dataProvider providerForTestTokenize
      *
@@ -163,11 +41,137 @@ class TextTokenizerTest extends FullTokenizerTest
      */
     protected function getExpectedFixtureWithOverride($string, array $expectedTokens)
     {
+        $this->setFixtureOverride();
+
         if (isset(self::$fixtureOverride[$string])) {
             return self::$fixtureOverride[$string];
         }
 
         return $expectedTokens;
+    }
+
+    protected function setFixtureOverride()
+    {
+        if (self::$fixtureOverride === null) {
+            self::$fixtureOverride = [
+                '#tag' => [
+                    new WordToken('#tag', 0, '', '#tag'),
+                ],
+                '\#tag' => [
+                    new WordToken('\#tag', 0, '', '\#tag'),
+                ],
+                '#_tag-tag' => [
+                    new WordToken('#_tag-tag', 0, '', '#_tag-tag'),
+                ],
+                '#tag+' => [
+                    new WordToken('#tag+', 0, '', '#tag+'),
+                ],
+                '#tag-' => [
+                    new WordToken('#tag-', 0, '', '#tag-'),
+                ],
+                '#tag!' => [
+                    new WordToken('#tag!', 0, '', '#tag!'),
+                ],
+                "#tag\n" => [
+                    new WordToken('#tag', 0, '', '#tag'),
+                    new Token(Tokenizer::TOKEN_WHITESPACE, "\n", 4),
+                ],
+                '#tag ' => [
+                    new WordToken('#tag', 0, '', '#tag'),
+                    new Token(Tokenizer::TOKEN_WHITESPACE, ' ', 4),
+                ],
+                '#tag(' => [
+                    new WordToken('#tag', 0, '', '#tag'),
+                    new GroupBeginToken('(', 4, '(', null),
+                ],
+                '#tag)' => [
+                    new WordToken('#tag', 0, '', '#tag'),
+                    new Token(Tokenizer::TOKEN_GROUP_END, ')', 4),
+                ],
+                '@user' => [
+                    new WordToken('@user', 0, '', '@user'),
+                ],
+                '@user.user' => [
+                    new WordToken('@user.user', 0, '', '@user.user'),
+                ],
+                '\@user' => [
+                    new WordToken('\@user', 0, '', '\@user'),
+                ],
+                '@_user-user' => [
+                    new WordToken('@_user-user', 0, '', '@_user-user'),
+                ],
+                '@user+' => [
+                    new WordToken('@user+', 0, '', '@user+'),
+                ],
+                '@user-' => [
+                    new WordToken('@user-', 0, '', '@user-'),
+                ],
+                '@user!' => [
+                    new WordToken('@user!', 0, '', '@user!'),
+                ],
+                "@user\n" => [
+                    new WordToken('@user', 0, '', '@user'),
+                    new Token(Tokenizer::TOKEN_WHITESPACE, "\n", 5),
+                ],
+                '@user ' => [
+                    new WordToken('@user', 0, '', '@user'),
+                    new Token(Tokenizer::TOKEN_WHITESPACE, ' ', 5),
+                ],
+                '@user(' => [
+                    new WordToken('@user', 0, '', '@user'),
+                    new GroupBeginToken('(', 5, '(', null),
+                ],
+                '@user)' => [
+                    new WordToken('@user', 0, '', '@user'),
+                    new Token(Tokenizer::TOKEN_GROUP_END, ')', 5),
+                ],
+                'domain:domain:' => [
+                    new WordToken('domain:domain:', 0, '', 'domain:domain:'),
+                ],
+                'some.domain:some.domain:' => [
+                    new WordToken('some.domain:some.domain:', 0, '', 'some.domain:some.domain:'),
+                ],
+                'domain:domain:domain:domain' => [
+                    new WordToken('domain:domain:domain:domain', 0, '', 'domain:domain:domain:domain'),
+                ],
+                'domain\:' => [
+                    new WordToken('domain\:', 0, '', 'domain\:'),
+                ],
+                'domain\::' => [
+                    new WordToken('domain\::', 0, '', 'domain\::'),
+                ],
+                'domain:word' => [
+                    new WordToken('domain:word', 0, '', 'domain:word'),
+                ],
+                'domain\:word' => [
+                    new WordToken('domain\:word', 0, '', 'domain\:word'),
+                ],
+                'domain:"phrase"' => [
+                    new WordToken('domain:', 0, '', 'domain:'),
+                    new PhraseToken('"phrase"', 7, '', '"', 'phrase'),
+                ],
+                'some.domain:"phrase"' => [
+                    new WordToken('some.domain:', 0, '', 'some.domain:'),
+                    new PhraseToken('"phrase"', 12, '', '"', 'phrase'),
+                ],
+                'domain\:"phrase"' => [
+                    new WordToken('domain\:', 0, '', 'domain\:'),
+                    new PhraseToken('"phrase"', 8, '', '"', 'phrase'),
+                ],
+                'domain:(one)' => [
+                    new WordToken('domain:', 0, '', 'domain:'),
+                    new GroupBeginToken('(', 7, '(', ''),
+                    new WordToken('one', 8, '', 'one'),
+                    new Token(Tokenizer::TOKEN_GROUP_END, ')', 11),
+                ],
+                'some.domain:(one)' => [
+                    new WordToken('some.domain:', 0, '', 'some.domain:'),
+                    new GroupBeginToken('(', 12, '(', ''),
+                    new WordToken('one', 13, '', 'one'),
+                    new Token(Tokenizer::TOKEN_GROUP_END, ')', 16),
+                ],
+            ];
+        }
     }
 
     /**
