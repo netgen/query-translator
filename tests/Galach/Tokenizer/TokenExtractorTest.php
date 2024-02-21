@@ -45,6 +45,7 @@ class TokenExtractorTest extends TestCase
         $reflectedProperty = $reflectedClass->getProperty('expressionTypeMap');
         $reflectedProperty->setAccessible(true);
         $reflectedProperty->setValue(
+            null,
             [
                 '/(?<lexeme>foobar)/' => Tokenizer::TOKEN_TERM,
             ]
@@ -63,6 +64,7 @@ class TokenExtractorTest extends TestCase
         $reflectedProperty = $reflectedClass->getProperty('expressionTypeMap');
         $reflectedProperty->setAccessible(true);
         $reflectedProperty->setValue(
+            null,
             [
                 '/(?<lexeme>foobar)/' => Tokenizer::TOKEN_TERM,
             ]
