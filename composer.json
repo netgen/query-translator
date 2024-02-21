@@ -26,7 +26,7 @@
         "php": "^7.0||^8.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "*",
+        "phpunit/phpunit": "<10",
         "symfony/phpunit-bridge": "*",
         "friendsofphp/php-cs-fixer": "^2.11"
     },
