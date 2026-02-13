@@ -4,6 +4,9 @@
          convertErrorsToExceptions="true"
          convertNoticesToExceptions="true"
          convertWarningsToExceptions="true">
+    <php>
+        <env name="SYMFONY_DEPRECATIONS_HELPER" value="disabled"/>
+    </php>
     <testsuites>
         <testsuite name="Query parser tests">
             <directory suffix="Test.php">./tests</directory>
