@@ -6,6 +6,7 @@
 [![Latest stable](https://img.shields.io/packagist/v/netgen/query-translator.svg?style=flat-square)](https://packagist.org/packages/netgen/query-translator)
 [![License](https://img.shields.io/packagist/l/netgen/query-translator.svg?style=flat-square)](https://packagist.org/packages/netgen/query-translator)
 [![PHP](https://img.shields.io/badge/php-%3E%3D%205.6-8892BF.svg?style=flat-square)](https://secure.php.net/)
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/netgen/query-translator)
 
 Query Translator takes a search string as user input and converts it into something a search backend
 can understand. Technically, it's a search query
