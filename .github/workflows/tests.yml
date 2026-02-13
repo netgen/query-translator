@@ -1,13 +1,15 @@
 name: Tests
+
 on:
     push:
-        branches:
-            - 'master'
-    pull_request: ~
+        branches: ['master']
+    pull_request:
+
 jobs:
     tests:
         name: PHP ${{ matrix.php }}
         runs-on: ubuntu-latest
+
         strategy:
             fail-fast: false
             matrix:
@@ -23,16 +25,39 @@ jobs:
                     - php: '8.3'
                     - php: '8.4'
                     - php: '8.5'
+
         steps:
-            - uses: actions/checkout@v2
-            - uses: shivammathur/setup-php@v2
+            - name: Checkout
+              uses: actions/checkout@v4
+              with:
+                  fetch-depth: 0
+
+            - name: Setup PHP
+              uses: shivammathur/setup-php@v2
               with:
                   php-version: ${{ matrix.php }}
                   coverage: xdebug
-            # Read-only OAuth token to work around GitHub API rate limits
-            - run: composer config -g github-oauth.github.com "4b3b0a83ea27d9544d3608a384c7a14625a98804"
-            - run: composer --version
-            - run: composer validate --strict
-            - run: composer update --prefer-dist
-            - run: vendor/bin/phpunit -c phpunit.xml --colors=always --coverage-clover=coverage.xml
-            - run: bash <(curl -s https://codecov.io/bash) -F all
+
+            - name: Configure Composer (public deps)
+              run: |
+                  composer config -g github-protocols https
+                  composer config -g use-github-api false
+
+            - name: Composer version
+              run: composer --version
+
+            - name: Validate composer.json
+              run: composer validate --strict
+
+            - name: Install dependencies
+              run: composer update --prefer-dist
+
+            - name: Run PHPUnit with coverage
+              run: vendor/bin/phpunit -c phpunit.xml --colors=always --coverage-clover=coverage.xml
+
+            - name: Upload coverage to Codecov
+              uses: codecov/codecov-action@v4
+              with:
+                  files: ./coverage.xml
+                  flags: all
+                  fail_ci_if_error: true
