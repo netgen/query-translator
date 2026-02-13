@@ -7,24 +7,47 @@ on:
 
 jobs:
     tests:
-        name: PHP ${{ matrix.php }}
-        runs-on: ubuntu-latest
+        name: PHP ${{ matrix.php }} on ${{ matrix.os }}
+        runs-on: ${{ matrix.os }}
 
         strategy:
             fail-fast: false
             matrix:
                 include:
                     - php: '7.0'
+                      os: ubuntu-20.04
+                      coverage: xdebug2
                     - php: '7.1'
+                      os: ubuntu-20.04
+                      coverage: xdebug2
                     - php: '7.2'
+                      os: ubuntu-20.04
+                      coverage: xdebug2
+
                     - php: '7.3'
+                      os: ubuntu-latest
+                      coverage: xdebug
                     - php: '7.4'
+                      os: ubuntu-latest
+                      coverage: xdebug
                     - php: '8.0'
+                      os: ubuntu-latest
+                      coverage: xdebug
                     - php: '8.1'
+                      os: ubuntu-latest
+                      coverage: xdebug
                     - php: '8.2'
+                      os: ubuntu-latest
+                      coverage: xdebug
                     - php: '8.3'
+                      os: ubuntu-latest
+                      coverage: xdebug
                     - php: '8.4'
+                      os: ubuntu-latest
+                      coverage: xdebug
                     - php: '8.5'
+                      os: ubuntu-latest
+                      coverage: xdebug
 
         steps:
             - name: Checkout
@@ -36,7 +59,14 @@ jobs:
               uses: shivammathur/setup-php@v2
               with:
                   php-version: ${{ matrix.php }}
-                  coverage: xdebug
+                  coverage: ${{ matrix.coverage }}
+
+            # Optional but VERY useful to prove xdebug is actually loaded
+            - name: Debug PHP + Xdebug
+              run: |
+                  php -v
+                  php -m | grep -i xdebug || true
+                  php -i | grep -i "xdebug.mode" || true
 
             - name: Configure Composer (public deps)
               run: |
@@ -54,6 +84,12 @@ jobs:
 
             - name: Run PHPUnit with coverage
               run: vendor/bin/phpunit -c phpunit.xml --colors=always --coverage-clover=coverage.xml
+
+            # Optional: fail fast with a clearer error than Codecov's
+            - name: Verify coverage.xml exists
+              run: |
+                  test -f coverage.xml
+                  ls -la coverage.xml
 
             - name: Upload coverage to Codecov
               uses: codecov/codecov-action@v4
